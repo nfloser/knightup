@@ -1,3 +1,4 @@
+import { extendedWalkthroughNotes } from "./extended-walkthrough-notes";
 import { expect, it } from "vitest";
 import { sequences, sequenceGame, expectedMove } from "./sequences";
 it("replays every branch legally and finishes mate drills with mate", () => {
@@ -71,5 +72,18 @@ it("replays every extended opening line with legal canonical moves and expected 
     const game = sequenceGame(sequence!, sequence!.moves.length);
     expect(game.history(), id).toEqual(sequence!.moves);
     expect(sequenceGame(sequence!, sequence!.moves.length - 1).turn()).toBe(sequence!.color);
+  }
+});
+
+it("gives every new repertoire lesson multiple position-specific teaching steps", () => {
+  expect(Object.keys(extendedWalkthroughNotes)).toHaveLength(17);
+  for (const [id, notes] of Object.entries(extendedWalkthroughNotes)) {
+    const sequence = sequences.find((s) => s.id === id);
+    expect(sequence, id).toBeDefined();
+    expect(Object.keys(notes).length, id).toBeGreaterThanOrEqual(3);
+    for (const [step, explanation] of Object.entries(notes)) {
+      expect(Number(step), id).toBeLessThan(sequence!.moves.length);
+      expect(explanation.length, id).toBeGreaterThan(40);
+    }
   }
 });
