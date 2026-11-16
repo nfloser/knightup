@@ -31,3 +31,11 @@ Unit tests cover every lesson solution, malformed backups, duplicate completions
 Dependency audit currently reports moderate/low issues in build-only Workbox/lint transitive dependencies; no high/critical findings at initial inspection. Runtime deps are checked separately. CI blocks high and critical findings. No automatic force/downgrade was applied to silence audit.
 
 Independent review found a stale-tab overwrite race, reproduced with a failing concurrent-save regression and fixed by transactional merging. A mutation removing canonical SAN enforcement caused the suffix regression to fail, confirming that guard is covered.
+
+## Interaction feedback (#14)
+
+Standard chess interaction uses short pressed/hover/focus states, last-move source/destination highlights and a 180 ms piece translation (both pieces for castling). Correct and retry states have explicit text; feedback never depends on color alone. No animation is awaited to enable controls. Reduced-motion preferences disable decorative transitions and piece animations.
+
+Correct exercises advance automatically after 1.6 seconds in Learn and Practice, including returning to the learning path after the last item. Auto-next is on by default per session. The always-visible Auto-next control and the Pause action preserve an explanation for reading; manual Next remains available. Timers cancel on navigation, exercise change or pausing. The next heading receives focus for keyboard/screen-reader continuity. This short pause is feedback timing, not a claim that the explanation can be fully read in that time.
+
+Browser regressions verify selection/last-move feedback, reduced motion, automatic progression and the pause override. Original adaptive, offline, backup and axe journeys remain required.

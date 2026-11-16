@@ -103,3 +103,65 @@ test("attempts and hints change persisted adaptive recommendations", async ({
   ).toBeVisible();
   await expect(page.getByText(/needed help or retries/)).toBeVisible();
 });
+
+test("move feedback stays clear with reduced motion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("./");
+  await page.getByRole("button", { name: "Start learning" }).click();
+  await page.getByLabel("Your move in English SAN").fill("d4");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.getByText("↺ Try again", { exact: true })).toBeVisible();
+  await page
+    .getByRole("button", { name: "e2 White pawn", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "e2 White pawn", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await page
+    .getByRole("button", { name: "e4 legal destination", exact: true })
+    .click();
+  await expect(page.getByText("✓ Correct move", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-last-move=true]")).toHaveCount(2);
+  await expect(
+    page.getByRole("button", { name: "e4 White pawn", exact: true }),
+  ).toBeDisabled();
+  expect(
+    await page
+      .locator(".chess-piece")
+      .evaluateAll(
+        (elements) => elements.flatMap((e) => e.getAnimations()).length,
+      ),
+  ).toBe(0);
+  await page.getByRole("button", { name: "Next exercise" }).click();
+  await expect(page.locator("[data-last-move=true]")).toHaveCount(0);
+});
+
+test("correct moves advance automatically and the explanation can be paused", async ({
+  page,
+}) => {
+  await page.clock.install();
+  await page.goto("./");
+  await page.getByRole("button", { name: "Practice", exact: true }).click();
+  await page.getByRole("button", { name: /DRILL 01/ }).click();
+  await page.getByLabel("Your move in English SAN").fill("e4");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.getByText("✓ Correct move", { exact: true })).toBeVisible();
+  await page.clock.fastForward(1601);
+  await expect(
+    page.getByRole("heading", { name: "N is for knight", exact: true }),
+  ).toBeFocused();
+  await page.getByLabel("Your move in English SAN").fill("Nf3");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await page.getByRole("button", { name: "Pause", exact: true }).click();
+  await page.clock.fastForward(5000);
+  await expect(
+    page.getByRole("heading", { name: "N is for knight", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Auto-next off", exact: true }),
+  ).toHaveAttribute("aria-pressed", "false");
+  await page.getByRole("button", { name: "Next exercise" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Read a capture", exact: true }),
+  ).toBeVisible();
+});

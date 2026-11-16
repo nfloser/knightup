@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Chess, type Square } from "chess.js";
+import { useLayoutEffect, useRef, useState } from "react";
+import { Chess, type Square, type Move } from "chess.js";
 const names = {
   k: "king",
   q: "queen",
@@ -12,11 +12,48 @@ export function Board({
   fen,
   onMove,
   disabled,
+  lastMove,
 }: {
   fen: string;
   onMove: (san: string) => void;
   disabled: boolean;
+  lastMove?: Move;
 }) {
+  const board = useRef<HTMLDivElement>(null);
+  const motionKey = lastMove
+    ? `${lastMove.from}:${lastMove.to}:${lastMove.flags}`
+    : "";
+  useLayoutEffect(() => {
+    if (
+      !motionKey ||
+      !board.current ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
+    const [from, to, flags] = motionKey.split(":");
+    const moves = [[from, to]];
+    if (flags.includes("k")) moves.push(["h" + from[1], "f" + from[1]]);
+    if (flags.includes("q")) moves.push(["a" + from[1], "d" + from[1]]);
+    const size = board.current.getBoundingClientRect().width / 8;
+    const animations = moves.flatMap(([origin, destination]) => {
+      const piece = board.current?.querySelector<HTMLElement>(
+        `[data-square="${destination}"] .chess-piece`,
+      );
+      if (!piece) return [];
+      const x = (origin.charCodeAt(0) - destination.charCodeAt(0)) * size;
+      const y = (Number(destination[1]) - Number(origin[1])) * size;
+      return [
+        piece.animate(
+          [
+            { transform: `translate(${x}px,${y}px)`, zIndex: 2 },
+            { transform: "translate(0,0)", zIndex: 2 },
+          ],
+          { duration: 180, easing: "cubic-bezier(.2,.8,.2,1)" },
+        ),
+      ];
+    });
+    return () => animations.forEach((animation) => animation.cancel());
+  }, [motionKey]);
   const [selected, setSelected] = useState<Square | null>(null);
   const [promotion, setPromotion] = useState<Square | null>(null);
   const [notice, setNotice] = useState("");
@@ -52,6 +89,7 @@ export function Board({
     <div className="board-wrap">
       <div
         className="board"
+        ref={board}
         role="group"
         aria-label="Chessboard, White at bottom"
       >
@@ -61,14 +99,18 @@ export function Board({
           .map((piece, i) => {
             const square = ("abcdefgh"[i % 8] +
               (8 - Math.floor(i / 8))) as Square;
-            const target = targets.some((m) => m.to === square);
+            const target = !disabled && targets.some((m) => m.to === square);
             return (
-              <div key={square} className="square-cell">
+              <div key={square} className="square-cell" data-square={square}>
                 <button
                   disabled={disabled}
-                  className={`square ${(Math.floor(i / 8) + (i % 8)) % 2 ? "dark-square" : "light-square"} ${selected === square ? "selected" : ""}`}
+                  data-last-move={
+                    !!lastMove &&
+                    (lastMove.from === square || lastMove.to === square)
+                  }
+                  className={`square ${(Math.floor(i / 8) + (i % 8)) % 2 ? "dark-square" : "light-square"} ${selected === square && !disabled ? "selected" : ""} ${lastMove && (lastMove.from === square || lastMove.to === square) ? "last-move" : ""}`}
                   aria-label={`${square}${piece ? ` ${piece.color === "w" ? "White" : "Black"} ${names[piece.type]}` : ""}${target ? " legal destination" : ""}`}
-                  aria-pressed={selected === square}
+                  aria-pressed={selected === square && !disabled}
                   onClick={() => choose(square)}
                 >
                   {piece ? (

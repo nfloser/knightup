@@ -959,3 +959,150 @@ input {
 .square-cell small {
   pointer-events: none;
 }
+
+/* Short feedback, never a prerequisite for the next interaction. */
+button,
+.file-button {
+  transition:
+    background-color 140ms ease,
+    color 140ms ease,
+    box-shadow 140ms ease,
+    transform 100ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+button:not(:disabled):not(.square):active,
+.file-button:active {
+  transform: scale(0.98);
+}
+button.square:not(:disabled):active {
+  box-shadow: inset 0 0 0 3px #21372f;
+}
+.square.last-move {
+  box-shadow: inset 0 0 0 100px #e3cd4e66;
+}
+.square.selected {
+  box-shadow: inset 0 0 0 3px #6a5314;
+}
+.chess-piece {
+  position: relative;
+}
+.feedback-label {
+  display: block;
+  font-size: 0.78rem;
+  margin-bottom: 8px;
+  letter-spacing: 0.015em;
+}
+.feedback.retry {
+  border-left: 3px solid var(--muted);
+  padding-left: 14px;
+}
+.feedback.success {
+  border-left: 3px solid var(--success);
+  padding-left: 14px;
+}
+.feedback-entry {
+  animation: feedback-in 160ms ease-out both;
+}
+.hint {
+  animation: feedback-in 160ms ease-out both;
+}
+@keyframes feedback-in {
+  from {
+    opacity: 0.4;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (hover: hover) {
+  nav button:hover,
+  .theme-button:hover {
+    background: var(--soft);
+  }
+  .path-item:hover {
+    background: var(--soft);
+    border-radius: 6px;
+  }
+  .practice-list button:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .text-button:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .square:not(:disabled):hover {
+    box-shadow: inset 0 0 0 3px #21372f80;
+  }
+  .file-button:hover {
+    background: var(--soft);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  button:not(:disabled):not(.square):active,
+  .file-button:active,
+  .practice-list button:hover {
+    transform: none;
+  }
+  .feedback-entry,
+  .hint {
+    animation: none;
+  }
+}
+
+.auto-next-setting {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: -8px 0 16px;
+  font-size: 0.67rem;
+  color: var(--muted);
+}
+.auto-next-setting button {
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+.auto-next-setting button[aria-pressed="true"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.auto-next-notice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-bottom: 12px;
+  padding-bottom: 4px;
+  overflow: hidden;
+}
+.auto-next-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform-origin: left;
+  animation: auto-next 1600ms linear forwards;
+}
+@keyframes auto-next {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.lesson-copy h1:focus {
+  outline: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .auto-next-progress {
+    animation: none;
+  }
+}
