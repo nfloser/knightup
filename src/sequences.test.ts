@@ -5,7 +5,8 @@ import { sequences, sequenceGame, expectedMove } from "./sequences";
 it("replays every branch legally and finishes mate drills with mate", () => {
   expect(new Set(sequences.map((s) => s.id)).size).toBe(sequences.length);
   for (const s of sequences) {
-    expect(sequenceGame(s, s.moves.length - 1).turn()).toBe(s.color);
+    expect(() => sequenceGame(s, s.moves.length), `Invalid line: ${s.id}`).not.toThrow();
+    expect(sequenceGame(s, s.moves.length - 1).turn(), s.id).toBe(s.color);
     const g = sequenceGame(s, s.moves.length);
     expect(g.history().length).toBe(s.moves.length);
     for (let i = 0; i < s.moves.length; i++)
