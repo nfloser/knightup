@@ -18,7 +18,8 @@ test("a real lesson teaches before testing and preserves completion", async ({
   await page.getByRole("button", { name: "Next exercise" }).click();
   await page.getByLabel("Your move in English SAN").fill("Bc4");
   await page.getByRole("button", { name: "Check", exact: true }).click();
-  await page.getByRole("button", { name: "Finish lesson" }).click();
+  await page.getByRole("button", { name: "Next exercise" }).click();
+  await page.getByRole("button", { name: "← Learning path" }).click();
   await expect(
     page.getByRole("button", { name: /01 · 0–200 Know your pieces 2 \/ 2/ }),
   ).toBeVisible();
