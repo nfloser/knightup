@@ -1949,3 +1949,44 @@ textarea {
     display: none;
   }
 }
+
+/* Mobile study surfaces keep body text legible in both color schemes.
+   These overrides intentionally supersede older compact course typography. */
+.academy .course-card p,
+.academy .course-card > span:last-child {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.academy .course-card .eyebrow {
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+.academy .course-card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.academy .course-card:focus-visible,
+.academy .path-item:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+@media (max-width: 760px) {
+  .academy .course-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .academy .course-card h3 {
+    font-size: 1rem;
+  }
+  .course-intro .course-reading {
+    justify-content: flex-start;
+    overflow-y: auto;
+  }
+  .course-intro .course-reading p,
+  .course-intro .course-reading .small {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  .course-intro .course-reading h2 {
+    font-size: 1.125rem;
+  }
+}
