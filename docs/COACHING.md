@@ -14,7 +14,7 @@ Manual PGN import validates standard games and every move, with a 2 MB/100-game/
 
 Public archive import uses the documented Chess.com Published-Data API only after user consent. Requests are serial; 429 starts a one-minute cooldown. Username and archive responses are validated, unexpected domains ignored, variants skipped, failures visible. Batches select recent 2/6/24 available months, with explicit library limits. Public API bot coverage is not promised; manual PGN supports exports. Reference: https://support.chess.com/en/articles/9650547-what-is-the-pubapi-and-how-do-i-use-it . KnightUp is independent and not affiliated with Chess.com.
 
-Optional daily refresh runs once per 24 hours only while the Insights page is open, visible and idle. It imports the latest archive and analyses at most one not-yet-complete game, with the same time bound. Closing the page stops local work. Unattended private analysis while every device is closed needs a separately configured private backend; public Actions/Pages never publish personal reports.
+Optional daily refresh starts once per 24 hours only when the Insights page is open, visible and idle. A started bounded job may finish in a hidden tab. It imports the latest archive and analyses at most one not-yet-complete game, with the same time bound. Closing the page stops local work. Unattended private analysis while every device is closed needs a separately configured private backend; public Actions/Pages never publish personal reports.
 
 ## Personalized learning
 

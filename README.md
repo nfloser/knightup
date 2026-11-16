@@ -24,7 +24,7 @@ CI checks types, lint, unit tests, production build, high/critical dependency au
 
 ## Privacy, recovery and offline use
 
-Personal data stays in this browser's IndexedDB. No account, trackers, API key or external LLM. Public Chess.com collection requires explicit consent. Daily import/analysis runs only while the app is open and visible, not on a closed device. No live-game assistance workflow is provided.
+Personal data stays in this browser's IndexedDB. No account, trackers, API key or external LLM. Public Chess.com collection requires explicit consent. Daily import/analysis starts only when Insights is open, visible and idle. An already-started bounded job may finish after the tab is hidden; leaving Insights stops it. Nothing runs on a closed device. No live-game assistance workflow is provided.
 
 Export a learning backup before switching devices or clearing browser data. It includes lesson/puzzle mastery and rewards; imported games and Stockfish reports remain on this device and are excluded. Existing and legacy notation backups merge rather than erase progress. There is no automatic cross-device sync. Browser storage eviction can remove local data.
 
