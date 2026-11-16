@@ -964,8 +964,6 @@ input {
 button,
 .file-button {
   transition:
-    background-color 140ms ease,
-    color 140ms ease,
     box-shadow 140ms ease,
     transform 100ms ease;
   -webkit-tap-highlight-color: transparent;
