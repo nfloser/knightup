@@ -15,5 +15,5 @@
 ### Interaction improvements
 
 - Add standard button press feedback, move animation and last-move highlights.
-- Continue automatically after correct answers, with a Pause control to read explanations.
+- Continue automatically after correct answers, with an Explain control that shows and explains the intended move.
 - Respect reduced-motion preferences and preserve keyboard focus across exercises.

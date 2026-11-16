@@ -136,7 +136,7 @@ test("move feedback stays clear with reduced motion", async ({ page }) => {
   await expect(page.locator("[data-last-move=true]")).toHaveCount(0);
 });
 
-test("correct moves advance automatically and the explanation can be paused", async ({
+test("correct moves advance automatically unless Explain is opened", async ({
   page,
 }) => {
   await page.clock.install();
@@ -152,16 +152,44 @@ test("correct moves advance automatically and the explanation can be paused", as
   ).toBeFocused();
   await page.getByLabel("Your move in English SAN").fill("Nf3");
   await page.getByRole("button", { name: "Check", exact: true }).click();
-  await page.getByRole("button", { name: "Pause", exact: true }).click();
+  await page.getByRole("button", { name: "Explain", exact: true }).click();
   await page.clock.fastForward(5000);
   await expect(
     page.getByRole("heading", { name: "N is for knight", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Auto-next off", exact: true }),
-  ).toHaveAttribute("aria-pressed", "false");
+    page.getByRole("heading", { name: "Why Nf3?", exact: true }),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Next exercise" }).click();
   await expect(
     page.getByRole("heading", { name: "Read a capture", exact: true }),
   ).toBeVisible();
+});
+
+test("Explain reveals the intended move without awarding a solution", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: "Start learning" }).click();
+  await page.getByRole("button", { name: "Explain", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Why e4?", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "e4 White pawn", exact: true }),
+  ).toBeDisabled();
+  await expect(page.getByText("✓ Correct move", { exact: true })).toHaveCount(
+    0,
+  );
+  await expect(page.getByRole("button", { name: "Next exercise" })).toHaveCount(
+    0,
+  );
+  await page
+    .getByRole("button", { name: "Try it yourself", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "e2 White pawn", exact: true }),
+  ).toBeEnabled();
+  await page.getByRole("button", { name: "Learning path" }).click();
+  await expect(page.getByText("0 OF 8 COMPLETED")).toBeVisible();
 });
