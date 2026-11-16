@@ -2,7 +2,7 @@ name: Verify
 on:
   pull_request:
   push:
-    branches: [main, feature/notation-foundation]
+    branches: [main]
 permissions:
   contents: read
 jobs:

@@ -63,24 +63,25 @@ export function Board({
               (8 - Math.floor(i / 8))) as Square;
             const target = targets.some((m) => m.to === square);
             return (
-              <button
-                key={square}
-                disabled={disabled}
-                className={`square ${(Math.floor(i / 8) + (i % 8)) % 2 ? "dark-square" : "light-square"} ${selected === square ? "selected" : ""}`}
-                aria-label={`${square}${piece ? ` ${piece.color === "w" ? "White" : "Black"} ${names[piece.type]}` : ""}${target ? " legal destination" : ""}`}
-                aria-pressed={selected === square}
-                onClick={() => choose(square)}
-              >
-                {piece ? (
-                  <img
-                    className="chess-piece"
-                    draggable={false}
-                    alt=""
-                    src={`${import.meta.env.BASE_URL}pieces/${piece.color}${piece.type.toUpperCase()}.svg`}
-                  />
-                ) : target ? (
-                  <span aria-hidden="true" className="legal-dot" />
-                ) : null}
+              <div key={square} className="square-cell">
+                <button
+                  disabled={disabled}
+                  className={`square ${(Math.floor(i / 8) + (i % 8)) % 2 ? "dark-square" : "light-square"} ${selected === square ? "selected" : ""}`}
+                  aria-label={`${square}${piece ? ` ${piece.color === "w" ? "White" : "Black"} ${names[piece.type]}` : ""}${target ? " legal destination" : ""}`}
+                  aria-pressed={selected === square}
+                  onClick={() => choose(square)}
+                >
+                  {piece ? (
+                    <img
+                      className="chess-piece"
+                      draggable={false}
+                      alt=""
+                      src={`${import.meta.env.BASE_URL}pieces/${piece.color}${piece.type.toUpperCase()}.svg`}
+                    />
+                  ) : target ? (
+                    <span aria-hidden="true" className="legal-dot" />
+                  ) : null}
+                </button>
                 {i % 8 === 0 && (
                   <small className="rank" aria-hidden="true">
                     {8 - Math.floor(i / 8)}
@@ -91,7 +92,7 @@ export function Board({
                     {"abcdefgh"[i % 8]}
                   </small>
                 )}
-              </button>
+              </div>
             );
           })}
       </div>
