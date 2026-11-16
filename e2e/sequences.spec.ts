@@ -34,7 +34,7 @@ test("trains a complete Caro-Kann branch against automatic replies", async ({
     page.getByRole("heading", { name: "Study a system" }),
   ).toBeVisible();
   await expect(
-    page.getByText("1 / 11 lines recalled without help."),
+    page.getByText("1 / 20 lines recalled without help."),
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: /Caro–Kann · against the Exchange/ }),
@@ -172,7 +172,7 @@ test("continuing a course advances through lessons and resumes unfinished work",
   await expect(
     page.getByRole("progressbar", { name: "Course progress" }),
   ).toHaveAttribute("value", "0");
-  await expect(page.getByText("Course progress · lesson 1 of 7")).toBeVisible();
+  await expect(page.getByText("Course progress · lesson 1 of 20")).toBeVisible();
   await page.getByRole("button", { name: "Next move" }).click();
   await expect(
     page.getByRole("progressbar", { name: "Course progress" }),
@@ -190,13 +190,13 @@ test("continuing a course advances through lessons and resumes unfinished work",
       name: /London · against a kingside fianchetto/,
     }),
   ).toBeVisible();
-  await expect(page.getByText("Course progress · lesson 2 of 7")).toBeVisible();
+  await expect(page.getByText("Course progress · lesson 2 of 20")).toBeVisible();
   await expect(
     page.getByRole("progressbar", { name: "Course progress" }),
   ).toHaveAttribute("value", "1");
   await page.getByRole("button", { name: "Back to lessons" }).click();
   await expect(
-    page.getByText("1 / 7 lines recalled without help."),
+    page.getByText("1 / 20 lines recalled without help."),
   ).toBeVisible();
   await page.reload();
   await page.getByRole("button", { name: "Continue course" }).click();
@@ -205,7 +205,7 @@ test("continuing a course advances through lessons and resumes unfinished work",
       name: /London · against a kingside fianchetto/,
     }),
   ).toBeVisible();
-  await expect(page.getByText("Course progress · lesson 2 of 7")).toBeVisible();
+  await expect(page.getByText("Course progress · lesson 2 of 20")).toBeVisible();
   await expect(
     page.getByRole("progressbar", { name: "Course progress" }),
   ).toHaveAttribute("value", "1");
