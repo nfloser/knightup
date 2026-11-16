@@ -35,12 +35,18 @@ export async function importLearning(raw: unknown) {
     current === undefined ? emptyProgress : parseProgress(current),
     progress,
   );
-  const mergedTraining = mergeTraining(
+  let mergedTraining = mergeTraining(
     currentTraining === undefined
       ? emptyTraining
       : parseTraining(currentTraining),
     training,
   );
+  if (currentTraining === undefined && full)
+    mergedTraining = {
+      ...mergedTraining,
+      goal: training.goal,
+      cosmetic: training.cosmetic,
+    };
   await tx.store.put(merged, "progress");
   await tx.store.put(mergedTraining, "training");
   await tx.done;

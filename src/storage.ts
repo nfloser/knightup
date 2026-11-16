@@ -1,4 +1,4 @@
-import { emptyTraining, updateTraining } from "./training";
+import { emptyTraining, parseTraining, updateTraining } from "./training";
 import { mergeProgress, recordAttempt } from "./adaptive";
 import { database as db } from "./local-db";
 import { emptyProgress, parseProgress, type Progress } from "./learning";
@@ -43,19 +43,19 @@ export async function saveAttempt(
       crypto.randomUUID(),
     ),
   );
-  await tx.store.put(next, "progress");
-  const training = (await tx.store.get("training")) ?? emptyTraining;
-  await tx.store.put(
-    updateTraining(
-      training,
-      `course:${id}`,
-      "course",
-      correct,
-      assisted,
-      Date.now(),
-    ),
-    "training",
+  const rawTraining = await tx.store.get("training");
+  const training =
+    rawTraining === undefined ? emptyTraining : parseTraining(rawTraining);
+  const nextTraining = updateTraining(
+    training,
+    `course:${id}`,
+    "course",
+    correct,
+    assisted,
+    Date.now(),
   );
+  await tx.store.put(next, "progress");
+  await tx.store.put(nextTraining, "training");
   await tx.done;
   if (typeof window !== "undefined")
     window.dispatchEvent(new Event("knightup-training"));
