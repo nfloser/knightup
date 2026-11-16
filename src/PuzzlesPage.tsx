@@ -1,3 +1,5 @@
+import { database } from "./local-db";
+import { loadReports, learningNeeds } from "./coaching";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Chess } from "chess.js";
 import { Board } from "./Board";
@@ -29,6 +31,7 @@ export function PuzzlesPage({
 }: {
   onSessionChange: (active: boolean) => void;
 }) {
+  const [needs, setNeeds] = useState<Record<string, number>>({});
   const [training, setTraining] = useState(emptyTraining);
   const [mode, setMode] = useState("random");
   const session = useRef(0);
@@ -52,8 +55,20 @@ export function PuzzlesPage({
   const [focused, setFocused] = useState(false);
   const seen = useRef<string[]>([]);
   useEffect(() => {
-    loadTraining()
-      .then(setTraining)
+    Promise.all([
+      loadTraining(),
+      loadReports(),
+      database().then((db) => db.get("settings", "coachPrefs")),
+    ])
+      .then(([state, reports, prefs]) => {
+        setTraining(state);
+        setNeeds(
+          learningNeeds(
+            reports,
+            typeof prefs?.username === "string" ? prefs.username : "GMNille",
+          ),
+        );
+      })
       .catch(() => setError("Training history could not be loaded."));
     const invalidate = () => {
       session.current++;
@@ -113,6 +128,24 @@ export function PuzzlesPage({
             .sort((a, b) => a.box - b.box || a.due - b.due)
             .map((r) => r.id.slice(7))
         : [];
+    if (mode === "adaptive") {
+      const mapped: Record<string, number> = {
+        ...needs,
+        backRankMate: needs.kingSafety ?? 0,
+        mateIn1: (needs.mateIn1 ?? 0) + (needs.kingSafety ?? 0),
+      };
+      const personal = pool
+        .filter(
+          (p) =>
+            !seen.current.includes(p.id) && p.themes.some((t) => mapped[t] > 0),
+        )
+        .sort(
+          (a, b) =>
+            Math.max(...b.themes.map((t) => mapped[t] ?? 0)) -
+            Math.max(...a.themes.map((t) => mapped[t] ?? 0)),
+        );
+      priority.push(...personal.map((p) => p.id));
+    }
     const candidate = choosePuzzle(
       pool,
       { theme, min, max },
@@ -145,7 +178,7 @@ export function PuzzlesPage({
     } catch {
       setError("This puzzle was invalid. Please choose another.");
     }
-  }, [pool, theme, difficulty, onSessionChange, mode, training.records]);
+  }, [pool, theme, difficulty, onSessionChange, mode, training.records, needs]);
   useEffect(() => {
     if (!puzzle || ply >= puzzle.moves.length || ply % 2 !== 0 || explaining)
       return;
