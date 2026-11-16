@@ -61,6 +61,14 @@ export function SequenceLibrary({
         "Start a repertoire against 1.d4 with the Exchange variation.",
     },
     {
+      id: "london",
+      title: "London System",
+      color: "w",
+      ids: ["london-classical", "london-fianchetto", "london-c5"],
+      description:
+        "Develop the bishop early and practise a solid setup against three Black responses.",
+    },
+    {
       id: "vienna",
       title: "Vienna Game",
       color: "w",
@@ -160,6 +168,29 @@ export function SequenceLibrary({
               </button>
               <h3>{selected.title}</h3>
               <p>{selected.description}</p>
+              {selected.id === "london" && (
+                <section aria-label="London System course guide">
+                  <h4>1. Develop the bishop</h4>
+                  <p>
+                    After 1.d4, an early Bf4 develops the dark-squared bishop
+                    before e3 can restrict it. Black has several reasonable
+                    setups, so observe the response.
+                  </p>
+                  <h4>2. Build a center</h4>
+                  <p>
+                    Moves such as e3, Nf3 and sometimes c3 support d4. Against
+                    an early ...c5, check the pressure on d4 and b2 before
+                    following the setup.
+                  </p>
+                  <h4>3. Adapt and practise</h4>
+                  <p>
+                    Finish development and make your king safe. Against a
+                    fianchetto, the g7 bishop pressures the center; watch for
+                    pawn breaks such as ...c5 or ...e5. Practise each response,
+                    then review without assistance.
+                  </p>
+                </section>
+              )}
               {selected.id === "caro" && (
                 <section aria-label="Caro–Kann course guide">
                   <h4>1. The starting idea</h4>
