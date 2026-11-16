@@ -1,3 +1,4 @@
+import { emptyTraining, updateTraining } from "./training";
 import { mergeProgress, recordAttempt } from "./adaptive";
 import { database as db } from "./local-db";
 import { emptyProgress, parseProgress, type Progress } from "./learning";
@@ -43,6 +44,20 @@ export async function saveAttempt(
     ),
   );
   await tx.store.put(next, "progress");
+  const training = (await tx.store.get("training")) ?? emptyTraining;
+  await tx.store.put(
+    updateTraining(
+      training,
+      `course:${id}`,
+      "course",
+      correct,
+      assisted,
+      Date.now(),
+    ),
+    "training",
+  );
   await tx.done;
+  if (typeof window !== "undefined")
+    window.dispatchEvent(new Event("knightup-training"));
   return next;
 }
