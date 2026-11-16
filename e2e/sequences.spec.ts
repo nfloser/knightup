@@ -158,3 +158,39 @@ test("Vienna explains quiet plans and gambit responses", async ({ page }) => {
     page.getByRole("button", { name: /Vienna Gambit · if Black takes/ }),
   ).toBeVisible();
 });
+
+test("continuing a course advances through lessons and resumes unfinished work", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page
+    .getByRole("group", { name: "Opening color" })
+    .getByRole("button", { name: "White" })
+    .click();
+  await page.getByRole("button", { name: /London System Develop/ }).click();
+  await page.getByRole("button", { name: "Continue course" }).click();
+  await page.getByRole("button", { name: "Practise whole line" }).click();
+  for (const san of ["d4", "Bf4", "e3", "Nf3", "Bd3", "O-O"]) {
+    await expect(
+      page.getByRole("heading", { name: "Your repertoire move" }),
+    ).toBeVisible();
+    await page.getByLabel("Your move in English SAN").fill(san);
+    await page.getByRole("button", { name: "Check", exact: true }).click();
+  }
+  await expect(
+    page.getByRole("heading", {
+      name: /London · against a kingside fianchetto/,
+    }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Back to lessons" }).click();
+  await expect(
+    page.getByText("1 / 3 lines recalled without help."),
+  ).toBeVisible();
+  await page.reload();
+  await page.getByRole("button", { name: "Continue course" }).click();
+  await expect(
+    page.getByRole("heading", {
+      name: /London · against a kingside fianchetto/,
+    }),
+  ).toBeVisible();
+});
