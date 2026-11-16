@@ -232,7 +232,9 @@ test("learners see a board demonstration before practising without earning credi
   await expect(
     intro.getByRole("heading", { name: "Black plays c6" }),
   ).toBeVisible();
-  await expect(intro.getByRole("status")).toContainText("d5");
+  await expect(
+    intro.locator(".walkthrough-copy").getByRole("status"),
+  ).toContainText("d5");
   await intro.getByRole("button", { name: "Previous move" }).click();
   await expect(
     intro.getByRole("heading", { name: "White plays e4" }),
