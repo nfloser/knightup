@@ -121,7 +121,15 @@ for (const [topic, prefix] of [
   ["caro-kann", "caro-"],
   ["vienna", "vienna-"],
 ] as const) {
-  const examples = sequences.filter((s) => s.id.startsWith(prefix)).slice(0, 18);
+  const used = new Set<string>();
+  const examples = sequences.filter((s) => s.id.startsWith(prefix))
+    .filter((s) => {
+      const fen = sequenceGame(s, s.moves.length - 1).fen();
+      if (used.has(fen)) return false;
+      used.add(fen);
+      return true;
+    }).slice(0, 18);
+  if (examples.length !== 18) throw Error("Too few distinct opening decisions for " + topic);
   additionalAcademyExercises[topic] = examples.map((s, index) => {
     const ply = s.moves.length - 1;
     const fen = sequenceGame(s, ply).fen();
