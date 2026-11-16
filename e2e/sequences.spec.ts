@@ -30,6 +30,8 @@ test("trains a complete Caro-Kann branch against automatic replies", async ({
   await expect(page.locator(".sequence-screen .feedback")).toContainText(
     "Whole line complete",
   );
+  await expect(page.getByRole("heading", { name: "Line complete" })).toBeVisible();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Study a system" }),
   ).toBeVisible();
@@ -106,6 +108,8 @@ test("a revealed endgame continuation stays assisted and earns no XP", async ({
   await expect(page.locator(".sequence-screen .feedback")).toContainText(
     "with assistance",
   );
+  await expect(page.getByRole("heading", { name: "Line complete" })).toBeVisible();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Study a system" }),
   ).toBeVisible();
@@ -185,6 +189,11 @@ test("continuing a course advances through lessons and resumes unfinished work",
     await page.getByLabel("Your move in English SAN").fill(san);
     await page.getByRole("button", { name: "Check", exact: true }).click();
   }
+  await expect(page.getByRole("heading", { name: "Line complete" })).toBeVisible();
+  await expect(page.locator(".sequence-screen .feedback")).toContainText("O-O:");
+  await page.waitForTimeout(2200);
+  await expect(page.getByRole("heading", { name: "Line complete" })).toBeVisible();
+  await page.getByRole("button", { name: "Continue", exact: true }).click();
   await expect(
     page.getByRole("heading", {
       name: /London · against a kingside fianchetto/,
