@@ -224,14 +224,21 @@ export function SequenceLibrary({
                     Fried Liver continuation is unavailable; practise Bb5+ and
                     the resulting exchanges instead.
                   </p>
-                  <h4>4. Recognize the Traxler</h4>
+                  <h4>4. Compare the alternatives</h4>
+                  <p>
+                    Against ...Na5, Bb5+ is not the only way to save the
+                    bishop: d3 defends it and leads to a quieter position. If
+                    Black plays ...Nd4 instead, c3 challenges the knight, but
+                    ...b5 can attack the bishop first. Check both threats.
+                  </p>
+                  <h4>5. Recognize the Traxler</h4>
                   <p>
                     Black can meet Ng5 with ...Bc5 instead of ...d5,
                     counterattacking f2. The bishop check Bxf7+ is a different
                     tactical choice from the knight sacrifice Nxf7: follow the
                     actual position and calculate replies.
                   </p>
-                  <h4>5. Practise the branches</h4>
+                  <h4>6. Practise the branches</h4>
                   <p>
                     Play the branches, compare the opponent's choices and
                     review without hints. Black has other options too; these
