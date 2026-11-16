@@ -41,9 +41,16 @@ export function SequenceLibrary({
       id: "caro",
       title: "Caro–Kann",
       color: "b",
-      ids: ["caro-advance", "caro-exchange", "caro-classical"],
+      ids: [
+        "caro-advance",
+        "caro-exchange",
+        "caro-classical",
+        "caro-panov",
+        "caro-two-knights",
+        "caro-fantasy",
+      ],
       description:
-        "Build a reliable response to 1.e4: learn the central structure and practise three common white setups.",
+        "Build a reliable response to 1.e4: learn the central structure and practise six common white setups.",
     },
     {
       id: "slav",
@@ -153,6 +160,38 @@ export function SequenceLibrary({
               </button>
               <h3>{selected.title}</h3>
               <p>{selected.description}</p>
+              {selected.id === "caro" && (
+                <section aria-label="Caro–Kann course guide">
+                  <h4>1. The starting idea</h4>
+                  <p>
+                    After 1.e4 c6, Black prepares ...d5 to challenge White's
+                    center. When White plays 2.d4, meet it with ...d5. Notice
+                    how White responds before choosing a plan.
+                  </p>
+                  <h4>2. Read the pawn structure</h4>
+                  <p>
+                    Against the Advance, e5 gains space and Black can challenge
+                    d4 with ...c5. In the Exchange, recapture toward the center.
+                    In the Panov, c4 challenges d5 and an isolated pawn may
+                    appear after exchanges.
+                  </p>
+                  <h4>3. Develop with a purpose</h4>
+                  <p>
+                    In the classical and Advance examples, consider developing
+                    the light-squared bishop before ...e6 can block it. Against
+                    the Two Knights and Fantasy, the position asks different
+                    questions: watch the center, king safety and your opponent's
+                    threats.
+                  </p>
+                  <h4>4. Practise, then recall</h4>
+                  <p>
+                    Work through each response in order. Explain is available
+                    when you are stuck; try again without assistance to record a
+                    clean recall. Use recommended practice when a line needs
+                    review.
+                  </p>
+                </section>
+              )}
               <p>
                 {lessons.filter(solved).length} / {lessons.length} lines
                 recalled without help. This course currently covers the lines
