@@ -73,6 +73,7 @@ export function choosePuzzle(
   filter: { theme: string; min: number; max: number },
   seen: string[],
   random = Math.random,
+  priority: string[] = [],
 ) {
   const eligible = pool.filter(
     (p) =>
@@ -80,6 +81,10 @@ export function choosePuzzle(
       p.rating <= filter.max &&
       (filter.theme === "all" || p.themes.includes(filter.theme)),
   );
+  const due = priority
+    .map((id) => eligible.find((p) => p.id === id))
+    .filter((p): p is Puzzle => !!p);
+  if (due.length) return due[0];
   const fresh = eligible.filter((p) => !seen.includes(p.id));
   const list = fresh.length ? fresh : eligible;
   return list.length
@@ -121,4 +126,21 @@ export function puzzleExplanation(p: Puzzle) {
       .join(" ") ||
     "Calculate checks, captures and threats. Follow the full line, including the opponent’s strongest reply."
   );
+}
+
+export async function parsePuzzlePack(data: unknown, signal?: AbortSignal) {
+  if (!Array.isArray(data) || data.length > 10000)
+    throw Error("Invalid puzzle library");
+  const result: Puzzle[] = [];
+  const ids = new Set<string>();
+  for (let i = 0; i < data.length; i++) {
+    if (signal?.aborted) throw new DOMException("Aborted", "AbortError");
+    const puzzle = validatePuzzle(data[i]);
+    if (!ids.has(puzzle.id)) {
+      result.push(puzzle);
+      ids.add(puzzle.id);
+    }
+    if (i % 100 === 99) await new Promise((resolve) => setTimeout(resolve, 0));
+  }
+  return result;
 }

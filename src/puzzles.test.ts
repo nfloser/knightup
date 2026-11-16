@@ -62,3 +62,22 @@ it("replays every shipped source variation and ends on a player move", () => {
     expect(p.moves.length % 2).toBe(0);
   }
 });
+
+import { parsePuzzlePack } from "./puzzles";
+it("rejects malformed pack entries before UI rendering", async () => {
+  await expect(
+    parsePuzzlePack([{ id: "bad", themes: null }]),
+  ).rejects.toThrow();
+});
+it("focused reviews select a due item even when already seen", () => {
+  const other = { ...raw, id: "second" };
+  expect(
+    choosePuzzle(
+      [raw, other],
+      { theme: "all", max: 2500, min: 0 },
+      ["sample"],
+      () => 0,
+      ["sample"],
+    )?.id,
+  ).toBe("sample");
+});

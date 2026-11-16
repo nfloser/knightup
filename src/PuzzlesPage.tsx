@@ -3,6 +3,7 @@ import { Chess } from "chess.js";
 import { Board } from "./Board";
 import {
   choosePuzzle,
+  parsePuzzlePack,
   gradePuzzleMove,
   playUci,
   preparePuzzle,
@@ -11,7 +12,7 @@ import {
   validatePuzzle,
   type Puzzle,
 } from "./puzzles";
-import { recordTraining } from "./training";
+import { recordTraining, loadTraining, emptyTraining } from "./training";
 const filters = [
   ["all", "All themes"],
   ["mateIn1", "Mate in one"],
@@ -28,6 +29,9 @@ export function PuzzlesPage({
 }: {
   onSessionChange: (active: boolean) => void;
 }) {
+  const [training, setTraining] = useState(emptyTraining);
+  const [mode, setMode] = useState("random");
+  const session = useRef(0);
   const [pool, setPool] = useState<Puzzle[]>([]);
   const [error, setError] = useState("");
   const [theme, setTheme] = useState("all");
@@ -48,6 +52,15 @@ export function PuzzlesPage({
   const [focused, setFocused] = useState(false);
   const seen = useRef<string[]>([]);
   useEffect(() => {
+    loadTraining()
+      .then(setTraining)
+      .catch(() => setError("Training history could not be loaded."));
+    const invalidate = () => {
+      session.current++;
+    };
+    return invalidate;
+  }, []);
+  useEffect(() => {
     const controller = new AbortController();
     fetch(`${import.meta.env.BASE_URL}puzzles.json`, {
       signal: controller.signal,
@@ -56,10 +69,9 @@ export function PuzzlesPage({
         if (!r.ok) throw Error("Puzzle library could not be loaded.");
         return r.json();
       })
-      .then((data) => {
-        if (!Array.isArray(data) || data.length > 10000)
-          throw Error("Invalid puzzle library");
-        setPool(data);
+      .then(async (data) => {
+        const pack = await parsePuzzlePack(data, controller.signal);
+        if (!controller.signal.aborted) setPool(pack);
       })
       .catch((e) => {
         if (e.name !== "AbortError") setError(e.message);
@@ -94,7 +106,20 @@ export function PuzzlesPage({
           : difficulty === "hard"
             ? [1400, 2000]
             : [0, 4000];
-    const candidate = choosePuzzle(pool, { theme, min, max }, seen.current);
+    const priority =
+      mode === "adaptive"
+        ? Object.values(training.records)
+            .filter((r) => r.kind === "puzzle" && r.due <= Date.now())
+            .sort((a, b) => a.box - b.box || a.due - b.due)
+            .map((r) => r.id.slice(7))
+        : [];
+    const candidate = choosePuzzle(
+      pool,
+      { theme, min, max },
+      seen.current,
+      Math.random,
+      priority,
+    );
     if (!candidate) {
       setError(
         "No puzzles match these filters. Try All themes or another difficulty.",
@@ -102,6 +127,7 @@ export function PuzzlesPage({
       return;
     }
     try {
+      session.current++;
       const p = validatePuzzle(candidate);
       const start = preparePuzzle(p);
       seen.current.push(p.id);
@@ -119,7 +145,7 @@ export function PuzzlesPage({
     } catch {
       setError("This puzzle was invalid. Please choose another.");
     }
-  }, [pool, theme, difficulty, onSessionChange]);
+  }, [pool, theme, difficulty, onSessionChange, mode, training.records]);
   useEffect(() => {
     if (!puzzle || ply >= puzzle.moves.length || ply % 2 !== 0 || explaining)
       return;
@@ -138,24 +164,37 @@ export function PuzzlesPage({
     return () => window.clearTimeout(timer);
   }, [solved, explaining, next]);
   function exit() {
+    session.current++;
     setPuzzle(null);
     onSessionChange(false);
   }
   async function submit(san: string) {
     if (!puzzle || busy || solved || explaining || ply % 2 === 0) return;
+    const token = session.current;
     setBusy(true);
     const result = gradePuzzleMove(fen, puzzle.moves[ply], san);
     try {
       if (!result.correct) {
         setAssisted(true);
-        await recordTraining(`puzzle:${puzzle.id}`, "puzzle", false, true);
+        setTraining(
+          await recordTraining(`puzzle:${puzzle.id}`, "puzzle", false, true),
+        );
+        if (session.current !== token) return;
         setFeedback("Try again. Check forcing moves and the opponent’s reply.");
       } else {
         const game = new Chess(fen);
         game.move(san, { strict: true });
         const done = ply + 1 === puzzle.moves.length;
         if (done)
-          await recordTraining(`puzzle:${puzzle.id}`, "puzzle", true, assisted);
+          setTraining(
+            await recordTraining(
+              `puzzle:${puzzle.id}`,
+              "puzzle",
+              true,
+              assisted,
+            ),
+          );
+        if (session.current !== token) return;
         setFen(game.fen());
         setPly(ply + 1);
         setInput("");
@@ -169,12 +208,14 @@ export function PuzzlesPage({
         );
       }
     } catch {
+      if (session.current !== token) return;
       setFeedback("Progress could not be saved. Please retry.");
     }
     setBusy(false);
   }
   async function explain() {
     if (!puzzle || busy) return;
+    const token = session.current;
     if (explaining) {
       setExplaining(false);
       return;
@@ -184,10 +225,31 @@ export function PuzzlesPage({
     setAssisted(true);
     if (!solved)
       try {
-        await recordTraining(`puzzle:${puzzle.id}`, "puzzle", false, true);
+        setTraining(
+          await recordTraining(`puzzle:${puzzle.id}`, "puzzle", false, true),
+        );
       } catch {
+        if (session.current !== token) return;
         setFeedback("Could not save assisted review.");
       }
+  }
+  async function hint() {
+    if (!puzzle || busy) return;
+    const token = session.current;
+    setBusy(true);
+    setAssisted(true);
+    try {
+      setTraining(
+        await recordTraining(`puzzle:${puzzle.id}`, "puzzle", false, true),
+      );
+      if (session.current === token)
+        setFeedback(
+          `Hint: examine the piece on ${puzzle.moves[ply].slice(0, 2)}. ${puzzleExplanation(puzzle)}`,
+        );
+    } catch {
+      if (session.current === token) setFeedback("Could not save this hint.");
+    }
+    if (session.current === token) setBusy(false);
   }
   if (!puzzle)
     return (
@@ -201,6 +263,15 @@ export function PuzzlesPage({
         </div>
         <section className="surface puzzle-launch">
           <div className="filter-row">
+            <label>
+              Session
+              <select value={mode} onChange={(e) => setMode(e.target.value)}>
+                <option value="random">Random puzzles</option>
+                <option value="adaptive">
+                  Focused review · due skills first
+                </option>
+              </select>
+            </label>
             <label>
               Theme
               <select value={theme} onChange={(e) => setTheme(e.target.value)}>
@@ -225,7 +296,11 @@ export function PuzzlesPage({
             </label>
           </div>
           <button className="primary" disabled={!pool.length} onClick={next}>
-            {pool.length ? "Play random puzzle →" : "Loading puzzles…"}
+            {pool.length
+              ? mode === "random"
+                ? "Play random puzzle →"
+                : "Start focused practice →"
+              : "Loading puzzles…"}
           </button>
           <p>
             {pool.length.toLocaleString()} legally validated Lichess positions.
@@ -288,7 +363,7 @@ export function PuzzlesPage({
         </span>
       </div>
       <div className="lesson-tools">
-        <button className="text-button" onClick={next}>
+        <button className="text-button" disabled={busy} onClick={next}>
           Skip puzzle →
         </button>
         <button
@@ -392,7 +467,7 @@ export function PuzzlesPage({
                     : "Next puzzle follows automatically…"}
                 </span>
               </div>
-              <button className="primary wide" onClick={next}>
+              <button className="primary wide" disabled={busy} onClick={next}>
                 Next puzzle →
               </button>
             </>
@@ -400,18 +475,7 @@ export function PuzzlesPage({
             <button
               className="text-button"
               disabled={busy || explaining || ply % 2 === 0}
-              onClick={() => {
-                setAssisted(true);
-                setFeedback(
-                  `Hint: examine the piece on ${puzzle.moves[ply].slice(0, 2)}. ${puzzleExplanation(puzzle)}`,
-                );
-                void recordTraining(
-                  `puzzle:${puzzle.id}`,
-                  "puzzle",
-                  false,
-                  true,
-                ).catch(() => setFeedback("Could not save this hint."));
-              }}
+              onClick={() => void hint()}
             >
               Hint
             </button>

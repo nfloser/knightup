@@ -55,7 +55,7 @@ test("puzzle filters and revealed solutions never count as solved", async ({
   await page
     .getByRole("button", { name: "Try it yourself", exact: true })
     .click();
-  await page.getByRole("button", { name: "Puzzles", exact: true }).click();
+  await page.getByRole("button", { name: "← Puzzles", exact: true }).click();
   await page.getByLabel("Theme", { exact: true }).selectOption("promotion");
   await page.getByRole("button", { name: "Play random puzzle" }).click();
   await expect(page.getByRole("alert")).toContainText("No puzzles match");
