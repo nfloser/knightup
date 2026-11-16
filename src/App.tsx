@@ -1,3 +1,5 @@
+import { CourseSession } from "./CourseLibrary";
+import type { Course } from "./curriculum";
 import { PuzzlesPage } from "./PuzzlesPage";
 import { recommend, mergeProgress } from "./adaptive";
 import { ProfilePage } from "./ProfilePage";
@@ -21,6 +23,7 @@ type Tab = (typeof tabs)[number];
 export default function App() {
   const [now, setNow] = useState(() => Date.now());
   const [tab, setTab] = useState<Tab>("Learn");
+  const [course, setCourse] = useState<Course | null>(null);
   const [puzzling, setPuzzling] = useState(false);
   const [active, setActive] = useState(false);
   const [initialIndex, setInitialIndex] = useState(0);
@@ -69,6 +72,7 @@ export default function App() {
   function navigate(next: Tab) {
     setTab(next);
     setActive(false);
+    setCourse(null);
     setPuzzling(false);
     requestAnimationFrame(() => main.current?.focus());
   }
@@ -204,10 +208,23 @@ export default function App() {
                 main.current?.focus();
               }}
             />
+          ) : course ? (
+            <CourseSession
+              course={course}
+              onExit={() => {
+                setCourse(null);
+                setPuzzling(false);
+              }}
+            />
           ) : (
             <>
               {tab === "Learn" && (
                 <LearnPage
+                  now={now}
+                  onCourseStart={(c) => {
+                    setCourse(c);
+                    setPuzzling(true);
+                  }}
                   ready={ready}
                   progress={progress}
                   start={start}

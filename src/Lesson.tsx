@@ -6,8 +6,12 @@ export function Lesson({
   initialIndex,
   onAttempt,
   onExit,
+  content = lessons,
+  label = "NOTATION LAB",
 }: {
   initialIndex: number;
+  content?: typeof lessons;
+  label?: string;
   onAttempt: (
     id: string,
     correct: boolean,
@@ -51,7 +55,7 @@ export function Lesson({
       document.documentElement.style.removeProperty("--training-height");
     };
   }, []);
-  const lesson = lessons[index];
+  const lesson = content[index];
   const game = new Chess(lesson.fen);
   if (correct || explaining) game.move(lesson.san);
   async function submit(san: string) {
@@ -87,7 +91,7 @@ export function Lesson({
     }
   }
   const next = useCallback(() => {
-    if (index === lessons.length - 1) {
+    if (index === content.length - 1) {
       onExit();
       return;
     }
@@ -100,7 +104,7 @@ export function Lesson({
     setAttemptNumber(0);
     setExplaining(false);
     requestAnimationFrame(() => heading.current?.focus());
-  }, [index, onExit]);
+  }, [index, onExit, content.length]);
   useEffect(() => {
     if (!correct || explaining) return;
     const timer = window.setTimeout(next, 1600);
@@ -118,7 +122,7 @@ export function Lesson({
           ← Learning path
         </button>
         <span>
-          NOTATION LAB · {index + 1} / {lessons.length}
+          {label} · {index + 1} / {content.length}
         </span>
       </div>
       <div className="lesson-tools">
@@ -146,6 +150,7 @@ export function Lesson({
         <Board
           key={lesson.id}
           fen={game.fen()}
+          orientation={new Chess(lesson.fen).turn()}
           lastMove={game.history({ verbose: true }).at(-1)}
           onMove={(san) => {
             setInput(san);
@@ -202,7 +207,7 @@ export function Lesson({
           {correct && !explaining && (
             <div className="auto-next-notice">
               <span role="status">
-                {index < lessons.length - 1
+                {index < content.length - 1
                   ? "Moving to the next exercise…"
                   : "Returning to your learning path…"}
               </span>
@@ -239,7 +244,7 @@ export function Lesson({
           )}
           {correct ? (
             <button className="primary wide" onClick={next}>
-              {index < lessons.length - 1
+              {index < content.length - 1
                 ? "Next exercise →"
                 : "Finish lesson ✓"}
             </button>

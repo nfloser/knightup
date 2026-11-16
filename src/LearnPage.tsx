@@ -1,3 +1,5 @@
+import type { Course } from "./curriculum";
+import { CourseLibrary } from "./CourseLibrary";
 import { lessons, type Progress } from "./learning";
 import { Knight } from "./Knight";
 export function LearnPage({
@@ -6,8 +8,12 @@ export function LearnPage({
   start,
   next,
   reason,
+  onCourseStart,
+  now,
 }: {
   ready: boolean;
+  now: number;
+  onCourseStart: (course: Course) => void;
   progress: Progress;
   start: (index: number) => void;
   next: number;
@@ -21,6 +27,7 @@ export function LearnPage({
         <h1>Your next good move.</h1>
         <p className="lead">Build understanding, one small lesson at a time.</p>
       </div>
+      <CourseLibrary now={now} onStart={onCourseStart} />
       <section className="featured">
         <div>
           <span className="pill">FOUNDATIONS · NOTATION</span>
