@@ -1,4 +1,4 @@
-import { moveFeedback } from "./moveFeedback";
+import { compareMoveScores, moveFeedback } from "./moveFeedback";
 import { useTrainingViewport } from "./useTrainingViewport";
 import { useEffect, useRef, useState } from "react";
 import { Chess, type Move } from "chess.js";
@@ -190,7 +190,17 @@ export function PlayCoach({ onExit }: { onExit: () => void }) {
             controller.current.signal,
           );
           if (controller.current.signal.aborted) return;
-          review = moveFeedback(m.san, legalVariation(before, score.pv));
+          const afterFen = game.current.fen();
+          const after = await client().evaluate(
+            afterFen,
+            controller.current.signal,
+          );
+          if (controller.current.signal.aborted) return;
+          const replyLine = legalVariation(afterFen, after.pv)
+            .slice(0, 3)
+            .map((move) => move.san)
+            .join(" ");
+          review = `${moveFeedback(m.san, legalVariation(before, score.pv))} ${compareMoveScores(score, after)}${replyLine ? ` A possible reply to your move: ${replyLine}.` : ""}`;
         } catch {
           if (controller.current.signal.aborted) return;
           engine.current?.close();
