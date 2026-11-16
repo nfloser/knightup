@@ -31,7 +31,7 @@ export const extendedWalkthroughNotes: Record<string, Record<number, string>> = 
     2: "White challenges d5 in advance by playing c4 on move two.",
     3: "...d5 strikes at the e4 pawn despite the unusual move order.",
     4: "White trades the e-pawn for the d-pawn, opening lines in the center.",
-    5: "...cxd5 recaptures toward the center.",
+    5: "...cxd5 recaptures toward the center, keeping a black pawn on d5.",
     6: "The c-pawn captures on d5; Black must evaluate the resulting isolated pawn and piece activity.",
     7: "...Nf6 brings a knight into play instead of automatically pushing another pawn."
   },
@@ -66,19 +66,19 @@ export const extendedWalkthroughNotes: Record<string, Record<number, string>> = 
     2: "Bf4 develops before e3 shuts the bishop behind the pawn chain.",
     5: "...c5 attacks the base of White's center.",
     6: "c3 supports d4. White should check captures before choosing the familiar setup.",
-    7: "...Nc6 reinforces central pressure.",
+    7: "...Nc6 reinforces central pressure against White's d4 pawn.",
     8: "Nd2 brings the queenside knight into play and supports flexible central responses."
   },
   "london-queenside-fianchetto": {
     2: "Bf4 develops the bishop before White plays e3.",
     5: "...b6 prepares to develop Black's light bishop along the long diagonal.",
-    7: "...Bb7 eyes the center from a distance.",
+    7: "...Bb7 eyes the center from a distance along the long diagonal.",
     8: "Bd3 develops White's other bishop and helps prepare castling."
   },
   "london-nf6-c5": {
-    3: "...d5 establishes a pawn in the center.",
+    3: "...d5 establishes a pawn in the center and challenges White's pawn on d4.",
     4: "e3 maintains d4 and clears the way for White's kingside bishop.",
-    5: "...c5 challenges the d4 pawn.",
+    5: "...c5 challenges the d4 pawn and increases the tension in the center.",
     8: "c3 reinforces the center; reassess the position if Black exchanges on d4."
   },
   "london-mirror-bishop": {
@@ -101,8 +101,8 @@ export const extendedWalkthroughNotes: Record<string, Record<number, string>> = 
   "slav-exchange-bf4": {
     4: "White exchanges on d5, opening the c-file.",
     5: "Black recaptures with the c-pawn, keeping a pawn on d5.",
-    6: "Bf4 develops a bishop before playing e3.",
-    7: "...Nc6 develops and supports the center.",
+    6: "Bf4 develops the dark-squared bishop before playing e3 can restrict its diagonal.",
+    7: "...Nc6 develops the knight and supports key central squares.",
     9: "...Nf6 continues development while controlling e4."
   },
   "slav-bf5": {
