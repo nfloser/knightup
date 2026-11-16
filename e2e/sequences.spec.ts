@@ -34,7 +34,7 @@ test("trains a complete Caro-Kann branch against automatic replies", async ({
     page.getByRole("heading", { name: "Study a system" }),
   ).toBeVisible();
   await expect(
-    page.getByText("1 / 6 lines recalled without help."),
+    page.getByText("1 / 20 lines recalled without help."),
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: /Caro–Kann · against the Exchange/ }),
@@ -172,7 +172,7 @@ test("continuing a course advances through lessons and resumes unfinished work",
   await expect(
     page.getByRole("progressbar", { name: "Course progress" }),
   ).toHaveAttribute("value", "0");
-  await expect(page.getByText("Course progress · lesson 1 of 3")).toBeVisible();
+  await expect(page.getByText("Course progress · lesson 1 of 20")).toBeVisible();
   await page.getByRole("button", { name: "Next move" }).click();
   await expect(
     page.getByRole("progressbar", { name: "Course progress" }),
@@ -190,13 +190,13 @@ test("continuing a course advances through lessons and resumes unfinished work",
       name: /London · against a kingside fianchetto/,
     }),
   ).toBeVisible();
-  await expect(page.getByText("Course progress · lesson 2 of 3")).toBeVisible();
+  await expect(page.getByText("Course progress · lesson 2 of 20")).toBeVisible();
   await expect(
     page.getByRole("progressbar", { name: "Course progress" }),
   ).toHaveAttribute("value", "1");
   await page.getByRole("button", { name: "Back to lessons" }).click();
   await expect(
-    page.getByText("1 / 3 lines recalled without help."),
+    page.getByText("1 / 20 lines recalled without help."),
   ).toBeVisible();
   await page.reload();
   await page.getByRole("button", { name: "Continue course" }).click();
@@ -205,7 +205,7 @@ test("continuing a course advances through lessons and resumes unfinished work",
       name: /London · against a kingside fianchetto/,
     }),
   ).toBeVisible();
-  await expect(page.getByText("Course progress · lesson 2 of 3")).toBeVisible();
+  await expect(page.getByText("Course progress · lesson 2 of 20")).toBeVisible();
   await expect(
     page.getByRole("progressbar", { name: "Course progress" }),
   ).toHaveAttribute("value", "1");
@@ -369,4 +369,32 @@ test("guided explanation remains readable in dark mode", async ({
     page.getByRole("heading", { name: "White plays e4" }),
   ).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("guided-dark.png") });
+});
+
+test("extended repertoire paths expose opponent alternatives with guided board walkthroughs", async ({ page }) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
+  await expect(page.getByRole("button", { name: /immediate .*c5 against the Advance/ })).toBeVisible();
+  await page.getByRole("button", { name: /immediate .*c5 against the Advance/ }).click();
+  await expect(page.getByRole("heading", { name: /immediate .*c5 against the Advance/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "The idea" })).toBeVisible();
+  await page.getByRole("button", { name: "Next move" }).click();
+  await expect(page.getByRole("heading", { name: "White plays e4" })).toBeVisible();
+  await expect(page.locator(".walkthrough-copy [role=status]")).not.toBeEmpty();
+});
+
+test("each opening path offers exactly twenty selectable lessons", async ({ page }) => {
+  await page.goto("./");
+  for (const [color, name] of [
+    ["Black", /Caro–Kann Build/],
+    ["Black", /Slav Defence Study/],
+    ["White", /London System Develop/],
+    ["White", /Vienna Game Learn/],
+  ] as const) {
+    await page.getByRole("group", { name: "Opening color" })
+      .getByRole("button", { name: color, exact: true }).click();
+    await page.getByRole("button", { name }).click();
+    await expect(page.locator(".academy ol.path-list > li")).toHaveCount(20);
+    await page.getByRole("button", { name: /All (White|Black) openings/ }).click();
+  }
 });

@@ -1,3 +1,4 @@
+import { additionalRepertoireLessons } from "./additional-repertoire-lessons";
 import { useEffect, useRef, useState } from "react";
 import { remainingCourseSteps } from "./courseRun";
 import { Chess } from "chess.js";
@@ -58,25 +59,31 @@ export function SequenceLibrary({
         "caro-panov",
         "caro-two-knights",
         "caro-fantasy",
+        "caro-advance-c5",
+        "caro-classical-nd7",
+        "caro-two-knights-order",
+        "caro-quiet-d3",
+        "caro-c4",
+        ...additionalRepertoireLessons.filter((s) => s.id.startsWith("caro-")).map((s) => s.id),
       ],
       description:
-        "Build a reliable response to 1.e4: learn the central structure and practise six common white setups.",
+        "Build a reliable response to 1.e4: learn the central structure and practise 20 opponent setups, move orders and central responses.",
     },
     {
       id: "slav",
       title: "Slav Defence",
       color: "b",
-      ids: ["slav-exchange"],
+      ids: ["slav-exchange", "slav-accepted", "slav-solid", "slav-exchange-bf4", "slav-bf5", ...additionalRepertoireLessons.filter((s) => s.id.startsWith("slav-")).map((s) => s.id)],
       description:
-        "Start a repertoire against 1.d4 with the Exchange variation.",
+        "Study 20 Slav responses, exchanges, development schemes and central pawn decisions.",
     },
     {
       id: "london",
       title: "London System",
       color: "w",
-      ids: ["london-classical", "london-fianchetto", "london-c5"],
+      ids: ["london-classical", "london-fianchetto", "london-c5", "london-nc6", "london-queenside-fianchetto", "london-nf6-c5", "london-mirror-bishop", ...additionalRepertoireLessons.filter((s) => s.id.startsWith("london-")).map((s) => s.id)],
       description:
-        "Develop the bishop early and practise a solid setup against three Black responses.",
+        "Develop the bishop early and practise a solid setup against 20 Black responses and development plans.",
     },
     {
       id: "vienna",
@@ -87,9 +94,14 @@ export function SequenceLibrary({
         "vienna-falkbeer",
         "vienna-gambit-d5",
         "vienna-gambit-accepted",
+        "vienna-f4-nc6",
+        "vienna-gambit-nf3",
+        "vienna-quiet-f4",
+        "vienna-fianchetto",
+        ...additionalRepertoireLessons.filter((s) => s.id.startsWith("vienna-")).map((s) => s.id),
       ],
       description:
-        "Learn a developing setup and practise quiet and gambit responses.",
+        "Learn a developing setup and practise 20 quiet and gambit responses, including central breaks.",
     },
   ];
   const selected = groups.find((g) => g.id === course);
