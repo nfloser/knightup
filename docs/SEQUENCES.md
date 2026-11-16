@@ -74,3 +74,11 @@ possible reply is covered, that every move is engine-best or that every lesson
 lasts a fixed number of minutes. The separate Academy, middlegame and endgame
 paths are not yet 20-unit courses. Broader curriculum expansion and professional
 chess-content review remain tracked separately.
+
+## Readable final feedback
+
+After the final repertoire or academy-path move, the learner sees the exact
+move and its corresponding explanation until they choose **Continue**.
+The completed line is persisted before the next lesson can be opened. Assisted
+work remains assisted and does not gain clean-recall mastery. This replaces the
+former 1.8-second automatic redirect and applies at desktop and phone sizes.
