@@ -2,7 +2,7 @@ import { Chess } from "chess.js";
 export type Sequence = {
   id: string;
   title: string;
-  category: "Openings" | "Endgames";
+  category: "Openings" | "Endgames" | "Middlegame" | "Foundations";
   color: "w" | "b";
   fen: string;
   moves: string[];
@@ -153,9 +153,11 @@ export function expectedMove(s: Sequence, ply: number) {
 import endgames from "./endgame-sequences.json";
 import { extendedOpenings } from "./extended-openings";
 import { additionalRepertoireLessons } from "./additional-repertoire-lessons";
+import { academySequences } from "./academy-paths";
 export const sequences: Sequence[] = [
   ...openingSequences,
   ...extendedOpenings,
   ...additionalRepertoireLessons,
+  ...academySequences,
   ...(endgames as Sequence[]),
 ];
