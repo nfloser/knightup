@@ -50,3 +50,27 @@ The extended line tests assert canonical legal replay via chess.js,
 opponent/learner turn alignment, unique sequence IDs, and authored
 position-specific explanations. Engine and browser verification still
 depend on passing CI and follow-up review.
+
+## Twenty-lesson minimum for each opening course
+
+The four currently connected opening repertoires each provide **20 distinct,
+individually identified practice lessons**, totaling 80 lines:
+
+| Track | Existing before expansion | New in this PR | Total |
+| --- | ---: | ---: | ---: |
+| Caro–Kann | 6 | 14 | 20 |
+| Vienna | 4 | 16 | 20 |
+| London | 3 | 17 | 20 |
+| Slav | 1 | 19 | 20 |
+
+The new lessons include opponent deviations, move-order recognition, positional
+setups and concrete pawn challenges. Each includes a specific original introduction,
+a continuation to play against the automatic opponent, and a stated strategic
+follow-up. Introductions can be stepped through on the actual board before
+practice; the existing learning ledger retains achievements under stable IDs.
+
+A 20-lesson count is a minimum breadth target, **not** a guarantee that every
+possible reply is covered, that every move is engine-best or that every lesson
+lasts a fixed number of minutes. The separate Academy, middlegame and endgame
+paths are not yet 20-unit courses. Broader curriculum expansion and professional
+chess-content review remain tracked separately.
