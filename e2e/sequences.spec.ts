@@ -260,12 +260,20 @@ test("a hint gives a plan without revealing the next move", async ({
   await expect(
     page.getByRole("heading", { name: "Your repertoire move" }),
   ).toBeVisible();
+  await page.getByLabel("Your move in English SAN").fill("e5");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.locator(".sequence-screen .feedback")).toHaveClass(/retry/);
   await page.getByRole("button", { name: "Hint", exact: true }).click();
   await expect(page.locator(".sequence-screen .feedback")).toContainText(
     "Plan hint:",
   );
   await expect(page.locator(".sequence-screen .feedback")).not.toContainText(
     "Train c6",
+  );
+  await page.getByLabel("Your move in English SAN").fill("c6");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.locator(".sequence-screen .feedback")).toHaveClass(
+    /success/,
   );
 });
 

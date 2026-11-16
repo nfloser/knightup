@@ -412,6 +412,9 @@ export function SequenceSession({
     [explaining, setExplaining] = useState(false),
     [focused, setFocused] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [feedbackKind, setFeedbackKind] = useState<
+    "neutral" | "retry" | "success"
+  >("neutral");
   const height = useTrainingViewport(),
     busy = useRef(false),
     token = useRef(0);
@@ -444,10 +447,12 @@ export function SequenceSession({
       try {
         normalized = new Chess(game.fen()).move(san).san;
       } catch {
+        setFeedbackKind("retry");
         setFeedback("That move is not legal. Check the route and king safety.");
         return;
       }
       if (normalized !== expectedMove(sequence, ply)) {
+        setFeedbackKind("retry");
         setAssisted(true);
         await recordTraining(
           `course:sequence-${sequence.id}`,
@@ -471,6 +476,7 @@ export function SequenceSession({
         );
       if (current !== token.current) return;
       setInput("");
+      setFeedbackKind("success");
       setPly(next);
       setFeedback(
         `${normalized}: ${walkthroughFrame(sequence, next).text}${assisted ? " Assisted recall." : ""}`,
@@ -506,10 +512,12 @@ export function SequenceSession({
         false,
         true,
       );
-      if (current === token.current)
+      if (current === token.current) {
+        setFeedbackKind("neutral");
         setFeedback(
           `Plan hint: ${hintForMove(game.fen(), expectedMove(sequence, ply))}`,
         );
+      }
     } catch {
       if (current === token.current)
         setFeedback("Could not save this hint. Please check browser storage.");
@@ -561,6 +569,7 @@ export function SequenceSession({
       );
       if (current !== token.current) return;
       setExplaining((v) => !v);
+      setFeedbackKind("neutral");
       setFeedback(
         `Train ${target}. ${walkthroughFrame(sequence, ply + 1).text}`,
       );
@@ -738,7 +747,7 @@ export function SequenceSession({
               </button>
             </div>
           </form>
-          <p className="feedback" role="status">
+          <p className={`feedback ${feedbackKind}`} role="status">
             {feedback}
           </p>
         </section>
