@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { Chess } from "chess.js";
-import puzzle from "./fixtures/puzzle.json";
+import puzzle from "./fixtures/puzzle.json" with { type: "json" };
 test("random puzzles play the whole variation with black orientation and Explain", async ({
   page,
 }) => {
