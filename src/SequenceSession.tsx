@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { remainingCourseSteps } from "./courseRun";
 import { Chess } from "chess.js";
 import { Board } from "./Board";
 import {
@@ -12,7 +13,7 @@ import { useTrainingViewport } from "./useTrainingViewport";
 export function SequenceLibrary({
   onStart,
 }: {
-  onStart: (s: Sequence) => void;
+  onStart: (s: Sequence, remaining?: Sequence[]) => void;
 }) {
   const [training, setTraining] = useState(emptyTraining);
   const [section, setSection] = useState<"Openings" | "Endgames">("Openings");
@@ -23,11 +24,15 @@ export function SequenceLibrary({
     sessionStorage.getItem("knightup-course"),
   );
   const [error, setError] = useState("");
+  const [progressReady, setProgressReady] = useState(false);
   useEffect(() => {
     let active = true;
     loadTraining()
       .then((value) => {
-        if (active) setTraining(value);
+        if (active) {
+          setTraining(value);
+          setProgressReady(true);
+        }
       })
       .catch(() => {
         if (active) setError("Could not load course progress.");
@@ -90,7 +95,11 @@ export function SequenceLibrary({
     : [];
   const solved = (s: Sequence) =>
     training.records[`course:sequence-${s.id}`]?.firstSolvedAt !== undefined;
-  const next = lessons.find((s) => !solved(s)) ?? lessons[0];
+  const courseSteps = remainingCourseSteps(
+    lessons.map((s) => s.id),
+    new Set(lessons.filter(solved).map((s) => s.id)),
+  ).map((id) => lessons.find((s) => s.id === id)!);
+  const next = courseSteps[0];
   return (
     <section className="academy">
       <div className="section-heading">
@@ -262,7 +271,11 @@ export function SequenceLibrary({
                 shown below; it is not an exhaustive repertoire.
               </p>
               {next && (
-                <button className="primary" onClick={() => onStart(next)}>
+                <button
+                  className="primary"
+                  disabled={!progressReady}
+                  onClick={() => onStart(next, courseSteps.slice(1))}
+                >
                   {lessons.every(solved) ? "Review course" : "Continue course"}{" "}
                   →
                 </button>
@@ -369,9 +382,11 @@ export function SequenceLibrary({
 export function SequenceSession({
   sequence,
   onExit,
+  onComplete,
 }: {
   sequence: Sequence;
   onExit: () => void;
+  onComplete?: () => void;
 }) {
   const [ply, setPly] = useState(0),
     [input, setInput] = useState(""),
@@ -403,9 +418,9 @@ export function SequenceSession({
   }, [intro, done, opponent, ply]);
   useEffect(() => {
     if (!done) return;
-    const timer = setTimeout(onExit, 1800);
+    const timer = setTimeout(onComplete ?? onExit, 1800);
     return () => clearTimeout(timer);
-  }, [done, onExit]);
+  }, [done, onComplete, onExit]);
   async function submit(san: string) {
     if (busy.current || intro || done || opponent) return;
     busy.current = true;
@@ -452,7 +467,7 @@ export function SequenceSession({
         setFeedback(
           assisted
             ? "Line complete with assistance. It will return for review."
-            : "Whole line complete. Well played. Returning to lessons…",
+            : "Whole line complete. Well played. Continuing…",
         );
       }
     } catch {

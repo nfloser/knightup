@@ -19,6 +19,7 @@ const tabs = ["Learn", "Practice", "Puzzles", "Insights", "Profile"] as const;
 type Tab = (typeof tabs)[number];
 export default function App() {
   const [sequence, setSequence] = useState<Sequence | null>(null);
+  const [sequenceQueue, setSequenceQueue] = useState<Sequence[]>([]);
   const [now, setNow] = useState(() => Date.now());
   const [tab, setTab] = useState<Tab>("Learn");
   const [course, setCourse] = useState<Course | null>(null);
@@ -73,6 +74,7 @@ export default function App() {
     setCourse(null);
     setPuzzling(false);
     setSequence(null);
+    setSequenceQueue([]);
     requestAnimationFrame(() => main.current?.focus());
   }
   function start(index = 0) {
@@ -202,9 +204,20 @@ export default function App() {
           )}
           {sequence ? (
             <SequenceSession
+              key={sequence.id}
               sequence={sequence}
+              onComplete={() => {
+                if (sequenceQueue.length) {
+                  setSequence(sequenceQueue[0]);
+                  setSequenceQueue(sequenceQueue.slice(1));
+                } else {
+                  setSequence(null);
+                  setPuzzling(false);
+                }
+              }}
               onExit={() => {
                 setSequence(null);
+                setSequenceQueue([]);
                 setPuzzling(false);
               }}
             />
@@ -229,8 +242,9 @@ export default function App() {
             <>
               {tab === "Learn" && (
                 <LearnPage
-                  onSequenceStart={(s) => {
+                  onSequenceStart={(s, remaining = []) => {
                     setSequence(s);
+                    setSequenceQueue(remaining);
                     setPuzzling(true);
                   }}
                   now={now}
