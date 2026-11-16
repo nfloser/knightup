@@ -374,9 +374,9 @@ test("guided explanation remains readable in dark mode", async ({
 test("extended repertoire paths expose opponent alternatives with guided board walkthroughs", async ({ page }) => {
   await page.goto("./");
   await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
-  await expect(page.getByRole("button", { name: /immediate \\.\\.\\.c5 against the Advance/ })).toBeVisible();
-  await page.getByRole("button", { name: /immediate \\.\\.\\.c5 against the Advance/ }).click();
-  await expect(page.getByRole("heading", { name: /immediate \\.\\.\\.c5 against the Advance/ })).toBeVisible();
+  await expect(page.getByRole("button", { name: /immediate .*c5 against the Advance/ })).toBeVisible();
+  await page.getByRole("button", { name: /immediate .*c5 against the Advance/ }).click();
+  await expect(page.getByRole("heading", { name: /immediate .*c5 against the Advance/ })).toBeVisible();
   await expect(page.getByRole("heading", { name: "The idea" })).toBeVisible();
   await page.getByRole("button", { name: "Next move" }).click();
   await expect(page.getByRole("heading", { name: "White plays e4" })).toBeVisible();
