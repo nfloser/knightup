@@ -1,5 +1,6 @@
 import { Chess } from "chess.js";
 import type { Lesson } from "./learning";
+import { additionalAcademyExercises } from "./academy-topic-exercises";
 export type Course = {
   id: string;
   title: string;
@@ -453,3 +454,10 @@ export const courses: Course[] = [
     ],
   ),
 ];
+
+// Keep the original first two teaching exercises and their saved IDs unchanged.
+// Expand each topic with eighteen separately sourced application positions.
+for (const item of courses) {
+  const additions = additionalAcademyExercises[item.id];
+  if (additions) item.exercises.push(...additions);
+}
