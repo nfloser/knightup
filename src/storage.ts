@@ -1,12 +1,6 @@
 import { mergeProgress, recordAttempt } from "./adaptive";
-import { openDB } from "idb";
+import { database as db } from "./local-db";
 import { emptyProgress, parseProgress, type Progress } from "./learning";
-const db = () =>
-  openDB("knightup", 1, {
-    upgrade(database) {
-      database.createObjectStore("settings");
-    },
-  });
 export async function loadProgress() {
   const stored = await (await db()).get("settings", "progress");
   return stored === undefined ? emptyProgress : parseProgress(stored);
