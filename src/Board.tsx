@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Chess, type Square, type Move } from "chess.js";
 const names = {
   k: "king",
@@ -55,7 +55,11 @@ export function Board({
     return () => animations.forEach((animation) => animation.cancel());
   }, [motionKey]);
   const [selected, setSelected] = useState<Square | null>(null);
+  const promotionPicker = useRef<HTMLDivElement>(null);
   const [promotion, setPromotion] = useState<Square | null>(null);
+  useEffect(() => {
+    if (promotion) promotionPicker.current?.querySelector("button")?.focus();
+  }, [promotion]);
   const [notice, setNotice] = useState("");
   const game = new Chess(fen);
   const targets = selected
@@ -139,7 +143,12 @@ export function Board({
           })}
       </div>
       {promotion && (
-        <div className="promotion" role="group" aria-label="Promotion piece">
+        <div
+          ref={promotionPicker}
+          className="promotion"
+          role="group"
+          aria-label="Promotion piece"
+        >
           {(["q", "r", "b", "n"] as const).map((p) => (
             <button
               key={p}

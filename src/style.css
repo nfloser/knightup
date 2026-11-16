@@ -1398,3 +1398,55 @@ button.square:not(:disabled):active {
     display: none;
   }
 }
+
+.board-wrap {
+  position: relative;
+}
+.promotion {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: min(280px, calc(100% - 16px));
+  padding: 10px;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 4px 20px #0003;
+}
+.promotion button {
+  min-height: 44px;
+  padding: 8px;
+  font-size: 0.72rem;
+  line-height: 1.25;
+  border-radius: 4px;
+}
+@keyframes feedback-opacity {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (max-width: 760px) {
+  .workspace:has(.lesson-screen) > main {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .lesson-screen {
+    height: auto;
+    flex: 1;
+    min-height: 0;
+  }
+  .lesson-screen .feedback-entry,
+  .lesson-screen .hint,
+  .lesson-screen .move-explanation {
+    animation-name: feedback-opacity;
+  }
+}

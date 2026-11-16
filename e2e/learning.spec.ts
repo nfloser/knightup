@@ -215,11 +215,17 @@ test("phone exercise and Explain fit the viewport without clipped controls", asy
       page.getByRole("button", { name: "Check", exact: true }),
     ])
       await expect(locator).toBeInViewport({ ratio: 1 });
+    const dimensions = await page
+      .locator(".lesson-screen")
+      .evaluate((e) => ({ scroll: e.scrollHeight, client: e.clientHeight }));
+    if (dimensions.scroll > dimensions.client + 1)
+      await page.screenshot({
+        path: `test-results/overflow-${width}-${height}-${test.info().project.name}.png`,
+      });
     expect(
-      await page
-        .locator(".lesson-screen")
-        .evaluate((e) => e.scrollHeight <= e.clientHeight + 1),
-    ).toBe(true);
+      dimensions.scroll,
+      `${width}x${height} screen overflow`,
+    ).toBeLessThanOrEqual(dimensions.client + 1);
     expect(
       await page.evaluate(
         () => document.documentElement.scrollHeight <= window.innerHeight + 1,
@@ -237,14 +243,61 @@ test("phone exercise and Explain fit the viewport without clipped controls", asy
       ratio: 1,
     });
     await expect(page.locator(".board")).toBeInViewport({ ratio: 1 });
+    const explainedDimensions = await page
+      .locator(".lesson-screen")
+      .evaluate((e) => ({ scroll: e.scrollHeight, client: e.clientHeight }));
+    if (explainedDimensions.scroll > explainedDimensions.client + 1)
+      await page.screenshot({
+        path: `test-results/overflow-explain-${width}-${height}-${test.info().project.name}.png`,
+      });
     expect(
-      await page
-        .locator(".lesson-screen")
-        .evaluate((e) => e.scrollHeight <= e.clientHeight + 1),
-    ).toBe(true);
+      explainedDimensions.scroll,
+      `${width}x${height} Explain overflow`,
+    ).toBeLessThanOrEqual(explainedDimensions.client + 1);
     if (width === 375)
       await page.screenshot({
         path: `test-results/training-explain-${test.info().project.name}.png`,
       });
   }
+});
+
+test("mobile restore notice and promotion picker never clip training actions", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto("./");
+  await page.getByRole("button", { name: "Profile", exact: true }).click();
+  await page
+    .locator("input[type=file]")
+    .setInputFiles({
+      name: "restore.json",
+      mimeType: "application/json",
+      buffer: Buffer.from('{"version":1,"completed":[]}'),
+    });
+  await expect(page.getByRole("status")).toContainText("Backup restored");
+  await page.getByRole("button", { name: "Practice", exact: true }).click();
+  await page.getByRole("button", { name: /DRILL 07/ }).click();
+  await expect(page.getByLabel("Your move in English SAN")).toBeInViewport({
+    ratio: 1,
+  });
+  await page
+    .getByRole("button", { name: "e7 White pawn", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "e8 legal destination", exact: true })
+    .click();
+  for (const piece of ["queen", "rook", "bishop", "knight"])
+    await expect(
+      page.getByRole("button", { name: `Promote to ${piece}`, exact: true }),
+    ).toBeInViewport({ ratio: 1 });
+  const picker = await page.locator(".promotion").boundingBox();
+  const form = await page.locator("form").boundingBox();
+  expect(picker!.y + picker!.height).toBeLessThanOrEqual(form!.y);
+  await expect(
+    page.getByRole("button", { name: "Check", exact: true }),
+  ).toBeInViewport({ ratio: 1 });
+  await page
+    .getByRole("button", { name: "Promote to queen", exact: true })
+    .click();
+  await expect(page.getByText("✓ Correct move", { exact: true })).toBeVisible();
 });
