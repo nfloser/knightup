@@ -1,3 +1,4 @@
+import { moveFeedback } from "./moveFeedback";
 import { useTrainingViewport } from "./useTrainingViewport";
 import { useEffect, useRef, useState } from "react";
 import { Chess, type Move } from "chess.js";
@@ -34,7 +35,8 @@ export function PlayCoach({ onExit }: { onExit: () => void }) {
       "Choose your starting challenge. This is a practice level, not Elo.",
     ),
     [assisted, setAssisted] = useState(false),
-    [over, setOver] = useState(false);
+    [over, setOver] = useState(false),
+    [reviewMoves, setReviewMoves] = useState(true);
   const assist = useRef(false),
     playingColor = useRef<"w" | "b">("w"),
     gameLevel = useRef(2);
@@ -170,6 +172,7 @@ export function PlayCoach({ onExit }: { onExit: () => void }) {
       return;
     await run(async () => {
       let m: Move;
+      const before = game.current.fen();
       try {
         m = game.current.move(san);
       } catch {
@@ -179,7 +182,29 @@ export function PlayCoach({ onExit }: { onExit: () => void }) {
       setInput("");
       setMessage("Your move. Look for checks, captures and threats.");
       await publish(m);
+      let review = "";
+      if (reviewMoves && !game.current.isGameOver()) {
+        try {
+          const score = await client().evaluate(
+            before,
+            controller.current.signal,
+          );
+          if (controller.current.signal.aborted) return;
+          review = moveFeedback(m.san, legalVariation(before, score.pv));
+        } catch {
+          if (controller.current.signal.aborted) return;
+          engine.current?.close();
+          engine.current = null;
+          review = `Move review for ${m.san} is unavailable. Continue your game.`;
+        }
+      }
       await reply();
+      if (
+        review &&
+        !controller.current.signal.aborted &&
+        !game.current.isGameOver()
+      )
+        setMessage(review);
     });
   }
   async function explain() {
@@ -215,6 +240,15 @@ export function PlayCoach({ onExit }: { onExit: () => void }) {
           Strength adjusts gradually after at least three unassisted games; the
           most recent eight results guide it. Levels are not Elo ratings.
         </p>
+        <p>Games have no clock. Take as long as you need.</p>
+        <label>
+          <input
+            type="checkbox"
+            checked={reviewMoves}
+            onChange={(e) => setReviewMoves(e.target.checked)}
+          />{" "}
+          Review my moves with Stockfish
+        </label>
         <p>
           {progress.games} completed unassisted games · recommended level{" "}
           {progress.level}

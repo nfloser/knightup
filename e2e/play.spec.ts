@@ -12,6 +12,10 @@ test("plays a legal Stockfish reply and explains without making the user move", 
   await expect(
     page.getByRole("heading", { name: "Your move", exact: true }),
   ).toBeVisible({ timeout: 45000 });
+  await expect(page.locator(".play-screen .feedback")).toContainText(
+    "Stockfish",
+    { timeout: 45000 },
+  );
   await page.getByRole("button", { name: "Explain", exact: true }).click();
   await expect(page.locator(".play-screen .feedback")).toContainText(
     "Stockfish suggests",
