@@ -1,0 +1,1284 @@
+[
+  {
+    "id": "01uI5",
+    "fen": "rn1Br1k1/pp3ppp/2p5/3p3b/3P4/5B1P/PPP2PP1/RN2R1K1 b - - 0 14",
+    "moves": [
+      "h5f3",
+      "e1e8"
+    ],
+    "rating": 536,
+    "themes": [
+      "backRankMate",
+      "hangingPiece",
+      "mate",
+      "mateIn1",
+      "middlegame",
+      "oneMove"
+    ],
+    "url": "https://lichess.org/game/JfkAS8xm/black#28",
+    "phase": "foundations",
+    "focus": "mateIn1"
+  },
+  {
+    "id": "00pCr",
+    "fen": "6nk/pRQ4p/6p1/5p2/4p3/2b2nP1/q4PKP/5B2 b - - 3 31",
+    "moves": [
+      "c3d4",
+      "c7h7"
+    ],
+    "rating": 692,
+    "themes": [
+      "master",
+      "mate",
+      "mateIn1",
+      "middlegame",
+      "oneMove"
+    ],
+    "url": "https://lichess.org/game/NGOQ1yu4/black#62",
+    "phase": "foundations",
+    "focus": "mateIn1"
+  },
+  {
+    "id": "02Pxu",
+    "fen": "6k1/R7/6K1/7P/8/6p1/8/7r b - - 3 58",
+    "moves": [
+      "g3g2",
+      "a7a8"
+    ],
+    "rating": 847,
+    "themes": [
+      "endgame",
+      "mate",
+      "mateIn1",
+      "oneMove",
+      "rookEndgame"
+    ],
+    "url": "https://lichess.org/game/pf17o3oj/black#116",
+    "phase": "foundations",
+    "focus": "mateIn1"
+  },
+  {
+    "id": "02hTQ",
+    "fen": "2rr1k2/5Pp1/2p4p/1pP1N3/1P6/6P1/6KP/5R2 b - - 0 32",
+    "moves": [
+      "d8d5",
+      "e5g6"
+    ],
+    "rating": 972,
+    "themes": [
+      "endgame",
+      "mate",
+      "mateIn1",
+      "oneMove"
+    ],
+    "url": "https://lichess.org/game/wLwnVFWE/black#64",
+    "phase": "foundations",
+    "focus": "mateIn1"
+  },
+  {
+    "id": "00SfT",
+    "fen": "r4rk1/pb2ppb1/1q6/6PQ/8/2NP1N2/PPnK1PP1/R6R b - - 1 16",
+    "moves": [
+      "c2a1",
+      "h5h7"
+    ],
+    "rating": 1119,
+    "themes": [
+      "mate",
+      "mateIn1",
+      "middlegame",
+      "oneMove"
+    ],
+    "url": "https://lichess.org/game/5y0Ha2gI/black#32",
+    "phase": "foundations",
+    "focus": "mateIn1"
+  },
+  {
+    "id": "01FjT",
+    "fen": "r3k1nr/pp2B3/2p1p3/3q3p/4N1p1/3P2P1/PPP2P1P/R3Q1K1 b kq - 0 18",
+    "moves": [
+      "g8e7",
+      "e4f6",
+      "e8f7",
+      "f6d5"
+    ],
+    "rating": 705,
+    "themes": [
+      "advantage",
+      "fork",
+      "middlegame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/ypELDUnH/black#36",
+    "phase": "foundations",
+    "focus": "fork"
+  },
+  {
+    "id": "02nxc",
+    "fen": "r3k2r/pp1q3p/4p1p1/2bN4/P5Pn/8/RPP4P/2BQR2K b kq - 0 19",
+    "moves": [
+      "d7c6",
+      "e1e6",
+      "c6e6",
+      "d5c7",
+      "e8f7",
+      "c7e6"
+    ],
+    "rating": 880,
+    "themes": [
+      "advantage",
+      "attraction",
+      "exposedKing",
+      "fork",
+      "long",
+      "middlegame",
+      "sacrifice"
+    ],
+    "url": "https://lichess.org/game/FZ8OHv03/black#38",
+    "phase": "foundations",
+    "focus": "fork"
+  },
+  {
+    "id": "01GiU",
+    "fen": "6rk/1p3p2/1qb1pP1p/p2p2B1/P2P2Q1/2P5/7P/R4RK1 w - - 0 26",
+    "moves": [
+      "g4h5",
+      "g8g5",
+      "h5g5",
+      "h6g5"
+    ],
+    "rating": 975,
+    "themes": [
+      "advantage",
+      "fork",
+      "middlegame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/rlEIa92S#51",
+    "phase": "foundations",
+    "focus": "fork"
+  },
+  {
+    "id": "01LPz",
+    "fen": "8/p6k/2pr2p1/4Np1p/4n2P/2n1P1P1/P4PB1/2R3K1 w - - 4 37",
+    "moves": [
+      "g2e4",
+      "c3e2",
+      "g1g2",
+      "e2c1"
+    ],
+    "rating": 1090,
+    "themes": [
+      "advantage",
+      "endgame",
+      "fork",
+      "master",
+      "short"
+    ],
+    "url": "https://lichess.org/game/zjEzF4hk#73",
+    "phase": "foundations",
+    "focus": "fork"
+  },
+  {
+    "id": "02lUz",
+    "fen": "r1r3k1/1p3ppp/2q1pn2/1N5P/P7/1P4Q1/2P2PP1/2KR3R w - - 1 21",
+    "moves": [
+      "d1d2",
+      "f6e4",
+      "g3e3",
+      "e4d2"
+    ],
+    "rating": 1175,
+    "themes": [
+      "advantage",
+      "fork",
+      "middlegame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/mbtBqygR#41",
+    "phase": "foundations",
+    "focus": "fork"
+  },
+  {
+    "id": "00NR5",
+    "fen": "R5k1/3r2pp/3N4/1nP5/6P1/1P3P2/P2K2n1/8 b - - 1 30",
+    "moves": [
+      "d7d8",
+      "a8d8"
+    ],
+    "rating": 539,
+    "themes": [
+      "endgame",
+      "hangingPiece",
+      "mate",
+      "mateIn1",
+      "oneMove"
+    ],
+    "url": "https://lichess.org/game/nRo0kQGD/black#60",
+    "phase": "foundations",
+    "focus": "hangingPiece"
+  },
+  {
+    "id": "00eCY",
+    "fen": "8/6p1/5p1p/R5kP/2b3P1/1r3PK1/8/8 b - - 4 61",
+    "moves": [
+      "c4d5",
+      "a5d5",
+      "f6f5",
+      "d5f5"
+    ],
+    "rating": 706,
+    "themes": [
+      "endgame",
+      "hangingPiece",
+      "mate",
+      "mateIn2",
+      "short"
+    ],
+    "url": "https://lichess.org/game/LXHmo9rD/black#122",
+    "phase": "foundations",
+    "focus": "hangingPiece"
+  },
+  {
+    "id": "00dzT",
+    "fen": "6k1/1Q4p1/p1p4p/3pP3/P3bq2/2N4P/1P4PK/5B2 w - - 1 26",
+    "moves": [
+      "h2h1",
+      "f4f1",
+      "h1h2",
+      "f1g2"
+    ],
+    "rating": 857,
+    "themes": [
+      "endgame",
+      "hangingPiece",
+      "mate",
+      "mateIn2",
+      "short"
+    ],
+    "url": "https://lichess.org/game/Kxd5ijdt#51",
+    "phase": "foundations",
+    "focus": "hangingPiece"
+  },
+  {
+    "id": "00d6g",
+    "fen": "r4n2/1p4pk/2p1R3/p2p1nPp/7P/3P1P1B/PP6/2K4R b - - 0 23",
+    "moves": [
+      "f8e6",
+      "h3f5",
+      "g7g6",
+      "f5e6"
+    ],
+    "rating": 960,
+    "themes": [
+      "advantage",
+      "endgame",
+      "fork",
+      "hangingPiece",
+      "short"
+    ],
+    "url": "https://lichess.org/game/Fsjwwt2F/black#46",
+    "phase": "foundations",
+    "focus": "hangingPiece"
+  },
+  {
+    "id": "023oo",
+    "fen": "r5k1/pp5p/2pN2p1/2P1n3/5Pq1/1P5b/P4RB1/Q5K1 b - - 2 24",
+    "moves": [
+      "a8f8",
+      "a1e5",
+      "h3g2",
+      "f2g2"
+    ],
+    "rating": 1099,
+    "themes": [
+      "advantage",
+      "hangingPiece",
+      "middlegame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/6oHAJVCE/black#48",
+    "phase": "foundations",
+    "focus": "hangingPiece"
+  },
+  {
+    "id": "01Ou9",
+    "fen": "5N1k/5qp1/p6p/8/8/4r3/6PP/5R1K w - - 0 32",
+    "moves": [
+      "f1f7",
+      "e3e1",
+      "f7f1",
+      "e1f1"
+    ],
+    "rating": 476,
+    "themes": [
+      "backRankMate",
+      "endgame",
+      "mate",
+      "mateIn2",
+      "short"
+    ],
+    "url": "https://lichess.org/game/Fh2rZgZT#63",
+    "phase": "foundations",
+    "focus": "backRankMate"
+  },
+  {
+    "id": "01hbV",
+    "fen": "3r2k1/1q3n1p/6p1/2PB1p2/1P6/2Q1P3/2P2PPP/6K1 w - - 0 31",
+    "moves": [
+      "d5b7",
+      "d8d1",
+      "c3e1",
+      "d1e1"
+    ],
+    "rating": 585,
+    "themes": [
+      "backRankMate",
+      "endgame",
+      "mate",
+      "mateIn2",
+      "short"
+    ],
+    "url": "https://lichess.org/game/MIAJyKTV#61",
+    "phase": "foundations",
+    "focus": "backRankMate"
+  },
+  {
+    "id": "00s8j",
+    "fen": "3r4/ppk5/2r5/5Q2/4p3/P7/5PPP/3R2K1 w - - 1 35",
+    "moves": [
+      "d1d8",
+      "c6c1",
+      "d8d1",
+      "c1d1"
+    ],
+    "rating": 701,
+    "themes": [
+      "backRankMate",
+      "endgame",
+      "mate",
+      "mateIn2",
+      "queenRookEndgame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/o149kmbP#69",
+    "phase": "foundations",
+    "focus": "backRankMate"
+  },
+  {
+    "id": "03R4H",
+    "fen": "3r2k1/5ppp/1Q1B1b2/1p6/2p5/8/1Pq2PPP/4R1K1 b - - 1 22",
+    "moves": [
+      "c2d2",
+      "b6d8",
+      "f6d8",
+      "e1e8"
+    ],
+    "rating": 900,
+    "themes": [
+      "backRankMate",
+      "endgame",
+      "mate",
+      "mateIn2",
+      "sacrifice",
+      "short"
+    ],
+    "url": "https://lichess.org/game/XTdibgnH/black#44",
+    "phase": "foundations",
+    "focus": "backRankMate"
+  },
+  {
+    "id": "001Wz",
+    "fen": "4r1k1/5ppp/r1p5/p1n1RP2/8/2P2N1P/2P3P1/3R2K1 b - - 0 21",
+    "moves": [
+      "e8e5",
+      "d1d8",
+      "e5e8",
+      "d8e8"
+    ],
+    "rating": 1118,
+    "themes": [
+      "backRankMate",
+      "endgame",
+      "mate",
+      "mateIn2",
+      "short"
+    ],
+    "url": "https://lichess.org/game/84RH3LaP/black#42",
+    "phase": "foundations",
+    "focus": "backRankMate"
+  },
+  {
+    "id": "017xQ",
+    "fen": "2b5/7k/1P6/5N2/6p1/6Kp/8/8 b - - 0 53",
+    "moves": [
+      "h7g6",
+      "f5e7",
+      "g6g5",
+      "e7c8"
+    ],
+    "rating": 849,
+    "themes": [
+      "crushing",
+      "endgame",
+      "fork",
+      "short"
+    ],
+    "url": "https://lichess.org/game/2fZ7FynM/black#106",
+    "phase": "middlegame",
+    "focus": "fork"
+  },
+  {
+    "id": "01Gvc",
+    "fen": "1k1r3r/ppp4p/3np1p1/Pb1pQ2P/3P4/2P5/1P1K1PP1/R6R w - - 1 22",
+    "moves": [
+      "h5g6",
+      "d6c4",
+      "d2c2",
+      "c4e5"
+    ],
+    "rating": 1008,
+    "themes": [
+      "advantage",
+      "fork",
+      "middlegame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/CTGHtpTC#43",
+    "phase": "middlegame",
+    "focus": "fork"
+  },
+  {
+    "id": "02qUN",
+    "fen": "7r/ppp1k1p1/7p/4N3/8/2P5/P1P2PbP/2KR4 b - - 0 18",
+    "moves": [
+      "g2h3",
+      "e5g6",
+      "e7f6",
+      "g6h8"
+    ],
+    "rating": 1159,
+    "themes": [
+      "crushing",
+      "endgame",
+      "fork",
+      "short"
+    ],
+    "url": "https://lichess.org/game/Qz9tJff1/black#36",
+    "phase": "middlegame",
+    "focus": "fork"
+  },
+  {
+    "id": "02GQ5",
+    "fen": "8/p5k1/5R2/3PP3/2P2N1p/1P2n3/3r4/7K w - - 0 42",
+    "moves": [
+      "d5d6",
+      "d2d1",
+      "h1h2",
+      "e3g4",
+      "h2h3",
+      "g4f6"
+    ],
+    "rating": 1368,
+    "themes": [
+      "advantage",
+      "endgame",
+      "exposedKing",
+      "fork",
+      "long"
+    ],
+    "url": "https://lichess.org/game/kM3WseIN#83",
+    "phase": "middlegame",
+    "focus": "fork"
+  },
+  {
+    "id": "038tw",
+    "fen": "4r1k1/5r1p/p2qN1pQ/2p1nP2/2Pp4/4p2P/PP4P1/4RRK1 b - - 3 31",
+    "moves": [
+      "e5d3",
+      "f5g6",
+      "d6e6",
+      "g6f7",
+      "e6f7",
+      "f1f7"
+    ],
+    "rating": 1579,
+    "themes": [
+      "advancedPawn",
+      "crushing",
+      "fork",
+      "long",
+      "middlegame"
+    ],
+    "url": "https://lichess.org/game/jMO2A4ur/black#62",
+    "phase": "middlegame",
+    "focus": "fork"
+  },
+  {
+    "id": "00blC",
+    "fen": "5r2/1Pk5/8/K7/8/1P3B2/8/8 w - - 1 47",
+    "moves": [
+      "f3d5",
+      "f8f5",
+      "b7b8b",
+      "c7b8",
+      "a5b5",
+      "f5d5"
+    ],
+    "rating": 1027,
+    "themes": [
+      "crushing",
+      "endgame",
+      "long",
+      "pin"
+    ],
+    "url": "https://lichess.org/game/IdlWudUv#93",
+    "phase": "middlegame",
+    "focus": "pin"
+  },
+  {
+    "id": "031qu",
+    "fen": "rn2kb1r/pp3ppp/2p1pn2/q2pN3/2PP1BP1/4P2P/PP3P2/1R1QKB1R w Kkq - 1 10",
+    "moves": [
+      "d1d2",
+      "f8b4",
+      "d2b4",
+      "a5b4"
+    ],
+    "rating": 1246,
+    "themes": [
+      "advantage",
+      "middlegame",
+      "pin",
+      "short"
+    ],
+    "url": "https://lichess.org/game/BBTQVWUs#19",
+    "phase": "middlegame",
+    "focus": "pin"
+  },
+  {
+    "id": "02jBf",
+    "fen": "r1b4r/1p1pkppp/pq1Np3/3Bn3/8/P4P2/1P1B2PP/R2QK2R b KQ - 0 17",
+    "moves": [
+      "b6d6",
+      "d2b4",
+      "d6b4",
+      "a3b4"
+    ],
+    "rating": 1402,
+    "themes": [
+      "crushing",
+      "middlegame",
+      "pin",
+      "short"
+    ],
+    "url": "https://lichess.org/game/M7zamHVN/black#34",
+    "phase": "middlegame",
+    "focus": "pin"
+  },
+  {
+    "id": "01Btz",
+    "fen": "2r1k2r/1p2bppp/1q1p4/p2Pp1P1/5n1P/1N3P2/PPPQ4/2KR1B1R w k - 0 17",
+    "moves": [
+      "a2a4",
+      "b6b3",
+      "f1b5",
+      "e8f8"
+    ],
+    "rating": 1528,
+    "themes": [
+      "advantage",
+      "defensiveMove",
+      "middlegame",
+      "pin",
+      "short"
+    ],
+    "url": "https://lichess.org/game/FMeNuY7a#33",
+    "phase": "middlegame",
+    "focus": "pin"
+  },
+  {
+    "id": "00XZR",
+    "fen": "8/2p5/p1n5/1pP1p2k/1P1p4/P2P3P/5P2/R4KRq b - - 9 34",
+    "moves": [
+      "h1h3",
+      "f1e2",
+      "e5e4",
+      "g1h1",
+      "e4d3",
+      "e2d2"
+    ],
+    "rating": 1678,
+    "themes": [
+      "crushing",
+      "defensiveMove",
+      "endgame",
+      "long",
+      "pin"
+    ],
+    "url": "https://lichess.org/game/cvl7Zq2b/black#68",
+    "phase": "middlegame",
+    "focus": "pin"
+  },
+  {
+    "id": "01DXj",
+    "fen": "8/pR6/8/P7/2Pb1rk1/1P1K4/8/8 b - - 0 39",
+    "moves": [
+      "d4g1",
+      "b7g7",
+      "g4f5",
+      "g7g1"
+    ],
+    "rating": 815,
+    "themes": [
+      "advantage",
+      "endgame",
+      "master",
+      "short",
+      "skewer"
+    ],
+    "url": "https://lichess.org/game/kyzVQnHB/black#78",
+    "phase": "middlegame",
+    "focus": "skewer"
+  },
+  {
+    "id": "02Z4F",
+    "fen": "6Q1/p7/8/1p6/1P3P2/P2kqK2/8/8 w - - 1 58",
+    "moves": [
+      "f3g4",
+      "e3g1",
+      "g4f5",
+      "g1g8"
+    ],
+    "rating": 989,
+    "themes": [
+      "crushing",
+      "endgame",
+      "queenEndgame",
+      "short",
+      "skewer"
+    ],
+    "url": "https://lichess.org/game/xu5pvuXh#115",
+    "phase": "middlegame",
+    "focus": "skewer"
+  },
+  {
+    "id": "02Ps5",
+    "fen": "2k3r1/p4prp/8/2p5/8/NPPp1P2/PB1P1K1P/4R3 w - - 6 23",
+    "moves": [
+      "a3c4",
+      "g7g2",
+      "f2e3",
+      "g8e8",
+      "e3d3",
+      "e8e1"
+    ],
+    "rating": 1144,
+    "themes": [
+      "advantage",
+      "endgame",
+      "long",
+      "skewer"
+    ],
+    "url": "https://lichess.org/game/CcsRDtwu#45",
+    "phase": "middlegame",
+    "focus": "skewer"
+  },
+  {
+    "id": "02meJ",
+    "fen": "5k2/3Q4/p6p/2P4P/P2P2KP/5p2/5Pb1/7r w - - 3 41",
+    "moves": [
+      "c5c6",
+      "g2h3",
+      "g4f3",
+      "h3d7",
+      "c6d7",
+      "f8e7",
+      "d7d8r",
+      "e7d8"
+    ],
+    "rating": 1366,
+    "themes": [
+      "crushing",
+      "endgame",
+      "master",
+      "skewer",
+      "veryLong"
+    ],
+    "url": "https://lichess.org/game/A4fUdHcm#81",
+    "phase": "middlegame",
+    "focus": "skewer"
+  },
+  {
+    "id": "03COV",
+    "fen": "r4rk1/p2b1ppp/3bp3/3pq3/2pN4/P1P1B1P1/1P1Q1P1P/R4RK1 b - - 0 20",
+    "moves": [
+      "h7h6",
+      "e3f4",
+      "e5f6",
+      "f4d6"
+    ],
+    "rating": 1598,
+    "themes": [
+      "advantage",
+      "middlegame",
+      "short",
+      "skewer"
+    ],
+    "url": "https://lichess.org/game/q3PiiNYF/black#40",
+    "phase": "middlegame",
+    "focus": "skewer"
+  },
+  {
+    "id": "02zVb",
+    "fen": "r2q1r2/p5k1/3b1ppp/1p1p4/2pP4/P1P2Q1P/1P1N1PP1/R3R1K1 w - - 0 24",
+    "moves": [
+      "f3d5",
+      "d6h2",
+      "g1h2",
+      "d8d5"
+    ],
+    "rating": 946,
+    "themes": [
+      "advantage",
+      "discoveredAttack",
+      "middlegame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/1jp7XnRC#47",
+    "phase": "middlegame",
+    "focus": "discoveredAttack"
+  },
+  {
+    "id": "03aHZ",
+    "fen": "r2r2k1/1pq1ppbp/p1b2np1/8/2B5/1P2P3/PBQ1NPPP/2R2RK1 b - - 5 15",
+    "moves": [
+      "c6e4",
+      "c4f7",
+      "g8f7",
+      "c2c7"
+    ],
+    "rating": 1128,
+    "themes": [
+      "crushing",
+      "discoveredAttack",
+      "middlegame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/wP3Go3UT/black#30",
+    "phase": "middlegame",
+    "focus": "discoveredAttack"
+  },
+  {
+    "id": "02veN",
+    "fen": "5rk1/6pp/pqP1R3/3Q4/8/8/P4rPP/R5K1 w - - 1 22",
+    "moves": [
+      "e6e8",
+      "f2f7",
+      "g1h1",
+      "f8e8"
+    ],
+    "rating": 1276,
+    "themes": [
+      "crushing",
+      "discoveredAttack",
+      "discoveredCheck",
+      "endgame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/i6Uct88K#43",
+    "phase": "middlegame",
+    "focus": "discoveredAttack"
+  },
+  {
+    "id": "036O1",
+    "fen": "r4rk1/p1p1b1p1/2pq1n2/3p3p/3P4/2P5/PPN1QPPP/R1B2RK1 w - - 0 16",
+    "moves": [
+      "c1g5",
+      "f6g4",
+      "g2g3",
+      "e7g5"
+    ],
+    "rating": 1474,
+    "themes": [
+      "advantage",
+      "discoveredAttack",
+      "middlegame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/48IGTHgW#31",
+    "phase": "middlegame",
+    "focus": "discoveredAttack"
+  },
+  {
+    "id": "01x76",
+    "fen": "5rk1/6pp/2pQ4/3pN3/5q2/2P2b1P/6P1/4R1K1 w - - 0 29",
+    "moves": [
+      "g2f3",
+      "f4g3",
+      "g1f1",
+      "f8f3",
+      "e5f3",
+      "g3d6",
+      "e1e8",
+      "g8f7"
+    ],
+    "rating": 1626,
+    "themes": [
+      "advantage",
+      "discoveredAttack",
+      "endgame",
+      "exposedKing",
+      "fork",
+      "veryLong"
+    ],
+    "url": "https://lichess.org/game/gHnDYMnI#57",
+    "phase": "middlegame",
+    "focus": "discoveredAttack"
+  },
+  {
+    "id": "03Bce",
+    "fen": "8/8/8/1p1k4/1P4p1/p3K1Pp/P6P/8 w - - 5 48",
+    "moves": [
+      "e3f4",
+      "d5c4",
+      "f4g4",
+      "c4b4"
+    ],
+    "rating": 822,
+    "themes": [
+      "crushing",
+      "endgame",
+      "pawnEndgame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/TlpdLOtQ#95",
+    "phase": "endgame",
+    "focus": "pawnEndgame"
+  },
+  {
+    "id": "00mnZ",
+    "fen": "8/p5k1/1pp2pp1/4Pp1p/5P1P/2P3P1/PP4K1/8 b - - 0 35",
+    "moves": [
+      "f6e5",
+      "f4e5",
+      "g7f7",
+      "g2f3",
+      "f7e6",
+      "f3f4"
+    ],
+    "rating": 1046,
+    "themes": [
+      "advantage",
+      "endgame",
+      "long",
+      "pawnEndgame"
+    ],
+    "url": "https://lichess.org/game/IcNWHIbW/black#70",
+    "phase": "endgame",
+    "focus": "pawnEndgame"
+  },
+  {
+    "id": "00kWx",
+    "fen": "8/8/1p2pk2/p1p5/P1Pp2PK/1P1P4/8/8 w - - 1 42",
+    "moves": [
+      "g4g5",
+      "f6g6",
+      "h4g4",
+      "e6e5"
+    ],
+    "rating": 1278,
+    "themes": [
+      "crushing",
+      "defensiveMove",
+      "endgame",
+      "pawnEndgame",
+      "short",
+      "zugzwang"
+    ],
+    "url": "https://lichess.org/game/ikCxx1tP#83",
+    "phase": "endgame",
+    "focus": "pawnEndgame"
+  },
+  {
+    "id": "026YW",
+    "fen": "8/p4pp1/7p/4k3/1pppP1P1/1P3PP1/P1PK4/8 b - - 0 31",
+    "moves": [
+      "c4c3",
+      "d2d3",
+      "g7g5",
+      "d3c4"
+    ],
+    "rating": 1439,
+    "themes": [
+      "advantage",
+      "defensiveMove",
+      "endgame",
+      "pawnEndgame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/LxHILHYG/black#62",
+    "phase": "endgame",
+    "focus": "pawnEndgame"
+  },
+  {
+    "id": "02rN8",
+    "fen": "8/8/p2p4/1ppPpPk1/2P5/PP1P1K2/8/8 b - - 0 44",
+    "moves": [
+      "g5f5",
+      "c4b5",
+      "a6b5",
+      "a3a4",
+      "b5a4",
+      "b3a4"
+    ],
+    "rating": 1603,
+    "themes": [
+      "crushing",
+      "endgame",
+      "long",
+      "pawnEndgame"
+    ],
+    "url": "https://lichess.org/game/Z0R6OpeM/black#88",
+    "phase": "endgame",
+    "focus": "pawnEndgame"
+  },
+  {
+    "id": "022AB",
+    "fen": "4k3/5p1p/5p2/8/1R5P/p4rP1/P1P5/1K6 w - - 0 35",
+    "moves": [
+      "b4b3",
+      "f3f1"
+    ],
+    "rating": 767,
+    "themes": [
+      "endgame",
+      "mate",
+      "mateIn1",
+      "oneMove",
+      "rookEndgame"
+    ],
+    "url": "https://lichess.org/game/I2Sw50W0#69",
+    "phase": "endgame",
+    "focus": "rookEndgame"
+  },
+  {
+    "id": "00Aae",
+    "fen": "1R6/1P6/4pkp1/5p2/3P3p/3KP3/8/1r6 b - - 0 43",
+    "moves": [
+      "h4h3",
+      "b8f8",
+      "f6e7",
+      "b7b8q",
+      "b1b8",
+      "f8b8"
+    ],
+    "rating": 971,
+    "themes": [
+      "advancedPawn",
+      "clearance",
+      "crushing",
+      "endgame",
+      "long",
+      "promotion",
+      "rookEndgame"
+    ],
+    "url": "https://lichess.org/game/mLIjph1r/black#86",
+    "phase": "endgame",
+    "focus": "rookEndgame"
+  },
+  {
+    "id": "02jr4",
+    "fen": "8/5p2/2k5/8/p5Pp/P6r/1PPR4/2K5 w - - 0 39",
+    "moves": [
+      "c1d1",
+      "h3h1",
+      "d1e2",
+      "h1h2"
+    ],
+    "rating": 1141,
+    "themes": [
+      "crushing",
+      "endgame",
+      "rookEndgame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/tMEtL4pb#77",
+    "phase": "endgame",
+    "focus": "rookEndgame"
+  },
+  {
+    "id": "03OY1",
+    "fen": "8/6p1/7p/8/2pk3P/6P1/P1R1K3/3r4 b - - 1 49",
+    "moves": [
+      "d1d3",
+      "c2d2",
+      "d3d2",
+      "e2d2"
+    ],
+    "rating": 1360,
+    "themes": [
+      "crushing",
+      "endgame",
+      "master",
+      "pin",
+      "rookEndgame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/hoiRjk7O/black#98",
+    "phase": "endgame",
+    "focus": "rookEndgame"
+  },
+  {
+    "id": "03aEm",
+    "fen": "r5k1/1R1P1pp1/8/7p/3p4/3K1P2/8/8 b - - 0 33",
+    "moves": [
+      "h5h4",
+      "b7c7",
+      "g8h7",
+      "c7c8"
+    ],
+    "rating": 1545,
+    "themes": [
+      "crushing",
+      "endgame",
+      "quietMove",
+      "rookEndgame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/qG8JOq5y/black#66",
+    "phase": "endgame",
+    "focus": "rookEndgame"
+  },
+  {
+    "id": "02I1j",
+    "fen": "8/8/p7/5PP1/P4K2/2p5/3k4/4r1R1 w - - 5 52",
+    "moves": [
+      "g1e1",
+      "d2e1",
+      "f5f6",
+      "c3c2",
+      "f6f7",
+      "c2c1q"
+    ],
+    "rating": 837,
+    "themes": [
+      "advancedPawn",
+      "crushing",
+      "endgame",
+      "long",
+      "master",
+      "promotion"
+    ],
+    "url": "https://lichess.org/game/7G5T7Bo8#103",
+    "phase": "endgame",
+    "focus": "promotion"
+  },
+  {
+    "id": "001w5",
+    "fen": "1rb2rk1/q5P1/4p2p/3p3p/3P1P2/2P5/2QK3P/3R2R1 b - - 0 29",
+    "moves": [
+      "f8f7",
+      "c2h7",
+      "g8h7",
+      "g7g8q"
+    ],
+    "rating": 1034,
+    "themes": [
+      "advancedPawn",
+      "attraction",
+      "mate",
+      "mateIn2",
+      "middlegame",
+      "promotion",
+      "short"
+    ],
+    "url": "https://lichess.org/game/0e1vxAEn/black#58",
+    "phase": "endgame",
+    "focus": "promotion"
+  },
+  {
+    "id": "01GnH",
+    "fen": "1R6/P7/6p1/7p/8/7k/K7/2q5 b - - 1 43",
+    "moves": [
+      "c1c4",
+      "b8b3",
+      "h3g4",
+      "a7a8q"
+    ],
+    "rating": 1160,
+    "themes": [
+      "advancedPawn",
+      "advantage",
+      "endgame",
+      "promotion",
+      "queenRookEndgame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/QXjY4nyw/black#86",
+    "phase": "endgame",
+    "focus": "promotion"
+  },
+  {
+    "id": "03f9e",
+    "fen": "7R/8/8/2P2b2/3K1P2/8/6kp/8 w - - 1 60",
+    "moves": [
+      "d4e5",
+      "f5h3",
+      "c5c6",
+      "h2h1q"
+    ],
+    "rating": 1359,
+    "themes": [
+      "advancedPawn",
+      "crushing",
+      "endgame",
+      "master",
+      "promotion",
+      "quietMove",
+      "short"
+    ],
+    "url": "https://lichess.org/game/9yeeVf6U#119",
+    "phase": "endgame",
+    "focus": "promotion"
+  },
+  {
+    "id": "01RWL",
+    "fen": "8/1B1K4/p4k2/8/1P4p1/5p2/P7/8 w - - 0 46",
+    "moves": [
+      "b7a6",
+      "g4g3",
+      "b4b5",
+      "g3g2",
+      "b5b6",
+      "g2g1q"
+    ],
+    "rating": 1542,
+    "themes": [
+      "advancedPawn",
+      "bishopEndgame",
+      "crushing",
+      "endgame",
+      "long",
+      "promotion"
+    ],
+    "url": "https://lichess.org/game/mp7s11NO#91",
+    "phase": "endgame",
+    "focus": "promotion"
+  },
+  {
+    "id": "03AhR",
+    "fen": "8/8/3R4/2k4P/8/5PK1/2p3P1/8 w - - 1 59",
+    "moves": [
+      "d6c6",
+      "c5c6",
+      "h5h6",
+      "c2c1q"
+    ],
+    "rating": 857,
+    "themes": [
+      "advancedPawn",
+      "crushing",
+      "endgame",
+      "hangingPiece",
+      "promotion",
+      "short"
+    ],
+    "url": "https://lichess.org/game/6QgWLGoM#117",
+    "phase": "endgame",
+    "focus": "advancedPawn"
+  },
+  {
+    "id": "03QN9",
+    "fen": "5r1k/pr4p1/2p2P1p/3nP3/6R1/1P2b3/P1PB2PP/5R1K b - - 0 27",
+    "moves": [
+      "e3d2",
+      "f6g7",
+      "b7g7",
+      "f1f8"
+    ],
+    "rating": 1099,
+    "themes": [
+      "advancedPawn",
+      "advantage",
+      "discoveredAttack",
+      "endgame",
+      "fork",
+      "short"
+    ],
+    "url": "https://lichess.org/game/VsjAz09Q/black#54",
+    "phase": "endgame",
+    "focus": "advancedPawn"
+  },
+  {
+    "id": "02Yk7",
+    "fen": "4r1k1/1q6/7b/5r1p/3p4/R2Np1P1/1P2Q2P/4R1K1 w - - 4 42",
+    "moves": [
+      "e1f1",
+      "f5f1",
+      "e2f1",
+      "e3e2"
+    ],
+    "rating": 1237,
+    "themes": [
+      "advancedPawn",
+      "crushing",
+      "master",
+      "middlegame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/tLoinc7K#83",
+    "phase": "endgame",
+    "focus": "advancedPawn"
+  },
+  {
+    "id": "00Rep",
+    "fen": "8/8/b1k5/p1N5/2p5/1P4P1/P6P/6K1 w - - 1 51",
+    "moves": [
+      "c5a6",
+      "c4c3",
+      "b3b4",
+      "c3c2"
+    ],
+    "rating": 1409,
+    "themes": [
+      "advancedPawn",
+      "crushing",
+      "endgame",
+      "knightEndgame",
+      "short"
+    ],
+    "url": "https://lichess.org/game/jXFjUSJk#101",
+    "phase": "endgame",
+    "focus": "advancedPawn"
+  },
+  {
+    "id": "00iQD",
+    "fen": "8/8/8/3K2kp/8/2P1P3/8/8 w - - 0 50",
+    "moves": [
+      "c3c4",
+      "h5h4",
+      "d5e4",
+      "g5g4",
+      "c4c5",
+      "h4h3",
+      "e4e5",
+      "h3h2",
+      "c5c6",
+      "h2h1q"
+    ],
+    "rating": 1557,
+    "themes": [
+      "advancedPawn",
+      "crushing",
+      "endgame",
+      "pawnEndgame",
+      "promotion",
+      "quietMove",
+      "veryLong"
+    ],
+    "url": "https://lichess.org/game/dDMWuoiZ#99",
+    "phase": "endgame",
+    "focus": "advancedPawn"
+  }
+]
