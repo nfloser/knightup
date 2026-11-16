@@ -58,25 +58,30 @@ export function SequenceLibrary({
         "caro-panov",
         "caro-two-knights",
         "caro-fantasy",
+        "caro-advance-c5",
+        "caro-classical-nd7",
+        "caro-two-knights-order",
+        "caro-quiet-d3",
+        "caro-c4",
       ],
       description:
-        "Build a reliable response to 1.e4: learn the central structure and practise six common white setups.",
+        "Build a reliable response to 1.e4: learn the central structure and practise eleven common White setups, move orders and central responses.",
     },
     {
       id: "slav",
       title: "Slav Defence",
       color: "b",
-      ids: ["slav-exchange"],
+      ids: ["slav-exchange", "slav-accepted", "slav-solid", "slav-exchange-bf4", "slav-bf5"],
       description:
-        "Start a repertoire against 1.d4 with the Exchange variation.",
+        "Practise five Slav choices against exchanges, quiet development and the early c4 capture.",
     },
     {
       id: "london",
       title: "London System",
       color: "w",
-      ids: ["london-classical", "london-fianchetto", "london-c5"],
+      ids: ["london-classical", "london-fianchetto", "london-c5", "london-nc6", "london-queenside-fianchetto", "london-nf6-c5", "london-mirror-bishop"],
       description:
-        "Develop the bishop early and practise a solid setup against three Black responses.",
+        "Develop the bishop early and practise a solid setup against seven Black responses and development plans.",
     },
     {
       id: "vienna",
@@ -87,9 +92,13 @@ export function SequenceLibrary({
         "vienna-falkbeer",
         "vienna-gambit-d5",
         "vienna-gambit-accepted",
+        "vienna-f4-nc6",
+        "vienna-gambit-nf3",
+        "vienna-quiet-f4",
+        "vienna-fianchetto",
       ],
       description:
-        "Learn a developing setup and practise quiet and gambit responses.",
+        "Learn a developing setup and practise eight quiet and gambit responses, including central breaks.",
     },
   ];
   const selected = groups.find((g) => g.id === course);
