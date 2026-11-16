@@ -179,12 +179,12 @@ export default function App() {
           </button>
         </header>
         <main id="main" ref={main} tabIndex={-1}>
-          {message && (
+          {!active && message && (
             <p role="status" className="notice">
               {message}
             </p>
           )}
-          {needRefresh && (
+          {!active && needRefresh && (
             <div className="notice">
               An update is ready. Your saved progress stays on this device.{" "}
               <button onClick={() => void updateServiceWorker(true)}>

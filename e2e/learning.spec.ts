@@ -103,3 +103,201 @@ test("attempts and hints change persisted adaptive recommendations", async ({
   ).toBeVisible();
   await expect(page.getByText(/needed help or retries/)).toBeVisible();
 });
+
+test("move feedback stays clear with reduced motion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("./");
+  await page.getByRole("button", { name: "Start learning" }).click();
+  await page.getByLabel("Your move in English SAN").fill("d4");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.getByText("↺ Try again", { exact: true })).toBeVisible();
+  await page
+    .getByRole("button", { name: "e2 White pawn", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "e2 White pawn", exact: true }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await page
+    .getByRole("button", { name: "e4 legal destination", exact: true })
+    .click();
+  await expect(page.getByText("✓ Correct move", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-last-move=true]")).toHaveCount(2);
+  await expect(
+    page.getByRole("button", { name: "e4 White pawn", exact: true }),
+  ).toBeDisabled();
+  expect(
+    await page
+      .locator(".chess-piece")
+      .evaluateAll(
+        (elements) => elements.flatMap((e) => e.getAnimations()).length,
+      ),
+  ).toBe(0);
+  await page.getByRole("button", { name: "Next exercise" }).click();
+  await expect(page.locator("[data-last-move=true]")).toHaveCount(0);
+});
+
+test("correct moves advance automatically unless Explain is opened", async ({
+  page,
+}) => {
+  await page.clock.install();
+  await page.goto("./");
+  await page.getByRole("button", { name: "Practice", exact: true }).click();
+  await page.getByRole("button", { name: /DRILL 01/ }).click();
+  await page.getByLabel("Your move in English SAN").fill("e4");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.getByText("✓ Correct move", { exact: true })).toBeVisible();
+  await page.clock.fastForward(1601);
+  await expect(
+    page.getByRole("heading", { name: "N is for knight", exact: true }),
+  ).toBeFocused();
+  await page.getByLabel("Your move in English SAN").fill("Nf3");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await page.getByRole("button", { name: "Explain", exact: true }).click();
+  await page.clock.fastForward(5000);
+  await expect(
+    page.getByRole("heading", { name: "N is for knight", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Why Nf3?", exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Next exercise" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Read a capture", exact: true }),
+  ).toBeVisible();
+});
+
+test("Explain reveals the intended move without awarding a solution", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: "Start learning" }).click();
+  await page.getByRole("button", { name: "Explain", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Why e4?", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "e4 White pawn", exact: true }),
+  ).toBeDisabled();
+  await expect(page.getByText("✓ Correct move", { exact: true })).toHaveCount(
+    0,
+  );
+  await expect(page.getByRole("button", { name: "Next exercise" })).toHaveCount(
+    0,
+  );
+  await page
+    .getByRole("button", { name: "Try it yourself", exact: true })
+    .click();
+  await expect(
+    page.getByRole("button", { name: "e2 White pawn", exact: true }),
+  ).toBeEnabled();
+  await page.getByRole("button", { name: "Learning path" }).click();
+  await expect(page.getByText("0 OF 8 COMPLETED")).toBeVisible();
+});
+
+test("phone exercise and Explain fit the viewport without clipped controls", async ({
+  page,
+}) => {
+  for (const [width, height] of [
+    [320, 568],
+    [375, 667],
+    [390, 844],
+    [667, 375],
+    [390, 360],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await page.goto("./");
+    await page.getByRole("button", { name: "Practice", exact: true }).click();
+    await page.getByRole("button", { name: /DRILL 01/ }).click();
+    for (const locator of [
+      page.locator(".board"),
+      page.getByLabel("Your move in English SAN"),
+      page.getByRole("button", { name: "Explain", exact: true }),
+      page.getByRole("button", { name: "Check", exact: true }),
+    ])
+      await expect(locator).toBeInViewport({ ratio: 1 });
+    const dimensions = await page
+      .locator(".lesson-screen")
+      .evaluate((e) => ({ scroll: e.scrollHeight, client: e.clientHeight }));
+    if (dimensions.scroll > dimensions.client + 1)
+      await page.screenshot({
+        path: `test-results/overflow-${width}-${height}-${test.info().project.name}.png`,
+      });
+    expect(
+      dimensions.scroll,
+      `${width}x${height} screen overflow`,
+    ).toBeLessThanOrEqual(dimensions.client + 1);
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollHeight <= window.innerHeight + 1,
+      ),
+    ).toBe(true);
+    await page.getByRole("button", { name: "Need a hint?" }).click();
+    await expect(page.getByLabel("Your move in English SAN")).toBeInViewport({
+      ratio: 1,
+    });
+    await page.getByRole("button", { name: "Explain", exact: true }).click();
+    await expect(
+      page.getByRole("button", { name: "Try it yourself", exact: true }),
+    ).toBeInViewport({ ratio: 1 });
+    await expect(page.locator(".move-explanation")).toBeInViewport({
+      ratio: 1,
+    });
+    await expect(page.locator(".board")).toBeInViewport({ ratio: 1 });
+    const explainedDimensions = await page
+      .locator(".lesson-screen")
+      .evaluate((e) => ({ scroll: e.scrollHeight, client: e.clientHeight }));
+    if (explainedDimensions.scroll > explainedDimensions.client + 1)
+      await page.screenshot({
+        path: `test-results/overflow-explain-${width}-${height}-${test.info().project.name}.png`,
+      });
+    expect(
+      explainedDimensions.scroll,
+      `${width}x${height} Explain overflow`,
+    ).toBeLessThanOrEqual(explainedDimensions.client + 1);
+    if (width === 375)
+      await page.screenshot({
+        path: `test-results/training-explain-${test.info().project.name}.png`,
+      });
+  }
+});
+
+test("mobile restore notice and promotion picker never clip training actions", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.goto("./");
+  await page.getByRole("button", { name: "Profile", exact: true }).click();
+  await page
+    .locator("input[type=file]")
+    .setInputFiles({
+      name: "restore.json",
+      mimeType: "application/json",
+      buffer: Buffer.from('{"version":1,"completed":[]}'),
+    });
+  await expect(page.getByRole("status")).toContainText("Backup restored");
+  await page.getByRole("button", { name: "Practice", exact: true }).click();
+  await page.getByRole("button", { name: /DRILL 07/ }).click();
+  await expect(page.getByLabel("Your move in English SAN")).toBeInViewport({
+    ratio: 1,
+  });
+  await page
+    .getByRole("button", { name: "e7 White pawn", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: "e8 legal destination", exact: true })
+    .click();
+  for (const piece of ["queen", "rook", "bishop", "knight"])
+    await expect(
+      page.getByRole("button", { name: `Promote to ${piece}`, exact: true }),
+    ).toBeInViewport({ ratio: 1 });
+  const picker = await page.locator(".promotion").boundingBox();
+  const form = await page.locator("form").boundingBox();
+  expect(picker!.y + picker!.height).toBeLessThanOrEqual(form!.y);
+  await expect(
+    page.getByRole("button", { name: "Check", exact: true }),
+  ).toBeInViewport({ ratio: 1 });
+  await page
+    .getByRole("button", { name: "Promote to queen", exact: true })
+    .click();
+  await expect(page.getByText("✓ Correct move", { exact: true })).toBeVisible();
+});
