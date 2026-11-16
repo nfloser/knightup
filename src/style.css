@@ -1874,3 +1874,11 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+/* Keep lesson summaries readable instead of shrinking content on mobile. */
+.course-card p {
+  font-size: 0.875rem;
+}
+.course-card > span:last-child {
+  font-size: 0.875rem;
+}
