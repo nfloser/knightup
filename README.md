@@ -6,13 +6,19 @@ A private, English chess-learning PWA with a local Stockfish coach. [Open Knight
 
 ## What you can do
 
-- **Learn:** 18 original lessons and 36 exercises across foundations, openings, middlegame and endgames; six multi-move repertoire branches and eight endgame continuations. Train Caro–Kann, Vienna and Slav responses, checks, mates and promotion.
+- **Learn:** 18 Academy topics with **20 legal board exercises each** (360 total), plus three guided foundations/middlegame/endgame paths of **20 positions each** (60 further lessons). Four ordered opening repertoires — **Caro–Kann, Vienna, London and Slav** — offer **20 playable training lines each** (80 total). Start with explanations and board walkthroughs, then practise, resume or review; progress is saved locally. The 20 exercises in an Academy topic are individual positions, not 20 full video lectures. The four opening repertoires are bounded response examples, not exhaustive coverage of every opponent move.
 - **Practice:** replay notation skills or play complete games against an adaptive Stockfish opponent. Recent unassisted results gradually adjust the next game's challenge. Practice levels are not Elo estimates.
 - **Puzzles:** 4,000 attributed CC0 Lichess positions, random or filtered by theme/difficulty, with full legal continuations and focused due review.
 - **Insights:** import PGN or explicitly opt into public Chess.com archives; analyze privately with Stockfish 19, inspect legal better lines and practise mistakes. Recommendations reflect your own analyzed games.
 - **Profile:** mastery XP, levels, local calendar streaks, daily goals, original knight collectibles and learning backup/restore.
 
 Correct answers and opponent replies advance automatically. Explain reveals the intended move and its teaching context; assisted answers do not earn clean mastery. Standard classical pieces, light/dark themes, desktop/mobile motion feedback and reduced-motion support. Phone training uses the available viewport and readable move input.
+
+## Learning content and quality limits
+
+Academy topic cards combine two introductory authored positions with 18 additional context-specific single-move applications. The guided phase paths and opening repertoires instead walk through complete move sequences before asking you to play them. The CC0 examples retain source attribution; an authored repertoire continuation is not the only acceptable chess move.
+
+The CI suite checks canonical legal moves and browser learning flows. A bounded Stockfish 19 screening samples one learner decision per opening line; it is not a deep independent verification of every move or a substitute for instructional review. Physical-device behavior and coaching quality need additional testing.
 
 ## Run and verify
 
