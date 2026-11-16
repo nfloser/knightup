@@ -58,3 +58,17 @@ The palette continues to rely on semantic theme tokens, with high-contrast focus
 outlines for keyboard navigation. Chromium browser regression coverage checks
 a narrow 375px viewport in light and dark modes. Physical-device testing remains
 separate and is not implied by the simulated viewport.
+
+## Learn dashboard alignment (November 2026)
+
+The Academy catalog, guided phase-path cards and opening repertoire cards
+share a three-column equal-height grid on wide screens, two columns at tablet
+widths (761–1050 px), and one full-width column on narrow screens. Each card
+uses an explicit vertical flex layout: labels, headings and body copy stay in
+reading order while progress and actions align with the bottom of their row.
+Text wraps rather than overflowing; card spacing is consistent in light and
+dark mode and reduced-motion preferences disable its subtle transition.
+
+Only catalog surfaces change. Lesson screens, progress bookkeeping and the
+chessboard are unaffected. Desktop/tablet/phone Playwright geometry tests
+guard card extents, action alignment and horizontal overflow.
