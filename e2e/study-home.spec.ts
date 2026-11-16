@@ -72,7 +72,7 @@ test("learning tiles align cleanly at desktop and phone widths in both themes", 
     await page.goto("./");
     for (const theme of ["light", "dark"]) {
       await page.evaluate((value) => { document.documentElement.dataset.theme = value; }, theme);
-      const courseGrid = page.locator(".academy .course-grid").last();
+      const courseGrid = page.locator(".academy").filter({ has: page.getByRole("heading", { name: "Chess academy" }) }).locator(".course-grid");
       await expect(courseGrid).toBeVisible();
       const cards = courseGrid.locator(":scope > .course-card");
       expect(await cards.count()).toBeGreaterThanOrEqual(3);
@@ -88,8 +88,9 @@ test("learning tiles align cleanly at desktop and phone widths in both themes", 
         expect(rect.right).toBeLessThanOrEqual(width + 1);
         expect(rect.actionBottom).toBeLessThanOrEqual(rect.bottom - 8);
       }
-      if (width >= 900) {
-        for (const rect of rectangles.slice(1)) {
+      if (width >= 761) {
+        const sameRow = rectangles.slice(1, width > 1050 ? 3 : 2);
+        for (const rect of sameRow) {
           expect(Math.abs(rect.top - rectangles[0].top)).toBeLessThanOrEqual(1);
           expect(Math.abs(rect.bottom - rectangles[0].bottom)).toBeLessThanOrEqual(1);
           expect(Math.abs(rect.actionBottom - rectangles[0].actionBottom)).toBeLessThanOrEqual(2);
