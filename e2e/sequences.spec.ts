@@ -4,6 +4,18 @@ test("trains a complete Caro-Kann branch against automatic replies", async ({
 }) => {
   await page.goto("./");
   await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
+  await expect(
+    page.getByRole("region", { name: "Caro–Kann course guide" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Caro–Kann · against the Panov/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Caro–Kann · against the Two Knights/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Caro–Kann · against the Fantasy/ }),
+  ).toBeVisible();
   await page
     .getByRole("button", { name: /Caro–Kann · against the Advance/ })
     .click();
@@ -22,7 +34,7 @@ test("trains a complete Caro-Kann branch against automatic replies", async ({
     page.getByRole("heading", { name: "Study a system" }),
   ).toBeVisible();
   await expect(
-    page.getByText("1 / 3 lines recalled without help."),
+    page.getByText("1 / 6 lines recalled without help."),
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: /Caro–Kann · against the Exchange/ }),
