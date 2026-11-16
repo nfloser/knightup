@@ -31,6 +31,7 @@ export function LearnPage({
         <h1>Your next good move.</h1>
         <p className="lead">Build understanding, one small lesson at a time.</p>
       </div>
+      <CourseLibrary now={now} onStart={onCourseStart} recommendationsOnly />
       <SequenceLibrary onStart={onSequenceStart} />
       <CourseLibrary now={now} onStart={onCourseStart} />
       <section className="featured">
