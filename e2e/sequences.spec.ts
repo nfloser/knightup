@@ -382,3 +382,19 @@ test("extended repertoire paths expose opponent alternatives with guided board w
   await expect(page.getByRole("heading", { name: "White plays e4" })).toBeVisible();
   await expect(page.locator(".walkthrough-copy [role=status]")).not.toBeEmpty();
 });
+
+test("each opening path offers exactly twenty selectable lessons", async ({ page }) => {
+  await page.goto("./");
+  for (const [color, name] of [
+    ["Black", /Caro–Kann Build/],
+    ["Black", /Slav Defence Study/],
+    ["White", /London System Develop/],
+    ["White", /Vienna Game Learn/],
+  ] as const) {
+    await page.getByRole("group", { name: "Opening color" })
+      .getByRole("button", { name: color, exact: true }).click();
+    await page.getByRole("button", { name }).click();
+    await expect(page.locator(".academy ol.path-list > li")).toHaveCount(20);
+    await page.getByRole("button", { name: /All (White|Black) openings/ }).click();
+  }
+});
