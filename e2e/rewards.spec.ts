@@ -19,6 +19,9 @@ test("earned knight unlocks persist and backups contain mastery", async ({
   ).toBeVisible();
   const ivory = page.getByRole("button", { name: /Ivory knight Equip/ });
   await ivory.click();
+  await expect(
+    page.getByRole("button", { name: /Ivory knight Equipped/ }),
+  ).toHaveAttribute("aria-pressed", "true");
   await page.reload();
   await page.getByRole("button", { name: "Profile", exact: true }).click();
   await expect(

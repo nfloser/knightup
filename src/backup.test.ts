@@ -46,3 +46,23 @@ it("never writes progress when stored training is corrupt", async () => {
   expect(await db.get("settings", "progress")).toEqual(before);
   await db.put("settings", training, "training");
 });
+it("recovers settings on fresh profile and preserves existing preferences on merge", async () => {
+  const { database } = await import("./local-db");
+  const db = await database();
+  await db.delete("settings", "training");
+  const training = { ...emptyTraining, goal: 5, cosmetic: "classic" };
+  await importLearning({
+    format: "knightup-learning",
+    version: 1,
+    progress: emptyProgress,
+    training,
+  });
+  expect((await exportLearning()).training.goal).toBe(5);
+  await importLearning({
+    format: "knightup-learning",
+    version: 1,
+    progress: emptyProgress,
+    training: { ...training, goal: 1 },
+  });
+  expect((await exportLearning()).training.goal).toBe(5);
+});
