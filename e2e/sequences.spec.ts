@@ -169,6 +169,14 @@ test("continuing a course advances through lessons and resumes unfinished work",
     .click();
   await page.getByRole("button", { name: /London System Develop/ }).click();
   await page.getByRole("button", { name: "Continue course" }).click();
+  await expect(
+    page.getByRole("progressbar", { name: "Course progress" }),
+  ).toHaveAttribute("value", "0");
+  await expect(page.getByText("Course progress · lesson 1 of 3")).toBeVisible();
+  await page.getByRole("button", { name: "Next move" }).click();
+  await expect(
+    page.getByRole("progressbar", { name: "Course progress" }),
+  ).toHaveAttribute("value", "0");
   await page.getByRole("button", { name: "Practise whole line" }).click();
   for (const san of ["d4", "Bf4", "e3", "Nf3", "Bd3", "O-O"]) {
     await expect(
@@ -182,6 +190,10 @@ test("continuing a course advances through lessons and resumes unfinished work",
       name: /London · against a kingside fianchetto/,
     }),
   ).toBeVisible();
+  await expect(page.getByText("Course progress · lesson 2 of 3")).toBeVisible();
+  await expect(
+    page.getByRole("progressbar", { name: "Course progress" }),
+  ).toHaveAttribute("value", "1");
   await page.getByRole("button", { name: "Back to lessons" }).click();
   await expect(
     page.getByText("1 / 3 lines recalled without help."),
@@ -193,4 +205,168 @@ test("continuing a course advances through lessons and resumes unfinished work",
       name: /London · against a kingside fianchetto/,
     }),
   ).toBeVisible();
+  await expect(page.getByText("Course progress · lesson 2 of 3")).toBeVisible();
+  await expect(
+    page.getByRole("progressbar", { name: "Course progress" }),
+  ).toHaveAttribute("value", "1");
+});
+
+test("learners see a board demonstration before practising without earning credit", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
+  await page
+    .getByRole("button", { name: /Caro–Kann · against the Advance/ })
+    .click();
+  const intro = page.locator(".sequence-intro");
+  await expect(intro.getByRole("heading", { name: "The idea" })).toBeVisible();
+  await expect(
+    intro.getByRole("button", { name: "Previous move" }),
+  ).toBeDisabled();
+  await intro.getByRole("button", { name: "Next move" }).click();
+  await expect(
+    intro.getByRole("heading", { name: "White plays e4" }),
+  ).toBeVisible();
+  await intro.getByRole("button", { name: "Next move" }).click();
+  await expect(
+    intro.getByRole("heading", { name: "Black plays c6" }),
+  ).toBeVisible();
+  await expect(
+    intro.locator(".walkthrough-copy").getByRole("status"),
+  ).toContainText("d5");
+  await intro.getByRole("button", { name: "Previous move" }).click();
+  await expect(
+    intro.getByRole("heading", { name: "White plays e4" }),
+  ).toBeVisible();
+  await intro
+    .getByRole("button", { name: "Back to lessons", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Profile", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Level 1 · 0 XP" }),
+  ).toBeVisible();
+});
+
+test("a hint gives a plan without revealing the next move", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
+  await page
+    .getByRole("button", { name: /Caro–Kann · against the Advance/ })
+    .click();
+  await page.getByRole("button", { name: "Practise whole line" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your repertoire move" }),
+  ).toBeVisible();
+  await page.getByLabel("Your move in English SAN").fill("e5");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.locator(".sequence-screen .feedback")).toHaveClass(/retry/);
+  await page.getByRole("button", { name: "Hint", exact: true }).click();
+  await expect(page.locator(".sequence-screen .feedback")).toContainText(
+    "Plan hint:",
+  );
+  await expect(page.locator(".sequence-screen .feedback")).not.toContainText(
+    "Train c6",
+  );
+  await page.getByLabel("Your move in English SAN").fill("c6");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.locator(".sequence-screen .feedback")).toHaveClass(
+    /success/,
+  );
+});
+
+test("reviewing the explanation during practice returns to the same position", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
+  await page
+    .getByRole("button", { name: /Caro–Kann · against the Advance/ })
+    .click();
+  await page.getByRole("button", { name: "Practise whole line" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your repertoire move" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Review lesson" }).click();
+  await expect(
+    page
+      .locator(".sequence-intro")
+      .getByRole("heading", { name: "White plays e4" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Resume practice" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your repertoire move" }),
+  ).toBeVisible();
+  await page.getByLabel("Your move in English SAN").fill("c6");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.locator(".sequence-screen .feedback")).toContainText(
+    "Assisted recall",
+  );
+});
+
+test("course controls and progress fit compact phone views", async ({
+  page,
+}, testInfo) => {
+  if (testInfo.project.name !== "mobile") return;
+  await page.goto("./");
+  await page
+    .getByRole("group", { name: "Opening color" })
+    .getByRole("button", { name: "White" })
+    .click();
+  await page.getByRole("button", { name: /London System Develop/ }).click();
+  await page.getByRole("button", { name: "Continue course" }).click();
+  await page.getByRole("button", { name: "Practise whole line" }).click();
+  for (const size of [
+    { width: 320, height: 568 },
+    { width: 667, height: 375 },
+  ]) {
+    await page.setViewportSize(size);
+    for (const locator of [
+      page.locator(".sequence-screen .board"),
+      page.getByRole("button", { name: "Hint", exact: true }),
+      page.getByRole("button", { name: "Review lesson" }),
+      page.getByRole("progressbar", { name: "Course progress" }),
+      page.getByLabel("Your move in English SAN"),
+    ]) {
+      await expect(locator).toBeVisible();
+      await expect
+        .poll(async () => {
+          const box = await locator.boundingBox();
+          return (
+            !!box &&
+            box.x >= 0 &&
+            box.y >= 0 &&
+            box.x + box.width <= size.width + 1 &&
+            box.y + box.height <= size.height + 1
+          );
+        })
+        .toBe(true);
+    }
+    expect(
+      await page.evaluate(() => document.documentElement.scrollHeight),
+    ).toBeLessThanOrEqual(size.height + 1);
+  }
+});
+
+test("guided explanation remains readable in dark mode", async ({
+  page,
+}, testInfo) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: /Switch to dark mode/ }).click();
+  await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
+  await page
+    .getByRole("button", { name: /Caro–Kann · against the Advance/ })
+    .click();
+  await expect(page.locator(".sequence-intro")).toHaveCSS(
+    "background-color",
+    "rgb(32, 36, 41)",
+  );
+  await expect(page.getByRole("button", { name: "Next move" })).toBeVisible();
+  await page.getByRole("button", { name: "Next move" }).click();
+  await expect(
+    page.getByRole("heading", { name: "White plays e4" }),
+  ).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("guided-dark.png") });
 });

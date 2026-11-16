@@ -1882,3 +1882,70 @@ textarea {
 .course-card > span:last-child {
   font-size: 0.875rem;
 }
+
+/* Read the position before practising it, on desktop and on narrow screens. */
+.walkthrough-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr);
+  align-items: start;
+  gap: 24px;
+}
+.walkthrough-layout .board-wrap {
+  width: min(100%, 600px);
+}
+.walkthrough-copy {
+  min-width: 0;
+}
+.walkthrough-copy h2 {
+  font-size: 1.25rem;
+}
+.walkthrough-actions {
+  margin: 20px 0;
+}
+.walkthrough-copy > .primary {
+  margin-bottom: 16px;
+}
+@media (max-width: 760px) {
+  .walkthrough-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+}
+.walkthrough-layout .square:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.course-session-progress {
+  display: grid;
+  gap: 5px;
+  margin-top: 16px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.course-session-progress progress {
+  width: 100%;
+  height: 8px;
+  accent-color: var(--accent);
+}
+@media (max-width: 760px) {
+  .sequence-screen > .course-session-progress {
+    flex-shrink: 0;
+    margin: 0;
+    font-size: 0.75rem;
+    gap: 2px;
+  }
+}
+@media (max-width: 760px) {
+  .sequence-screen .lesson-tools {
+    gap: 6px;
+  }
+  .sequence-screen .lesson-tools > span {
+    flex: 1;
+    min-width: 0;
+  }
+}
+@media (max-width: 420px) {
+  .sequence-screen .lesson-tools > span {
+    display: none;
+  }
+}
