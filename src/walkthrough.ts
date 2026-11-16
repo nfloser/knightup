@@ -1,4 +1,4 @@
-import { Chess } from "chess.js";
+import { Chess, type Move } from "chess.js";
 import { sequenceGame, type Sequence } from "./sequences";
 import { extendedWalkthroughNotes } from "./extended-walkthrough-notes";
 
@@ -169,7 +169,7 @@ const openingPrefixes: Record<string, string> = {
 /** Describes the actual displayed move when no hand-authored ply note exists.
  * Avoid repeating a course-level paragraph on every unexplained position. */
 function explainDisplayedMove(
-  move: ReturnType<Chess["history"]> extends never ? never : { san: string; from: string; to: string; piece: string; color: string; isCapture: () => boolean; isKingsideCastle: () => boolean; isQueensideCastle: () => boolean },
+  move: Move,
   plan: string,
 ): string {
   const side = move.color === "w" ? "White" : "Black";
