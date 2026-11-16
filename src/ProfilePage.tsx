@@ -1,3 +1,4 @@
+import { RewardsPanel } from "./RewardsPanel";
 export function ProfilePage({
   ready,
   backup,
@@ -14,12 +15,14 @@ export function ProfilePage({
         <h1>Keep your progress.</h1>
         <p className="lead">Private by default. No account required.</p>
       </div>
+      <RewardsPanel />
       <section className="surface">
         <h2>Progress backup</h2>
         <p>
           Learning progress lives in this browser. Export a backup before
-          switching devices or clearing browser data. Import merges completed
-          exercises.
+          switching devices or clearing browser data. Import merges notation,
+          lessons, puzzles and rewards. Game imports and Stockfish reports stay
+          on this device and are not included.
         </p>
         <div className="actions">
           <button className="primary" disabled={!ready} onClick={backup}>
@@ -55,8 +58,8 @@ export function ProfilePage({
         <h2>Privacy</h2>
         <p>
           No trackers, credentials or remote coaching uploads. Static hosting
-          may retain standard access logs. Exported backups contain your lesson
-          completions. Store them somewhere you trust.
+          may retain standard access logs. Exported backups contain your
+          learning activity and rewards. Store them somewhere you trust.
         </p>
       </section>
       <p>

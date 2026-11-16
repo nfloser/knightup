@@ -1,7 +1,8 @@
+import { exportLearning, importLearning } from "./backup";
 import { CourseSession } from "./CourseLibrary";
 import type { Course } from "./curriculum";
 import { PuzzlesPage } from "./PuzzlesPage";
-import { recommend, mergeProgress } from "./adaptive";
+import { recommend } from "./adaptive";
 import { ProfilePage } from "./ProfilePage";
 import { InsightsPage } from "./InsightsPage";
 import { PracticePage } from "./PracticePage";
@@ -9,14 +10,8 @@ import { LearnPage } from "./LearnPage";
 import { Knight } from "./Knight";
 import { useEffect, useRef, useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
-import { emptyProgress, parseProgress, type Progress } from "./learning";
-import {
-  loadProgress,
-  saveProgress,
-  loadTheme,
-  saveTheme,
-  saveAttempt,
-} from "./storage";
+import { emptyProgress, type Progress } from "./learning";
+import { loadProgress, loadTheme, saveTheme, saveAttempt } from "./storage";
 import { Lesson } from "./Lesson";
 const tabs = ["Learn", "Practice", "Puzzles", "Insights", "Profile"] as const;
 type Tab = (typeof tabs)[number];
@@ -90,25 +85,27 @@ export default function App() {
       return false;
     }
   }
-  function backup() {
-    const url = URL.createObjectURL(
-      new Blob([JSON.stringify(progress, null, 2)], {
-        type: "application/json",
-      }),
-    );
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "knightup-progress.json";
-    a.click();
-    URL.revokeObjectURL(url);
+  async function backup() {
+    try {
+      const url = URL.createObjectURL(
+        new Blob([JSON.stringify(await exportLearning(), null, 2)], {
+          type: "application/json",
+        }),
+      );
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "knightup-progress.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setMessage("Could not export learning backup.");
+    }
   }
   async function restore(file?: File) {
     if (!file) return;
     try {
-      if (file.size > 100000) throw Error("Backup is too large.");
-      const parsed = parseProgress(JSON.parse(await file.text()));
-      const merged = mergeProgress(progress, parsed);
-      const saved = await saveProgress(merged);
+      if (file.size > 20000000) throw Error("Backup is too large.");
+      const saved = await importLearning(JSON.parse(await file.text()));
       setProgress(saved);
       setMessage("Backup restored. Your existing completions were kept.");
     } catch (error) {
