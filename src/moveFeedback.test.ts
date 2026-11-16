@@ -21,3 +21,19 @@ describe("post-move coach feedback", () => {
     );
   });
 });
+
+it("compares both scores from the mover's perspective", async () => {
+  const { compareMoveScores } = await import("./moveFeedback");
+  expect(
+    compareMoveScores({ cp: 100, mate: null }, { cp: -40, mate: null }),
+  ).toContain("0.6");
+  expect(
+    compareMoveScores({ cp: -20, mate: null }, { cp: -10, mate: null }),
+  ).toContain("0.0");
+});
+it("avoids a pawn-loss estimate when mate scores are involved", async () => {
+  const { compareMoveScores } = await import("./moveFeedback");
+  expect(
+    compareMoveScores({ cp: null, mate: 2 }, { cp: 40, mate: null }),
+  ).toContain("mate");
+});
