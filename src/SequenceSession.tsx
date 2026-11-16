@@ -210,24 +210,55 @@ export function SequenceLibrary({
           )}
         </>
       ) : (
-        <div className="course-grid">
-          {sequences
-            .filter((s) => s.category === "Endgames")
-            .map((s) => (
-              <button
-                className="course-card"
-                key={s.id}
-                onClick={() => onStart(s)}
-              >
-                <span className="eyebrow">
-                  ENDGAMES · {s.color === "w" ? "WHITE" : "BLACK"}
-                </span>
-                <h3>{s.title}</h3>
-                <p>{s.idea}</p>
-                <span>{solved(s) ? "Review" : "Practise"} →</span>
-              </button>
-            ))}
-        </div>
+        <>
+          <div className="actions">
+            <button
+              onClick={() => {
+                const pool = sequences.filter((s) => s.category === "Endgames");
+                const pick = pool[Math.floor(Math.random() * pool.length)];
+                if (pick) onStart(pick);
+              }}
+            >
+              Random response →
+            </button>
+            <button
+              onClick={() => {
+                const pool = sequences.filter((s) => s.category === "Endgames");
+                const rank = (s: Sequence) => {
+                  const r = training.records[`course:sequence-${s.id}`];
+                  return !r ? 1 : r.due <= Date.now() ? 0 : 2;
+                };
+                pool.sort(
+                  (a, b) =>
+                    rank(a) - rank(b) ||
+                    (training.records[`course:sequence-${a.id}`]?.box ?? 0) -
+                      (training.records[`course:sequence-${b.id}`]?.box ?? 0),
+                );
+                if (pool[0]) onStart(pool[0]);
+              }}
+            >
+              Train a recommended branch →
+            </button>
+          </div>
+          <div className="course-grid">
+            {sequences
+              .filter((s) => s.category === "Endgames")
+              .map((s) => (
+                <button
+                  className="course-card"
+                  key={s.id}
+                  onClick={() => onStart(s)}
+                >
+                  <span className="eyebrow">
+                    ENDGAMES · {s.color === "w" ? "WHITE" : "BLACK"}
+                  </span>
+                  <h3>{s.title}</h3>
+                  <p>{s.idea}</p>
+                  <span>{solved(s) ? "Review" : "Practise"} →</span>
+                </button>
+              ))}
+          </div>
+        </>
       )}
     </section>
   );
