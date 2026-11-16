@@ -18,14 +18,18 @@ test("a real lesson teaches before testing and preserves completion", async ({
   await page.getByRole("button", { name: "Next exercise" }).click();
   await page.getByLabel("Your move in English SAN").fill("Bc4");
   await page.getByRole("button", { name: "Check", exact: true }).click();
-  await page.getByRole("button", { name: "Finish lesson" }).click();
+  await page.getByRole("button", { name: "Next exercise" }).click();
+  await page.getByRole("button", { name: "← Learning path" }).click();
   await expect(
-    page.getByRole("button", { name: /01 · 0–200 Know your pieces 2 \/ 2/ }),
+    page.getByRole("button", { name: /01 · 0–200 Know your pieces 2 \/ 20/ }),
   ).toBeVisible();
   await page.reload();
   await expect(
-    page.getByRole("button", { name: /01 · 0–200 Know your pieces 2 \/ 2/ }),
+    page.getByRole("button", { name: /01 · 0–200 Know your pieces 2 \/ 20/ }),
   ).toBeVisible();
+  await page.getByRole("button", { name: /01 · 0–200 Know your pieces/ }).click();
+  await page.getByRole("button", { name: "Continue your practice" }).click();
+  await expect(page.getByRole("heading", { name: /Application 03/ })).toBeVisible();
 });
 
 test("Black opening lessons keep Black at the bottom", async ({ page }) => {

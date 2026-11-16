@@ -12,7 +12,8 @@ test("earned knight unlocks persist and backups contain mastery", async ({
   await page.getByRole("button", { name: "Next exercise" }).click();
   await page.getByLabel("Your move in English SAN").fill("Bc4");
   await page.getByRole("button", { name: "Check", exact: true }).click();
-  await page.getByRole("button", { name: "Finish lesson" }).click();
+  await page.getByRole("button", { name: "Next exercise" }).click();
+  await page.getByRole("button", { name: "← Learning path" }).click();
   await page.getByRole("button", { name: "Profile", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Level 1 · 20 XP" }),
