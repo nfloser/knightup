@@ -349,3 +349,24 @@ test("course controls and progress fit compact phone views", async ({
     ).toBeLessThanOrEqual(size.height + 1);
   }
 });
+
+test("guided explanation remains readable in dark mode", async ({
+  page,
+}, testInfo) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: /Switch to dark mode/ }).click();
+  await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
+  await page
+    .getByRole("button", { name: /Caro–Kann · against the Advance/ })
+    .click();
+  await expect(page.locator(".sequence-intro")).toHaveCSS(
+    "background-color",
+    "rgb(32, 36, 41)",
+  );
+  await expect(page.getByRole("button", { name: "Next move" })).toBeVisible();
+  await page.getByRole("button", { name: "Next move" }).click();
+  await expect(
+    page.getByRole("heading", { name: "White plays e4" }),
+  ).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("guided-dark.png") });
+});
