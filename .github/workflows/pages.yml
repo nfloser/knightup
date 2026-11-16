@@ -34,7 +34,7 @@ jobs:
           const version = JSON.parse(readFileSync('package.json', 'utf8')).version;
           writeFileSync('dist/build.json', JSON.stringify({version, commit: process.env.GITHUB_SHA}));
           JS
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
   deploy:
