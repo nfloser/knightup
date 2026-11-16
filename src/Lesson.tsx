@@ -15,6 +15,10 @@ export function Lesson({
   ) => Promise<boolean>;
   onExit: () => void;
 }) {
+  const [viewportHeight, setViewportHeight] = useState(
+    () => window.visualViewport?.height ?? window.innerHeight,
+  );
+  const [inputFocused, setInputFocused] = useState(false);
   const [explaining, setExplaining] = useState(false);
   const explanationHeading = useRef<HTMLHeadingElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -26,6 +30,27 @@ export function Lesson({
   const [assisted, setAssisted] = useState(false);
   const [attemptNumber, setAttemptNumber] = useState(0);
   const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    const refresh = () => {
+      const height = window.visualViewport?.height ?? window.innerHeight;
+      setViewportHeight(height);
+      document.documentElement.style.setProperty(
+        "--training-height",
+        `${height}px`,
+      );
+    };
+    document.documentElement.style.setProperty(
+      "--training-height",
+      `${window.visualViewport?.height ?? window.innerHeight}px`,
+    );
+    window.visualViewport?.addEventListener("resize", refresh);
+    window.addEventListener("resize", refresh);
+    return () => {
+      window.visualViewport?.removeEventListener("resize", refresh);
+      window.removeEventListener("resize", refresh);
+      document.documentElement.style.removeProperty("--training-height");
+    };
+  }, []);
   const lesson = lessons[index];
   const game = new Chess(lesson.fen);
   if (correct || explaining) game.move(lesson.san);
@@ -82,7 +107,12 @@ export function Lesson({
     return () => window.clearTimeout(timer);
   }, [correct, explaining, next]);
   return (
-    <>
+    <div
+      className="lesson-screen"
+      data-explaining={explaining}
+      data-compact={viewportHeight < 500}
+      data-input-focused={inputFocused}
+    >
       <div className="section-heading">
         <button className="text-button" onClick={onExit}>
           ← Learning path
@@ -140,6 +170,8 @@ export function Lesson({
             <div className="input-row">
               <input
                 id="san"
+                onFocus={() => setInputFocused(true)}
+                onBlur={() => setInputFocused(false)}
                 autoComplete="off"
                 autoCapitalize="off"
                 spellCheck={false}
@@ -236,6 +268,6 @@ export function Lesson({
           </div>
         </section>
       </div>
-    </>
+    </div>
   );
 }

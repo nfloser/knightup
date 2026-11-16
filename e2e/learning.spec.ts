@@ -193,3 +193,58 @@ test("Explain reveals the intended move without awarding a solution", async ({
   await page.getByRole("button", { name: "Learning path" }).click();
   await expect(page.getByText("0 OF 8 COMPLETED")).toBeVisible();
 });
+
+test("phone exercise and Explain fit the viewport without clipped controls", async ({
+  page,
+}) => {
+  for (const [width, height] of [
+    [320, 568],
+    [375, 667],
+    [390, 844],
+    [667, 375],
+    [390, 360],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await page.goto("./");
+    await page.getByRole("button", { name: "Practice", exact: true }).click();
+    await page.getByRole("button", { name: /DRILL 01/ }).click();
+    for (const locator of [
+      page.locator(".board"),
+      page.getByLabel("Your move in English SAN"),
+      page.getByRole("button", { name: "Explain", exact: true }),
+      page.getByRole("button", { name: "Check", exact: true }),
+    ])
+      await expect(locator).toBeInViewport({ ratio: 1 });
+    expect(
+      await page
+        .locator(".lesson-screen")
+        .evaluate((e) => e.scrollHeight <= e.clientHeight + 1),
+    ).toBe(true);
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollHeight <= window.innerHeight + 1,
+      ),
+    ).toBe(true);
+    await page.getByRole("button", { name: "Need a hint?" }).click();
+    await expect(page.getByLabel("Your move in English SAN")).toBeInViewport({
+      ratio: 1,
+    });
+    await page.getByRole("button", { name: "Explain", exact: true }).click();
+    await expect(
+      page.getByRole("button", { name: "Try it yourself", exact: true }),
+    ).toBeInViewport({ ratio: 1 });
+    await expect(page.locator(".move-explanation")).toBeInViewport({
+      ratio: 1,
+    });
+    await expect(page.locator(".board")).toBeInViewport({ ratio: 1 });
+    expect(
+      await page
+        .locator(".lesson-screen")
+        .evaluate((e) => e.scrollHeight <= e.clientHeight + 1),
+    ).toBe(true);
+    if (width === 375)
+      await page.screenshot({
+        path: `test-results/training-explain-${test.info().project.name}.png`,
+      });
+  }
+});

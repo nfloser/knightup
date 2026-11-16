@@ -39,3 +39,9 @@ Standard chess interaction uses short pressed/hover/focus states, last-move sour
 Correct exercises advance automatically after 1.6 seconds in Learn and Practice, including returning to the learning path after the last item. Auto-next is on by default per session. The always-visible Explain action shows the intended move and its original explanation, cancelling auto-next while open; manual Next remains available. Revealing an unsolved exercise counts as assisted review, never a completion. Timers cancel on navigation, exercise change or opening Explain. The next heading receives focus for keyboard/screen-reader continuity. This short pause is feedback timing, not a claim that the explanation can be fully read in that time.
 
 Browser regressions verify selection/last-move feedback, reduced motion, automatic progression and Explain without false completion. Original adaptive, offline, backup and axe journeys remain required.
+
+## Phone training viewport (#16)
+
+The exercise route uses an immersive fixed available viewport on phones. Global navigation/header/footer give way to a compact learning-path exit, objective, board, input and feedback. Learn/Practice entry pages and data/settings pages retain normal document scrolling. Board size uses the remaining space, not a hard-coded pixel height. Explain replaces the input/feedback area while the intended move stays visible. Compact/landscape views place the board beside the controls. The visualViewport resize event updates available height when a mobile keyboard changes it; focused compact input hides the repeated title/objective to keep actions reachable.
+
+Browser geometry checks cover 320×568, 375×667, 390×844, 667×375 and a 390×360 reduced viewport. They check full visibility of the board, SAN/Check/Explain and explanatory actions, not merely hidden document overflow. Native iOS/Android keyboards still require physical device verification; a resized Chromium viewport is a simulation.
