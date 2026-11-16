@@ -1783,3 +1783,27 @@ textarea {
   width: 100%;
   accent-color: var(--accent);
 }
+
+/* Keep the training copy legible: make room by sizing the board. */
+@media (max-width: 760px) {
+  .lesson-screen .lesson-copy > h1 {
+    font-size: 1.125rem;
+  }
+  .lesson-screen .lesson-copy > .lead,
+  .lesson-screen .feedback,
+  .lesson-screen .move-explanation p {
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+  .lesson-screen .explain-button,
+  .lesson-screen > .section-heading .text-button {
+    font-size: 0.875rem;
+  }
+  .lesson-screen .board-caption {
+    font-size: 0.7rem;
+  }
+  .play-screen .feedback {
+    max-height: 7em;
+    overflow: auto;
+  }
+}

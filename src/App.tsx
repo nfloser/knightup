@@ -230,7 +230,11 @@ export default function App() {
                 />
               )}
               {tab === "Practice" && (
-                <PracticePage ready={ready} start={start} />
+                <PracticePage
+                  ready={ready}
+                  start={start}
+                  onSessionChange={setPuzzling}
+                />
               )}
               {tab === "Puzzles" && (
                 <PuzzlesPage onSessionChange={setPuzzling} />
