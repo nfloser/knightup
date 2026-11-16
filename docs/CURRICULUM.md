@@ -88,3 +88,18 @@ substitute for a complete positional explanation or a deeper Stockfish review.
 Tests cover the main tactical consequences and ensure authored notes retain
 precedence. Existing lesson IDs, save data and source continuations do not
 change.
+
+## Graduated ordering of phase-level study paths
+
+The foundations, middlegame and endgame **guided phase paths** now sort their
+existing twenty attributed Lichess positions by increasing source puzzle
+rating, using the puzzle ID for deterministic ties. This avoids the previous
+difficulty resets between successive five-position motif blocks; concepts
+recur at different challenge levels. Ratings are third-party approximate
+puzzle difficulty indicators, not estimated user Elo, and a higher number
+does not guarantee that an individual learner will find a particular task
+harder.
+
+All source puzzles, SAN continuations, stable IDs, and local clean/due progress
+records remain unchanged. Only presentation and course-run order change.
+Learners can still choose any individual position from the Explore list.
