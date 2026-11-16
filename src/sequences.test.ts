@@ -48,3 +48,37 @@ it("covers both accepting and meeting the Vienna Gambit in the center", () => {
     );
   }
 });
+
+it("teaches both the Fried Liver and Black's Na5 alternative", () => {
+  for (const id of ["fried-liver", "two-knights-na5"]) {
+    const line = sequences.find((s) => s.id === id);
+    expect(line).toBeDefined();
+    expect(line?.color).toBe("w");
+    expect(line?.moves.slice(0, 6)).toEqual([
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bc4",
+      "Nf6",
+    ]);
+    expect(sequenceGame(line!, line!.moves.length).history()).toEqual(
+      line!.moves,
+    );
+  }
+});
+
+it("includes additional branches after the sacrifice and the Traxler counterattack", () => {
+  for (const id of [
+    "fried-liver-ne7",
+    "fried-liver-nb4",
+    "two-knights-traxler",
+  ]) {
+    const line = sequences.find((s) => s.id === id);
+    expect(line).toBeDefined();
+    expect(line?.color).toBe("w");
+    expect(sequenceGame(line!, line!.moves.length).history()).toEqual(
+      line!.moves,
+    );
+  }
+});

@@ -33,3 +33,12 @@ it("explains shared opening moves in context rather than jumping to the end plan
   const vienna = sequences.find((item) => item.id === "vienna-gambit-d5")!;
   expect(walkthroughFrame(vienna, 2).text).toMatch(/center/i);
 });
+
+it("explains the sacrifice and the different Fried Liver defenses in their actual positions", () => {
+  const fried = sequences.find((item) => item.id === "fried-liver")!;
+  const traxler = sequences.find((item) => item.id === "two-knights-traxler")!;
+  const na5 = sequences.find((item) => item.id === "two-knights-na5")!;
+  expect(walkthroughFrame(fried, 11).text).toMatch(/sacrifices the knight/i);
+  expect(walkthroughFrame(traxler, 9).text).toMatch(/bishop gives check/i);
+  expect(walkthroughFrame(na5, 10).text).toMatch(/attacks the bishop/i);
+});

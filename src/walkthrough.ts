@@ -4,6 +4,37 @@ import { sequenceGame, type Sequence } from "./sequences";
 // Notes are keyed by the move just shown (zero-based ply). Missing notes use
 // the lesson's authored plan rather than inventing a reason for a move.
 const notes: Record<string, Record<number, string>> = {
+  "fried-liver": {},
+  "fried-liver-ne7": {
+    15: "Black develops the c6-knight to e7, adding a defender to the knight on d5.",
+    16: "d4 claims central space and opens a diagonal for the remaining bishop.",
+  },
+  "fried-liver-nb4": {
+    15: "Black moves the c6-knight to b4, where it can pressure c2.",
+    16: "Castle to bring your king to safety and activate the rook; keep an eye on c2.",
+    17: "Black plays ...c6, supporting d5 and restricting the bishop on b5.",
+    18: "d4 opens the center and a diagonal for the bishop on c1.",
+  },
+  "two-knights-na5": {
+    7: "Black challenges the knight with ...d5; the central pawn can be captured.",
+    8: "White captures on d5. Watch Black's next move before choosing a continuation.",
+    9: "The knight attacks the bishop on c4. This is a different defense from ...Nxd5.",
+    10: "Bb5+ checks the king and develops the bishop away from the threatened square.",
+    11: "Black blocks the check with the c-pawn.",
+    12: "The d-pawn captures on c6, changing the pawn structure.",
+    13: "Black recaptures the pawn on c6 with the b-pawn and attacks the bishop on b5.",
+    14: "The bishop retreats to e2, ready to help with development and king safety.",
+  },
+  "two-knights-traxler": {
+    7: "Instead of defending f7, Black plays ...Bc5 and aims the bishop toward f2.",
+    8: "The bishop gives check on f7. This is a different idea from sacrificing the knight.",
+    9: "The king moves to e7. Check the threats and do not assume the attack wins by force.",
+    10: "The bishop retreats to c4, remaining active on the diagonal.",
+    11: "Black develops the rook to f8 on the open file.",
+    12: "White castles, bringing the king to safety and a rook into play.",
+    13: "Black attacks the knight on g5 with the h-pawn.",
+    14: "The knight retreats to f3, continuing to develop and guarding central squares.",
+  },
   "caro-advance": {
     0: "White occupies the center with the e-pawn.",
     1: "Black prepares ...d5 to challenge White's center.",
@@ -150,6 +181,24 @@ const notes: Record<string, Record<number, string>> = {
   },
 };
 
+const friedCommon: Record<number, string> = {
+  0: "White occupies the center and opens lines for the bishop and queen.",
+  1: "Black answers in the center with ...e5.",
+  2: "The knight develops and attacks the e5-pawn.",
+  3: "Black develops a knight to defend e5.",
+  4: "The bishop develops to c4, pointing toward f7.",
+  5: "Black develops the other knight and attacks e4: this is the Two Knights Defense.",
+  6: "Ng5 attacks f7 together with the bishop. Black has several ways to respond.",
+  7: "Black challenges White in the center with ...d5.",
+  8: "White captures the pawn on d5. Black's recapture choice changes the plan.",
+  9: "Black recaptures with the knight. This allows the specific sacrifice shown next.",
+  10: "White sacrifices the knight on f7, drawing the king out if Black captures it.",
+  11: "Black captures the knight. The king is exposed and the knight on d5 can become a target.",
+  12: "Qf3+ checks the king and also attacks the knight on d5 along the diagonal.",
+  13: "Black moves the king to e6 while keeping the knight defended.",
+  14: "Nc3 develops with an attack on the knight on d5. Black can choose different retreats.",
+};
+
 const openingPrefixes: Record<string, string> = {
   e4: "White claims central space with the e-pawn, opening lines for the bishop and queen.",
   "e4 c6": "Black prepares ...d5 to challenge White's central pawn.",
@@ -180,6 +229,9 @@ export function walkthroughFrame(sequence: Sequence, requested: number) {
       step === 0
         ? sequence.idea
         : (notes[sequence.id]?.[step - 1] ??
+          (sequence.id.startsWith("fried-liver") || sequence.id.startsWith("two-knights-")
+            ? friedCommon[step - 1]
+            : undefined) ??
           (sequence.category === "Openings"
             ? openingPrefixes[sequence.moves.slice(0, step).join(" ")]
             : undefined) ??

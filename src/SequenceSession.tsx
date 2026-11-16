@@ -71,6 +71,20 @@ export function SequenceLibrary({
         "Start a repertoire against 1.d4 with the Exchange variation.",
     },
     {
+      id: "fried-liver",
+      title: "Fried Liver & Two Knights",
+      color: "w",
+      ids: [
+        "fried-liver",
+        "fried-liver-ne7",
+        "fried-liver-nb4",
+        "two-knights-na5",
+        "two-knights-traxler",
+      ],
+      description:
+        "Understand the f7 sacrifice and respond to different Black defenses.",
+    },
+    {
       id: "london",
       title: "London System",
       color: "w",
@@ -187,6 +201,42 @@ export function SequenceLibrary({
               </button>
               <h3>{selected.title}</h3>
               <p>{selected.description}</p>
+              {selected.id === "fried-liver" && (
+                <section aria-label="Fried Liver course guide">
+                  <h4>1. Recognize the position</h4>
+                  <p>
+                    After 1.e4 e5 2.Nf3 Nc6 3.Bc4 Nf6 4.Ng5, White threatens f7
+                    with bishop and knight. Black can challenge the center with
+                    ...d5.
+                  </p>
+                  <h4>2. Watch the recapture</h4>
+                  <p>
+                    After exd5, the Fried Liver line begins if Black plays
+                    ...Nxd5. Nxf7 sacrifices the knight; Qf3+ follows after
+                    ...Kxf7. Calculate carefully: the sacrifice depends on the
+                    exact position.
+                  </p>
+                  <h4>3. Prepare for a different move</h4>
+                  <p>
+                    Black can also play ...Na5, attacking your bishop. Then the
+                    Fried Liver continuation is unavailable; practise Bb5+ and
+                    the resulting exchanges instead.
+                  </p>
+                  <h4>4. Recognize the Traxler</h4>
+                  <p>
+                    Black can meet Ng5 with ...Bc5 instead of ...d5,
+                    counterattacking f2. The bishop check Bxf7+ is a different
+                    tactical choice from the knight sacrifice Nxf7: follow the
+                    actual position and calculate replies.
+                  </p>
+                  <h4>5. Practise the branches</h4>
+                  <p>
+                    Play both branches, compare the opponent's choices and
+                    review without hints. Black has other options too; these
+                    lines are a starting point.
+                  </p>
+                </section>
+              )}
               {selected.id === "vienna" && (
                 <section aria-label="Vienna Game course guide">
                   <h4>1. Develop the queen's knight</h4>
