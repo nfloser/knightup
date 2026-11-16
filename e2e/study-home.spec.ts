@@ -113,10 +113,15 @@ test("guided academy path tiles share a baseline and remain usable on narrow scr
     const buttons = element.querySelector(".actions")!.getBoundingClientRect();
     return { top: card.top, bottom: card.bottom, buttonsTop: buttons.top, buttonsBottom: buttons.bottom };
   }));
-  expect(Math.max(...geometry.map((x) => x.top)) - Math.min(...geometry.map((x) => x.top)))
-    .toBeLessThanOrEqual(1);
-  expect(Math.max(...geometry.map((x) => x.buttonsTop)) - Math.min(...geometry.map((x) => x.buttonsTop)))
-    .toBeLessThanOrEqual(2);
+  // Desktop cards share a row; mobile uses intentionally stacked full-width cards.
+  const gridColumns = await pathGrid.evaluate((element) =>
+    getComputedStyle(element).gridTemplateColumns.split(" ").length);
+  if (gridColumns === 3) {
+    expect(Math.max(...geometry.map((x) => x.top)) - Math.min(...geometry.map((x) => x.top)))
+      .toBeLessThanOrEqual(1);
+    expect(Math.max(...geometry.map((x) => x.buttonsTop)) - Math.min(...geometry.map((x) => x.buttonsTop)))
+      .toBeLessThanOrEqual(2);
+  }
   for (const card of geometry) expect(card.buttonsBottom).toBeLessThanOrEqual(card.bottom - 8);
   await page.setViewportSize({ width: 320, height: 680 });
   await expect(pathGrid.getByRole("button", { name: "Continue path" }).first()).toBeVisible();
