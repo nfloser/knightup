@@ -72,9 +72,14 @@ export function SequenceLibrary({
       id: "vienna",
       title: "Vienna Game",
       color: "w",
-      ids: ["vienna-natural", "vienna-falkbeer"],
+      ids: [
+        "vienna-natural",
+        "vienna-falkbeer",
+        "vienna-gambit-d5",
+        "vienna-gambit-accepted",
+      ],
       description:
-        "Learn a developing setup and practise two common black replies.",
+        "Learn a developing setup and practise quiet and gambit responses.",
     },
   ];
   const selected = groups.find((g) => g.id === course);
@@ -168,6 +173,34 @@ export function SequenceLibrary({
               </button>
               <h3>{selected.title}</h3>
               <p>{selected.description}</p>
+              {selected.id === "vienna" && (
+                <section aria-label="Vienna Game course guide">
+                  <h4>1. Develop the queen's knight</h4>
+                  <p>
+                    After 1.e4 e5 2.Nc3, White supports e4 while keeping the
+                    f-pawn free. First identify Black's reply: ...Nc6 and ...Nf6
+                    are both common.
+                  </p>
+                  <h4>2. Choose a plan</h4>
+                  <p>
+                    The quiet examples develop the bishop, support the center
+                    and castle. The gambit examples play f4 against ...Nf6,
+                    seeking activity and accepting additional risk to the king.
+                  </p>
+                  <h4>3. Read Black's response</h4>
+                  <p>
+                    Against ...d5, the center opens immediately. If Black takes
+                    on f4, e5 can attack the knight. The specific continuations
+                    are training choices, and Black can deviate earlier.
+                  </p>
+                  <h4>4. Apply and review</h4>
+                  <p>
+                    Practise the quiet setups first, then the gambit lines. Look
+                    for checks and captures before repeating a memorized move,
+                    and revisit lines when they are due.
+                  </p>
+                </section>
+              )}
               {selected.id === "london" && (
                 <section aria-label="London System course guide">
                   <h4>1. Develop the bishop</h4>
