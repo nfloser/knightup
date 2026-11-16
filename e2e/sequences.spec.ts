@@ -114,3 +114,29 @@ test("a revealed endgame continuation stays assisted and earns no XP", async ({
     page.getByRole("heading", { name: "Level 1 · 0 XP" }),
   ).toBeVisible();
 });
+
+test("London offers a guided path for White", async ({ page }) => {
+  await page.goto("./");
+  await page
+    .getByRole("group", { name: "Opening color" })
+    .getByRole("button", { name: "White" })
+    .click();
+  await page.getByRole("button", { name: /London System Develop/ }).click();
+  await expect(
+    page.getByRole("region", { name: "London System course guide" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /London · against an early/ }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Continue course" }).click();
+  await expect(
+    page.getByRole("heading", { name: /London · against/ }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Practise whole line" }).click();
+  await expect(
+    page.getByRole("group", { name: "Chessboard, White at bottom" }),
+  ).toBeVisible();
+  await page.getByLabel("Your move in English SAN").fill("d4");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.locator(".sequence-screen .feedback")).toContainText("d4");
+});

@@ -24,3 +24,15 @@ it("covers common Caro–Kann alternatives from the initial position", () => {
     );
   }
 });
+
+it("provides legal London setups against common Black replies", () => {
+  for (const id of ["london-classical", "london-fianchetto", "london-c5"]) {
+    const line = sequences.find((s) => s.id === id);
+    expect(line).toBeDefined();
+    expect(line?.color).toBe("w");
+    expect(line?.moves[0]).toBe("d4");
+    expect(sequenceGame(line!, line!.moves.length).history()).toEqual(
+      line!.moves,
+    );
+  }
+});
