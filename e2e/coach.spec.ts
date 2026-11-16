@@ -77,5 +77,5 @@ test("Chess.com imports only after consent and merges duplicates", async ({
   await expect(page.getByRole("status")).toContainText(
     "Library updated: 1 games",
   );
-  expect(calls.length).toBe(4);
+  await expect.poll(() => calls.length).toBe(4);
 });
