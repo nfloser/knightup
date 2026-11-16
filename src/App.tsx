@@ -247,6 +247,7 @@ export default function App() {
               )}
               {tab === "Practice" && (
                 <PracticePage
+                  onNavigate={setTab}
                   ready={ready}
                   start={start}
                   onSessionChange={setPuzzling}
