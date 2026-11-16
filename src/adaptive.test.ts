@@ -46,3 +46,13 @@ it("ignores an older backup review while keeping its completion", () => {
   expect(mergeProgress(recent, old).reviews[id]).toEqual(recent.reviews[id]);
   expect(mergeProgress(recent, old).completed).toContain(id);
 });
+
+it("keeps valid saturated review counters readable after another attempt", () => {
+  const p = recordAttempt(emptyProgress, id, false, false, now, "a");
+  p.reviews[id].attempts = 1_000_000;
+  p.reviews[id].failures = 1_000_000;
+  const accepted = parseProgress(p);
+  const next = recordAttempt(accepted, id, false, false, now + 1, "b");
+  expect(() => parseProgress(next)).not.toThrow();
+  expect(next.reviews[id].attempts).toBe(1_000_000);
+});

@@ -38,13 +38,15 @@ export async function saveAttempt(
   const tx = (await db()).transaction("settings", "readwrite");
   const raw = await tx.store.get("progress");
   const current = raw === undefined ? emptyProgress : parseProgress(raw);
-  const next = recordAttempt(
-    current,
-    id,
-    correct,
-    assisted,
-    Date.now(),
-    crypto.randomUUID(),
+  const next = parseProgress(
+    recordAttempt(
+      current,
+      id,
+      correct,
+      assisted,
+      Date.now(),
+      crypto.randomUUID(),
+    ),
   );
   await tx.store.put(next, "progress");
   await tx.done;

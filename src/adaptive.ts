@@ -33,8 +33,8 @@ export function recordAttempt(
     at,
     due: clean ? (eligible ? at + intervals[box] : previous.due) : at + 600_000,
     box,
-    attempts: (previous?.attempts ?? 0) + 1,
-    failures: (previous?.failures ?? 0) + (clean ? 0 : 1),
+    attempts: Math.min(1_000_000, (previous?.attempts ?? 0) + 1),
+    failures: Math.min(1_000_000, (previous?.failures ?? 0) + (clean ? 0 : 1)),
     correct,
     assisted,
   };
