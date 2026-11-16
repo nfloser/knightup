@@ -31,3 +31,28 @@ that the engine's choice is forced in all similar positions. The original
 puzzle solutions are source continuations, not independently Stockfish-reviewed
 teaching lines. Finer-grained pedagogy and engine screening remain distinct
 quality tasks.
+
+## Expanded individual Academy topic practice
+
+All 18 existing Academy topic cards now offer **20 board exercises each**
+(360 total): the original two introduction exercises, with unchanged stable
+progress IDs, plus 18 new applications per topic. Sixteen topics draw on 288
+distinct, attributed CC0 Lichess source positions; Caro–Kann and Vienna reuse
+18 unique repertoire-decision positions each from their original guided
+opening course. The added examples are legal single-position recall exercises,
+not 18 additional full-length lecture videos. The original topic introduction
+teaches the idea before the exercise stream.
+
+For motifs where a CC0 dataset does not exactly cover the name of an existing
+topic, exercises deliberately broaden the associated thinking habit:
+king safety includes defensive moves besides castling, and notation includes
+accurate SAN in real positions rather than exclusively disambiguation or en
+passant. These topics still need deeper dedicated instruction and specifically
+authored demonstrations. Completing a puzzle means reproducing a documented
+source continuation, **not** proving that other legal moves are mistakes.
+
+The three phase-level 20-unit guided courses remain separate from these
+individual topic exercises; they offer walkthrough-first complete puzzle
+continuations, whereas a topic exercise asks for the first response after the
+source setup move. Content remains subject to engine quality review, especially
+for opening choices and broader abstract teaching themes.
