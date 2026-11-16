@@ -126,9 +126,13 @@ export const academyPaths: Record<AcademyPhase, Sequence[]> = {
   middlegame: [],
   endgame: [],
 };
-for (const p of puzzles as Curated[]) {
-  const path = academyPaths[p.phase];
-  if (!path) throw Error("Unknown academy path");
-  path.push(toSequence(p, path.length));
+// Arrange the twenty positions in each phase by the source difficulty estimate,
+// rather than resetting to easy examples at every motif boundary. The puzzle
+// IDs (and therefore local saved progress) remain unchanged.
+for (const phase of ["foundations", "middlegame", "endgame"] as const) {
+  const graded = (puzzles as Curated[])
+    .filter((p) => p.phase === phase)
+    .sort((a, b) => a.rating - b.rating || a.id.localeCompare(b.id));
+  academyPaths[phase] = graded.map((p, index) => toSequence(p, index));
 }
 export const academySequences: Sequence[] = Object.values(academyPaths).flat();
