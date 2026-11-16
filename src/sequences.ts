@@ -117,6 +117,22 @@ export const openingSequences: Sequence[] = [
     "This repertoire chooses a quiet Vienna rather than the gambit. Learn the plan and react to actual threats.",
   ),
   opening(
+    "vienna-gambit-d5",
+    "Vienna Gambit · against ...d5",
+    "w",
+    "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 dxc3 Be7 Bd3 O-O Bf4",
+    "After 3.f4, Black challenges the center with ...d5 rather than taking the pawn. Capture on e5, then respond to the knight's entry.",
+    "The queen move attacks the knight on e4. If Black exchanges on c3, recapture toward the center and finish development; watch for concrete threats.",
+  ),
+  opening(
+    "vienna-gambit-accepted",
+    "Vienna Gambit · if Black takes on f4",
+    "w",
+    "e4 e5 Nc3 Nf6 f4 exf4 e5 Qe7 Qe2 Ng8 d4 d6 Bxf4",
+    "Black accepts the gambit pawn. The e5 advance attacks the knight and gains space; stay alert to checks and queen threats.",
+    "In this example Qe2 meets ...Qe7 and supports the center. Develop and recover the pawn only when the position allows it.",
+  ),
+  opening(
     "slav-exchange",
     "Slav · against an early exchange",
     "b",
