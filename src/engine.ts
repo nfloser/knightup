@@ -107,6 +107,7 @@ export class StockfishClient {
     fen: string,
     signal?: AbortSignal,
     confirm = false,
+    skill = 20,
   ): Promise<EngineScore> {
     new Chess(fen);
     if (this.busy) throw Error("Engine is busy.");
@@ -121,6 +122,9 @@ export class StockfishClient {
     };
     try {
       await this.ready;
+      this.send(
+        `setoption name Skill Level value ${Math.max(0, Math.min(20, Math.round(skill)))}`,
+      );
       this.send("setoption name Clear Hash");
       this.send(`position fen ${fen}`);
       this.listeners.add(listen);
@@ -142,7 +146,7 @@ export class StockfishClient {
       if (
         move &&
         /^[a-h][1-8][a-h][1-8][qrbn]?$/.test(move) &&
-        !score.pv.length
+        (skill < 20 || !score.pv.length)
       )
         score.pv = [move];
       const legal = legalVariation(fen, score.pv);
