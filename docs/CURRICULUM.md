@@ -71,3 +71,18 @@ a bounded before/after centipawn estimate. The JSON audit report is saved in
 test-results. The check is a deliberately shallow **gross-blunder screen**:
 other legal moves may be equally good, sacrifice evaluations can be unstable,
 and it is not a complete move-by-move engine endorsement of 80 variations.
+
+## Graduated ordering of phase-level study paths
+
+The foundations, middlegame and endgame **guided phase paths** now sort their
+existing twenty attributed Lichess positions by increasing source puzzle
+rating, using the puzzle ID for deterministic ties. This avoids the previous
+difficulty resets between successive five-position motif blocks; concepts
+recur at different challenge levels. Ratings are third-party approximate
+puzzle difficulty indicators, not estimated user Elo, and a higher number
+does not guarantee that an individual learner will find a particular task
+harder.
+
+All source puzzles, SAN continuations, stable IDs, and local clean/due progress
+records remain unchanged. Only presentation and course-run order change.
+Learners can still choose any individual position from the Explore list.
