@@ -27,6 +27,9 @@ test("a real lesson teaches before testing and preserves completion", async ({
   await expect(
     page.getByRole("button", { name: /01 · 0–200 Know your pieces 2 \/ 20/ }),
   ).toBeVisible();
+  await page.getByRole("button", { name: /01 · 0–200 Know your pieces/ }).click();
+  await page.getByRole("button", { name: "Continue your practice" }).click();
+  await expect(page.getByRole("heading", { name: /Application 03/ })).toBeVisible();
 });
 
 test("Black opening lessons keep Black at the bottom", async ({ page }) => {
