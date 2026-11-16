@@ -23,6 +23,13 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+      - name: Stamp deployment identity
+        run: |
+          node --input-type=module - <<'JS'
+          import {readFileSync, writeFileSync} from 'node:fs';
+          const version = JSON.parse(readFileSync('package.json', 'utf8')).version;
+          writeFileSync('dist/build.json', JSON.stringify({version, commit: process.env.GITHUB_SHA}));
+          JS
       - run: npm audit --audit-level=high
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
@@ -49,14 +56,18 @@ jobs:
       - name: Verify published assets
         run: |
           python - <<'PY'
-          import json, time, urllib.request
+          import json, os, time, urllib.request
           base = 'https://nfloser.github.io/knightup/'
-          for path in ['', 'puzzles.json', 'engine/SOURCE.txt', 'engine/stockfish-19-lite-single.wasm']:
+          version = json.load(open('package.json'))['version']
+          for path in ['build.json', '', 'puzzles.json', 'engine/SOURCE.txt', 'engine/stockfish-19-lite-single.wasm']:
               for attempt in range(5):
                   try:
-                      with urllib.request.urlopen(base + path, timeout=20) as response:
+                      with urllib.request.urlopen(base + path + "?deployment=" + os.environ["GITHUB_SHA"], timeout=20) as response:
                           data = response.read()
                           assert response.status == 200 and data
+                          if path == 'build.json':
+                              identity = json.loads(data)
+                              assert identity == {'version': version, 'commit': os.environ['GITHUB_SHA']}
                           if path == 'puzzles.json':
                               assert len(json.loads(data)) == 4000
                           if path.endswith('.wasm'):
