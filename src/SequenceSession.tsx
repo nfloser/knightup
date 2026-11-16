@@ -79,6 +79,8 @@ export function SequenceLibrary({
         "fried-liver-ne7",
         "fried-liver-nb4",
         "two-knights-na5",
+        "two-knights-na5-quiet",
+        "two-knights-nd4",
         "two-knights-traxler",
       ],
       description:
@@ -231,7 +233,7 @@ export function SequenceLibrary({
                   </p>
                   <h4>5. Practise the branches</h4>
                   <p>
-                    Play both branches, compare the opponent's choices and
+                    Play the branches, compare the opponent's choices and
                     review without hints. Black has other options too; these
                     lines are a starting point.
                   </p>

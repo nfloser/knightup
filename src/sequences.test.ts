@@ -82,3 +82,14 @@ it("includes additional branches after the sacrifice and the Traxler counteratta
     );
   }
 });
+
+it("covers two different alternatives to the Fried Liver sacrifice", () => {
+  const na5 = sequences.find((s) => s.id === "two-knights-na5-quiet")!;
+  const nd4 = sequences.find((s) => s.id === "two-knights-nd4")!;
+  expect(na5.moves.slice(9, 13)).toEqual(["Na5", "d3", "h6", "Nf3"]);
+  expect(nd4.moves.slice(9, 13)).toEqual(["Nd4", "c3", "b5", "Bf1"]);
+  for (const line of [na5, nd4]) {
+    const game = sequenceGame(line, line.moves.length);
+    expect(game.history()).toHaveLength(line.moves.length);
+  }
+});

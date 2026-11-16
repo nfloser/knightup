@@ -94,7 +94,7 @@ export const openingSequences: Sequence[] = [
   ),
   opening(
     "fried-liver-ne7",
-    "Fried Liver · knight retreats to e7",
+    "Fried Liver · reinforcing d5",
     "w",
     "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Ne7 d4",
     "After the sacrifice and Nc3, Black can reinforce the knight on d5 with ...Ne7. Challenge the center with d4.",
@@ -107,6 +107,22 @@ export const openingSequences: Sequence[] = [
     "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3 Nb4 O-O c6 d4",
     "After Nc3, Black can move the c6-knight to b4. Castle and challenge the center after ...c6 in this example.",
     "Do not assume a mating attack plays itself. The b4-knight can create counterplay; keep the king safe and calculate the opponent's checks.",
+  ),
+  opening(
+    "two-knights-na5-quiet",
+    "Two Knights · a quieter reply to ...Na5",
+    "w",
+    "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 d3 h6 Nf3 e4 Nd4 Bc5 Be3 exd3 Bxd3",
+    "Instead of checking on b5, support the bishop with d3. After ...h6 the knight retreats and Black can advance ...e4.",
+    "Keep checking threats while developing: the position is different from the Fried Liver sacrifice and neither side can follow a setup blindly.",
+  ),
+  opening(
+    "two-knights-nd4",
+    "Two Knights · against ...Nd4",
+    "w",
+    "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nd4 c3 b5 Bf1 Nxd5 Nxf7 Kxf7 cxd4",
+    "Black centralizes the knight with ...Nd4 instead of playing ...Na5 or ...Nxd5. Challenge it with c3 and watch the bishop on c4.",
+    "The exact move order matters: ...b5 attacks the bishop, and only after its retreat does this example use Nxf7 and capture the knight on d4.",
   ),
   opening(
     "two-knights-traxler",

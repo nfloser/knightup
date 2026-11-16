@@ -395,6 +395,6 @@ test("Fried Liver training distinguishes the Na5 alternative", async ({
     page.getByRole("button", { name: /Two Knights · the Traxler/ }),
   ).toBeVisible();
   await expect(
-    page.getByRole("button", { name: /Fried Liver · knight retreats/ }),
+    page.getByRole("button", { name: /Fried Liver · reinforcing d5/ }),
   ).toBeVisible();
 });

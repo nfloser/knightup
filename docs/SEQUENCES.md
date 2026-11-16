@@ -26,3 +26,5 @@ A course displays progress at the bottom, using previously clean units, complete
 The Fried Liver starter teaches the sacrifice after ...Nxd5 alongside a separate ...Na5 response. It explains the move-order dependency and does not claim a forced win. White's moves were checked at depth 10 with Stockfish 19 lite as a shallow blunder screen and all lines are legally replayed in tests; this is not exhaustive opening coverage.
 
 Additional Fried Liver branches cover the ...Ne7 and ...Nb4 defenses, and a separate Traxler counterattack example. These are independently authored training choices rather than exhaustive repertoires. White moves were shallow-screened with Stockfish 19 lite at depth 10; the Traxler decision was also checked at depth 15.
+
+Two further examples compare the quieter d3 response to ...Na5 with the counterattack ...Nd4. Their continuations were generated at depth 14 and White moves screened at depth 10 using Stockfish 19 lite; this is a limited check, not proof that moves are uniquely best.
