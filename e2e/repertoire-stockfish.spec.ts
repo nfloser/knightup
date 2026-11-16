@@ -1,18 +1,22 @@
 import { test, expect } from "@playwright/test";
 import { mkdir, writeFile } from "node:fs/promises";
-import { sequences, sequenceGame } from "../src/sequences";
+import { Chess } from "chess.js";
+import { openingSequences } from "../src/opening-sequences";
+import { extendedOpenings } from "../src/extended-openings";
+import { additionalRepertoireLessons } from "../src/additional-repertoire-lessons";
 
 test("Stockfish 19 screens a learner decision in every opening lesson", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop", "One full WASM review is enough per CI run.");
   test.setTimeout(240_000);
 
-  const samples = sequences
-    .filter((s) => s.category === "Openings")
+  const samples = [...openingSequences, ...extendedOpenings, ...additionalRepertoireLessons]
     .map((s) => {
-      const before = sequenceGame(s, s.moves.length - 1);
+      const before = new Chess(s.fen);
+      for (const san of s.moves.slice(0, -1)) before.move(san);
+      const startingFen = before.fen();
       const selected = before.move(s.moves.at(-1)!);
       if (!selected) throw Error("Illegal repertoire move in " + s.id);
-      return { id: s.id, before: sequenceGame(s, s.moves.length - 1).fen(),
+      return { id: s.id, before: startingFen,
         after: before.fen(), san: selected.san, terminal: before.isGameOver() };
     });
   expect(samples).toHaveLength(80);
