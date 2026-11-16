@@ -265,7 +265,11 @@ export function PuzzlesPage({
           <div className="filter-row">
             <label>
               Session
-              <select value={mode} onChange={(e) => setMode(e.target.value)}>
+              <select
+                aria-label="Session"
+                value={mode}
+                onChange={(e) => setMode(e.target.value)}
+              >
                 <option value="random">Random puzzles</option>
                 <option value="adaptive">
                   Focused review · due skills first
@@ -274,7 +278,11 @@ export function PuzzlesPage({
             </label>
             <label>
               Theme
-              <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+              <select
+                aria-label="Theme"
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+              >
                 {filters.map(([id, label]) => (
                   <option key={id} value={id}>
                     {label}
@@ -285,6 +293,7 @@ export function PuzzlesPage({
             <label>
               Puzzle difficulty
               <select
+                aria-label="Puzzle difficulty"
                 value={difficulty}
                 onChange={(e) => setDifficulty(e.target.value)}
               >
