@@ -8,7 +8,8 @@
     "test": "vitest run",
     "lint": "eslint .",
     "preview": "vite preview --host 127.0.0.1",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "prebuild": "node scripts/prepare-engine.mjs"
   },
   "repository": {
     "type": "git",
@@ -40,6 +41,7 @@
     "fake-indexeddb": "^6.2.8",
     "globals": "^17.14.0",
     "prettier": "^3.10.1",
+    "stockfish": "19.0.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.8",

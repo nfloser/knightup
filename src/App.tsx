@@ -238,7 +238,9 @@ export default function App() {
               {tab === "Puzzles" && (
                 <PuzzlesPage onSessionChange={setPuzzling} />
               )}
-              {tab === "Insights" && <InsightsPage count={count} />}
+              {tab === "Insights" && (
+                <InsightsPage count={count} onSessionChange={setPuzzling} />
+              )}
               {tab === "Profile" && (
                 <ProfilePage ready={ready} backup={backup} restore={restore} />
               )}

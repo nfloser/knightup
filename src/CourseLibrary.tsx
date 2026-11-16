@@ -1,3 +1,5 @@
+import { database } from "./local-db";
+import { loadReports, learningNeeds } from "./coaching";
 import { useEffect, useState } from "react";
 import { courses, type Course } from "./curriculum";
 import { Lesson } from "./Lesson";
@@ -62,12 +64,24 @@ export function CourseLibrary({
   onStart: (course: Course) => void;
   now: number;
 }) {
+  const [needs, setNeeds] = useState<Record<string, number>>({});
   const [training, setTraining] = useState(emptyTraining);
   const [error, setError] = useState("");
   useEffect(() => {
     let alive = true;
-    loadTraining()
-      .then((t) => {
+    Promise.all([
+      loadTraining(),
+      loadReports(),
+      database().then((db) => db.get("settings", "coachPrefs")),
+    ])
+      .then(([t, reports, prefs]) => {
+        if (alive)
+          setNeeds(
+            learningNeeds(
+              reports,
+              typeof prefs?.username === "string" ? prefs.username : "GMNille",
+            ),
+          );
         if (alive) setTraining(t);
       })
       .catch(() => {
@@ -87,8 +101,14 @@ export function CourseLibrary({
       return r && r.due <= now;
     }),
   );
+  const personal = [...courses]
+    .filter((c) => needs[c.theme])
+    .sort((a, b) => needs[b.theme] - needs[a.theme])[0];
   const recommended =
-    due ?? courses.find((c) => completed(c) < c.exercises.length) ?? courses[0];
+    due ??
+    personal ??
+    courses.find((c) => completed(c) < c.exercises.length) ??
+    courses[0];
   return (
     <section className="academy">
       <div className="section-heading">
@@ -100,8 +120,12 @@ export function CourseLibrary({
         return for spaced review.
       </p>
       <button className="primary" onClick={() => onStart(recommended)}>
-        {due ? "Review due lesson" : "Recommended lesson"}: {recommended.title}{" "}
-        →
+        {due
+          ? "Review due lesson"
+          : personal
+            ? "From your games"
+            : "Recommended lesson"}
+        : {recommended.title} →
       </button>
       {error && <p role="alert">{error}</p>}
       <div className="course-grid">

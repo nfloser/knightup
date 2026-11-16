@@ -24,6 +24,18 @@ export default defineConfig({
       },
       workbox: {
         navigateFallback: "index.html",
+        globIgnores: ["**/engine/**"],
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.includes("/knightup/engine/"),
+            handler: "CacheFirst",
+            options: {
+              cacheName: "knightup-stockfish-19",
+              cacheableResponse: { statuses: [200] },
+              expiration: { maxEntries: 4, maxAgeSeconds: 31536000 },
+            },
+          },
+        ],
         globPatterns: ["**/*.{js,css,html,svg,png,webmanifest,txt,md,json}"],
         cleanupOutdatedCaches: true,
       },
