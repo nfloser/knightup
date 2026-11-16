@@ -166,6 +166,23 @@ const openingPrefixes: Record<string, string> = {
     "Black develops a knight while keeping the pawn structure flexible.",
 };
 
+/** Describes the actual displayed move when no hand-authored ply note exists.
+ * Avoid repeating a course-level paragraph on every unexplained position. */
+function explainDisplayedMove(
+  move: ReturnType<Chess["history"]> extends never ? never : { san: string; from: string; to: string; piece: string; color: string; isCapture: () => boolean; isKingsideCastle: () => boolean; isQueensideCastle: () => boolean },
+  plan: string,
+): string {
+  const side = move.color === "w" ? "White" : "Black";
+  const pieces: Record<string, string> = { p: "pawn", n: "knight", b: "bishop", r: "rook", q: "queen", k: "king" };
+  if (move.isKingsideCastle() || move.isQueensideCastle())
+    return side + " castles to improve king safety and activate a rook. " + plan;
+  if (move.isCapture())
+    return side + " uses " + move.san + " to capture on " + move.to + ". Recheck what each side can recapture and how the pawn structure changes. " + plan;
+  if (move.piece === "p")
+    return side + " pushes a pawn from " + move.from + " to " + move.to + ". Look at which central squares or files this changes. " + plan;
+  return side + " moves the " + (pieces[move.piece] ?? "piece") + " from " + move.from + " to " + move.to + ". Evaluate the new attacks, defenders and development. " + plan;
+}
+
 export function walkthroughFrame(sequence: Sequence, requested: number) {
   const step = Math.max(
     0,
@@ -185,7 +202,7 @@ export function walkthroughFrame(sequence: Sequence, requested: number) {
           (sequence.category === "Openings"
             ? openingPrefixes[sequence.moves.slice(0, step).join(" ")]
             : undefined) ??
-          sequence.plan),
+          (lastMove ? explainDisplayedMove(lastMove, sequence.plan) : sequence.plan)),
   };
 }
 
