@@ -1,3 +1,4 @@
+import { additionalRepertoireLessons } from "./additional-repertoire-lessons";
 import { extendedWalkthroughNotes } from "./extended-walkthrough-notes";
 import { expect, it } from "vitest";
 import { sequences, sequenceGame, expectedMove } from "./sequences";
@@ -84,6 +85,26 @@ it("gives every new repertoire lesson multiple position-specific teaching steps"
     for (const [step, explanation] of Object.entries(notes)) {
       expect(Number(step), id).toBeLessThan(sequence!.moves.length);
       expect(explanation.length, id).toBeGreaterThan(40);
+    }
+  }
+});
+
+it("offers exactly twenty distinct guided positions in each expanded opening course", () => {
+  const initialCounts: Record<string, number> = { caro: 11, vienna: 8, london: 7, slav: 5 };
+  const expectedAdditions: Record<string, number> = { caro: 9, vienna: 12, london: 13, slav: 15 };
+  for (const [prefix, count] of Object.entries(expectedAdditions)) {
+    const added = additionalRepertoireLessons.filter((s) => s.id.startsWith(prefix + "-"));
+    const total = sequences.filter((s) => s.id.startsWith(prefix + "-"));
+    expect(added, prefix).toHaveLength(count);
+    expect(total, prefix).toHaveLength(20);
+    expect(total.length, prefix).toBe(initialCounts[prefix] + count);
+    expect(new Set(total.map((s) => s.id)).size, prefix).toBe(20);
+    for (const lesson of added) {
+      expect(lesson.idea.length, lesson.id).toBeGreaterThan(50);
+      expect(lesson.plan.length, lesson.id).toBeGreaterThan(50);
+      expect(lesson.moves.length, lesson.id).toBeGreaterThanOrEqual(7);
+      expect(sequenceGame(lesson, lesson.moves.length - 1).turn(), lesson.id).toBe(lesson.color);
+      expect(sequenceGame(lesson, lesson.moves.length).history(), lesson.id).toEqual(lesson.moves);
     }
   }
 });
