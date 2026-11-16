@@ -23,3 +23,30 @@ Continue course starts the unfinished lines in their authored order and advances
 Before a line is practised, the learner can step forwards and backwards through its legal positions on a board. The walkthrough presents the course's original idea and plan, with move-specific teaching notes where authored. Viewing a demonstration does not award mastery. During practice, Hint gives a clue about the type of move without naming its destination; Explain reveals the move. Review lesson opens the walkthrough at the current position and resumes practice there. All three mark the attempt assisted using the existing training record rules. The learner can start practice at any point.
 
 A course displays progress at the bottom, using previously clean units, completed units in this session and the current line's played moves. The denominator is the full course; an all-clean course instead starts a new review progress bar. Walkthrough viewing does not advance practice progress. The indicator includes assisted steps, not just clean mastery; assisted work remains marked separately in the training records.
+
+## Expanded repertoire practice (November 2026)
+
+Seventeen additional original, bounded lines extend the four connected opening courses.
+All additions keep stable sequence IDs, local saved progress and the existing
+walkthrough → assisted or clean practice → review workflow:
+
+- Caro–Kann: five new responses (immediate ...c5 Advance plan, Classical
+  ...Nd7, reversed Two Knights move order, 2.d3, and early c4), eleven total.
+- Vienna: four new examples (f4 versus ...Nc6, ...d5 central counter with
+  Nf3 development, a delayed f4, and a g3 fianchetto), eight total.
+- London: four new setups (...c5/...Nc6, ...b6/...Bb7, ...Nf6/...c5,
+  and mirrored bishop development), seven total.
+- Slav: four new responses (accepted c4, solid ...e6, Exchange with Bf4,
+  and early ...Bf5), five total.
+
+The new sequences provide move-indexed notes for key decisions so the
+walkthrough explains the position instead of repeating a generic plan on
+every step. The other plies still fall back to the course-level plan.
+These short examples broaden practical repertoire coverage but do **not**
+constitute complete treatments of all sidelines, tactics, middlegames or
+endgames. A single demonstrated line is not necessarily the only good move.
+
+The extended line tests assert canonical legal replay via chess.js,
+opponent/learner turn alignment, unique sequence IDs, and authored
+position-specific explanations. Engine and browser verification still
+depend on passing CI and follow-up review.
