@@ -142,6 +142,7 @@ test("correct moves advance automatically unless Explain is opened", async ({
   await page.clock.install();
   await page.goto("./");
   await page.getByRole("button", { name: "Practice", exact: true }).click();
+  await page.getByText("Notation drills", { exact: true }).click();
   await page.getByRole("button", { name: /DRILL 01/ }).click();
   await page.getByLabel("Your move in English SAN").fill("e4");
   await page.getByRole("button", { name: "Check", exact: true }).click();
@@ -207,6 +208,7 @@ test("phone exercise and Explain fit the viewport without clipped controls", asy
     await page.setViewportSize({ width, height });
     await page.goto("./");
     await page.getByRole("button", { name: "Practice", exact: true }).click();
+    await page.getByText("Notation drills", { exact: true }).click();
     await page.getByRole("button", { name: /DRILL 01/ }).click();
     for (const locator of [
       page.locator(".board"),
@@ -267,15 +269,14 @@ test("mobile restore notice and promotion picker never clip training actions", a
   await page.setViewportSize({ width: 320, height: 568 });
   await page.goto("./");
   await page.getByRole("button", { name: "Profile", exact: true }).click();
-  await page
-    .locator("input[type=file]")
-    .setInputFiles({
-      name: "restore.json",
-      mimeType: "application/json",
-      buffer: Buffer.from('{"version":1,"completed":[]}'),
-    });
+  await page.locator("input[type=file]").setInputFiles({
+    name: "restore.json",
+    mimeType: "application/json",
+    buffer: Buffer.from('{"version":1,"completed":[]}'),
+  });
   await expect(page.getByRole("status")).toContainText("Backup restored");
   await page.getByRole("button", { name: "Practice", exact: true }).click();
+  await page.getByText("Notation drills", { exact: true }).click();
   await page.getByRole("button", { name: /DRILL 07/ }).click();
   await expect(page.getByLabel("Your move in English SAN")).toBeInViewport({
     ratio: 1,

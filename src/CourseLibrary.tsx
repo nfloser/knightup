@@ -60,9 +60,11 @@ export function CourseSession({
 export function CourseLibrary({
   onStart,
   now,
+  recommendationsOnly = false,
 }: {
   onStart: (course: Course) => void;
   now: number;
+  recommendationsOnly?: boolean;
 }) {
   const [needs, setNeeds] = useState<Record<string, number>>({});
   const [training, setTraining] = useState(emptyTraining);
@@ -120,6 +122,37 @@ export function CourseLibrary({
     personal ??
     courses.find((c) => completed(c) < c.exercises.length) ??
     courses[0];
+  if (recommendationsOnly)
+    return (
+      <section className="academy study-recommendation">
+        <div className="section-heading">
+          <h2>Recommended for you</h2>
+          <span>YOUR NEXT STEP</span>
+        </div>
+        <p>
+          {due
+            ? "A lesson is ready for review."
+            : personal
+              ? "Based on themes in your analysed games."
+              : "Start with a foundation and build from there."}
+        </p>
+        {error && <p role="alert">{error}</p>}
+        <button
+          className="course-card study-next"
+          onClick={() => onStart(recommended)}
+        >
+          <span className="eyebrow">
+            {due
+              ? "DUE FOR REVIEW"
+              : personal
+                ? "FROM YOUR GAMES"
+                : "SUGGESTED LESSON"}
+          </span>
+          <h3>{recommended.title}</h3>
+          <span>Continue learning →</span>
+        </button>
+      </section>
+    );
   return (
     <section className="academy">
       <div className="section-heading">
@@ -130,14 +163,6 @@ export function CourseLibrary({
         Learn the idea first, then apply it on the board. Completed exercises
         return for spaced review.
       </p>
-      <button className="primary" onClick={() => onStart(recommended)}>
-        {due
-          ? "Review due lesson"
-          : personal
-            ? "From your games"
-            : "Recommended lesson"}
-        : {recommended.title} →
-      </button>
       {error && <p role="alert">{error}</p>}
       <div className="actions" role="group" aria-label="Lesson categories">
         {["All", "Foundations", "Openings", "Middlegame", "Endgames"].map(

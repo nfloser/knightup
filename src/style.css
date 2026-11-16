@@ -1827,3 +1827,58 @@ textarea {
     font-size: 0.8rem;
   }
 }
+
+/* Study and practice controls use the same tokens in both themes. */
+.academy .actions > button:not(.primary),
+.secondary-action {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+}
+.academy .actions > button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--soft);
+  color: var(--ink);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+.academy .actions > button:hover,
+.secondary-action:hover {
+  border-color: var(--accent);
+}
+.study-next {
+  width: min(100%, 480px);
+}
+.study-next h3 {
+  margin-top: 12px;
+}
+.practice-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 16px 0 24px;
+}
+.notation-practice {
+  margin: 24px 0;
+}
+.notation-practice summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 14px 0;
+}
+@media (max-width: 760px) {
+  .practice-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Keep lesson summaries readable instead of shrinking content on mobile. */
+.course-card p {
+  font-size: 0.875rem;
+}
+.course-card > span:last-child {
+  font-size: 0.875rem;
+}
