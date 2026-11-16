@@ -71,6 +71,16 @@ practice; the existing learning ledger retains achievements under stable IDs.
 
 A 20-lesson count is a minimum breadth target, **not** a guarantee that every
 possible reply is covered, that every move is engine-best or that every lesson
-lasts a fixed number of minutes. The separate Academy, middlegame and endgame
-paths are not yet 20-unit courses. Broader curriculum expansion and professional
-chess-content review remain tracked separately.
+lasts a fixed number of minutes. Three additional guided Academy paths
+(foundations, middlegame and endgame) also have 20 positions each, and the
+18 Academy topic cards offer 20 board exercises per topic. These are different
+study formats, not 20 lecture videos per topic. Professional chess-content
+review remains a separate quality task.
+
+## Readable final feedback
+
+After the final repertoire or academy-path move, the learner sees the exact
+move and its corresponding explanation until they choose **Continue**.
+The completed line is persisted before the next lesson can be opened. Assisted
+work remains assisted and does not gain clean-recall mastery. This replaces the
+former 1.8-second automatic redirect and applies at desktop and phone sizes.

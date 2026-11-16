@@ -444,11 +444,6 @@ export function SequenceSession({
     const timer = setTimeout(() => setPly((p) => p + 1), 450);
     return () => clearTimeout(timer);
   }, [intro, done, opponent, ply]);
-  useEffect(() => {
-    if (!done) return;
-    const timer = setTimeout(onComplete ?? onExit, 1800);
-    return () => clearTimeout(timer);
-  }, [done, onComplete, onExit]);
   async function submit(san: string) {
     if (busy.current || intro || done || opponent) return;
     busy.current = true;
@@ -496,9 +491,9 @@ export function SequenceSession({
       if (next === sequence.moves.length) {
         setDone(true);
         setFeedback(
-          assisted
+          `${normalized}: ${walkthroughFrame(sequence, next).text} ${assisted
             ? "Line complete with assistance. It will return for review."
-            : "Whole line complete. Well played. Continuing…",
+            : "Whole line complete. Well played."}`,
         );
       }
     } catch {
@@ -735,7 +730,7 @@ export function SequenceSession({
             {sequence.color === "w" ? "White" : "Black"} ·{" "}
             {Math.min(ply + 1, sequence.moves.length)} / {sequence.moves.length}
           </p>
-          <form
+          {!done && <form
             onSubmit={(e) => {
               e.preventDefault();
               void submit(input);
@@ -758,10 +753,15 @@ export function SequenceSession({
                 Check
               </button>
             </div>
-          </form>
+          </form>}
           <p className={`feedback ${feedbackKind}`} role="status">
             {feedback}
           </p>
+          {done && (
+            <button className="primary" onClick={onComplete ?? onExit}>
+              Continue
+            </button>
+          )}
         </section>
       </div>
       {sessionProgress && (
