@@ -1,0 +1,7 @@
+{
+  "source": "https://database.lichess.org/lichess_db_puzzle.csv.zst",
+  "prefixBytes": 4194304,
+  "prefixSha256": "e748d691d90d1466d155f63c3ceff97118c3a81e42a1a6b6419debf8fcb02062",
+  "license": "CC0-1.0",
+  "selected": 4000
+}

@@ -1450,3 +1450,68 @@ button.square:not(:disabled):active {
     animation-name: feedback-opacity;
   }
 }
+
+select {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+.filter-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.filter-row label {
+  flex: 1;
+  min-width: 180px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.puzzle-launch > p {
+  margin-top: 20px;
+}
+.move-sequence {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  margin: 10px 0;
+  padding: 4px 0;
+}
+.move-sequence button {
+  padding: 8px;
+  min-height: 36px;
+  border-radius: 4px;
+  background: var(--surface);
+  white-space: nowrap;
+  border: 1px solid var(--line);
+}
+.move-sequence button[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+@media (max-width: 760px) {
+  nav button {
+    font-size: 0.62rem;
+  }
+  .puzzle-screen .move-sequence {
+    margin: 6px 0;
+  }
+  .puzzle-screen .move-sequence button {
+    font-size: 0.65rem;
+    padding: 6px;
+    min-height: 30px;
+  }
+  .puzzle-screen .move-explanation p {
+    font-size: 0.7rem;
+  }
+  .puzzle-screen .lesson-tools {
+    gap: 8px;
+  }
+}

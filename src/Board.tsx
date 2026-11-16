@@ -13,11 +13,13 @@ export function Board({
   onMove,
   disabled,
   lastMove,
+  orientation = "w",
 }: {
   fen: string;
   onMove: (san: string) => void;
   disabled: boolean;
   lastMove?: Move;
+  orientation?: "w" | "b";
 }) {
   const board = useRef<HTMLDivElement>(null);
   const motionKey = lastMove
@@ -40,8 +42,14 @@ export function Board({
         `[data-square="${destination}"] .chess-piece`,
       );
       if (!piece) return [];
-      const x = (origin.charCodeAt(0) - destination.charCodeAt(0)) * size;
-      const y = (Number(destination[1]) - Number(origin[1])) * size;
+      const x =
+        (origin.charCodeAt(0) - destination.charCodeAt(0)) *
+        size *
+        (orientation === "w" ? 1 : -1);
+      const y =
+        (Number(destination[1]) - Number(origin[1])) *
+        size *
+        (orientation === "w" ? 1 : -1);
       return [
         piece.animate(
           [
@@ -53,7 +61,7 @@ export function Board({
       ];
     });
     return () => animations.forEach((animation) => animation.cancel());
-  }, [motionKey]);
+  }, [motionKey, orientation]);
   const [selected, setSelected] = useState<Square | null>(null);
   const promotionPicker = useRef<HTMLDivElement>(null);
   const [promotion, setPromotion] = useState<Square | null>(null);
@@ -89,58 +97,62 @@ export function Board({
         : "Select a piece belonging to the side to move.",
     );
   }
+  const squares = game.board().flat();
+  if (orientation === "b") squares.reverse();
   return (
     <div className="board-wrap">
       <div
         className="board"
         ref={board}
         role="group"
-        aria-label="Chessboard, White at bottom"
+        aria-label={`Chessboard, ${orientation === "w" ? "White" : "Black"} at bottom`}
       >
-        {game
-          .board()
-          .flat()
-          .map((piece, i) => {
-            const square = ("abcdefgh"[i % 8] +
-              (8 - Math.floor(i / 8))) as Square;
-            const target = !disabled && targets.some((m) => m.to === square);
-            return (
-              <div key={square} className="square-cell" data-square={square}>
-                <button
-                  disabled={disabled}
-                  data-last-move={
-                    !!lastMove &&
-                    (lastMove.from === square || lastMove.to === square)
-                  }
-                  className={`square ${(Math.floor(i / 8) + (i % 8)) % 2 ? "dark-square" : "light-square"} ${selected === square && !disabled ? "selected" : ""} ${lastMove && (lastMove.from === square || lastMove.to === square) ? "last-move" : ""}`}
-                  aria-label={`${square}${piece ? ` ${piece.color === "w" ? "White" : "Black"} ${names[piece.type]}` : ""}${target ? " legal destination" : ""}`}
-                  aria-pressed={selected === square && !disabled}
-                  onClick={() => choose(square)}
-                >
-                  {piece ? (
-                    <img
-                      className="chess-piece"
-                      draggable={false}
-                      alt=""
-                      src={`${import.meta.env.BASE_URL}pieces/${piece.color}${piece.type.toUpperCase()}.svg`}
-                    />
-                  ) : target ? (
-                    <span aria-hidden="true" className="legal-dot" />
-                  ) : null}
-                </button>
-                {i % 8 === 0 && (
-                  <small className="rank" aria-hidden="true">
-                    {8 - Math.floor(i / 8)}
-                  </small>
-                )}
-                {i >= 56 && (
-                  <small className="file" aria-hidden="true">
-                    {"abcdefgh"[i % 8]}
-                  </small>
-                )}
-              </div>
-            );
-          })}
+        {squares.map((piece, i) => {
+          const square = (
+            orientation === "w"
+              ? "abcdefgh"[i % 8] + (8 - Math.floor(i / 8))
+              : "hgfedcba"[i % 8] + (1 + Math.floor(i / 8))
+          ) as Square;
+          const target = !disabled && targets.some((m) => m.to === square);
+          return (
+            <div key={square} className="square-cell" data-square={square}>
+              <button
+                disabled={disabled}
+                data-last-move={
+                  !!lastMove &&
+                  (lastMove.from === square || lastMove.to === square)
+                }
+                className={`square ${(Math.floor(i / 8) + (i % 8)) % 2 ? "dark-square" : "light-square"} ${selected === square && !disabled ? "selected" : ""} ${lastMove && (lastMove.from === square || lastMove.to === square) ? "last-move" : ""}`}
+                aria-label={`${square}${piece ? ` ${piece.color === "w" ? "White" : "Black"} ${names[piece.type]}` : ""}${target ? " legal destination" : ""}`}
+                aria-pressed={selected === square && !disabled}
+                onClick={() => choose(square)}
+              >
+                {piece ? (
+                  <img
+                    className="chess-piece"
+                    draggable={false}
+                    alt=""
+                    src={`${import.meta.env.BASE_URL}pieces/${piece.color}${piece.type.toUpperCase()}.svg`}
+                  />
+                ) : target ? (
+                  <span aria-hidden="true" className="legal-dot" />
+                ) : null}
+              </button>
+              {i % 8 === 0 && (
+                <small className="rank" aria-hidden="true">
+                  {orientation === "w"
+                    ? 8 - Math.floor(i / 8)
+                    : 1 + Math.floor(i / 8)}
+                </small>
+              )}
+              {i >= 56 && (
+                <small className="file" aria-hidden="true">
+                  {(orientation === "w" ? "abcdefgh" : "hgfedcba")[i % 8]}
+                </small>
+              )}
+            </div>
+          );
+        })}
       </div>
       {promotion && (
         <div

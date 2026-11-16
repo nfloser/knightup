@@ -1,3 +1,4 @@
+import { PuzzlesPage } from "./PuzzlesPage";
 import { recommend, mergeProgress } from "./adaptive";
 import { ProfilePage } from "./ProfilePage";
 import { InsightsPage } from "./InsightsPage";
@@ -15,11 +16,12 @@ import {
   saveAttempt,
 } from "./storage";
 import { Lesson } from "./Lesson";
-const tabs = ["Learn", "Practice", "Insights", "Profile"] as const;
+const tabs = ["Learn", "Practice", "Puzzles", "Insights", "Profile"] as const;
 type Tab = (typeof tabs)[number];
 export default function App() {
   const [now, setNow] = useState(() => Date.now());
   const [tab, setTab] = useState<Tab>("Learn");
+  const [puzzling, setPuzzling] = useState(false);
   const [active, setActive] = useState(false);
   const [initialIndex, setInitialIndex] = useState(0);
   const [progress, setProgress] = useState<Progress>(emptyProgress);
@@ -67,6 +69,7 @@ export default function App() {
   function navigate(next: Tab) {
     setTab(next);
     setActive(false);
+    setPuzzling(false);
     requestAnimationFrame(() => main.current?.focus());
   }
   function start(index = 0) {
@@ -140,7 +143,7 @@ export default function App() {
               onClick={() => navigate(name)}
               aria-current={tab === name ? "page" : undefined}
             >
-              <span aria-hidden="true">{["◫", "◇", "▥", "○"][i]}</span>
+              <span aria-hidden="true">{["◫", "◇", "♟", "▥", "○"][i]}</span>
               {name}
             </button>
           ))}
@@ -179,12 +182,12 @@ export default function App() {
           </button>
         </header>
         <main id="main" ref={main} tabIndex={-1}>
-          {!active && message && (
+          {!active && !puzzling && message && (
             <p role="status" className="notice">
               {message}
             </p>
           )}
-          {!active && needRefresh && (
+          {!active && !puzzling && needRefresh && (
             <div className="notice">
               An update is ready. Your saved progress stays on this device.{" "}
               <button onClick={() => void updateServiceWorker(true)}>
@@ -214,6 +217,9 @@ export default function App() {
               )}
               {tab === "Practice" && (
                 <PracticePage ready={ready} start={start} />
+              )}
+              {tab === "Puzzles" && (
+                <PuzzlesPage onSessionChange={setPuzzling} />
               )}
               {tab === "Insights" && <InsightsPage count={count} />}
               {tab === "Profile" && (
