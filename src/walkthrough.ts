@@ -166,21 +166,42 @@ const openingPrefixes: Record<string, string> = {
     "Black develops a knight while keeping the pawn structure flexible.",
 };
 
-/** Describes the actual displayed move when no hand-authored ply note exists.
- * Avoid repeating a course-level paragraph on every unexplained position. */
-function explainDisplayedMove(
-  move: Move,
-  plan: string,
-): string {
+/** Explain only facts that can be checked from the resulting chess.js position.
+ * Authored per-move notes take priority over this safety-net explanation. */
+function explainDisplayedMove(move: Move, after: Chess, plan: string): string {
   const side = move.color === "w" ? "White" : "Black";
-  const pieces: Record<string, string> = { p: "pawn", n: "knight", b: "bishop", r: "rook", q: "queen", k: "king" };
-  if (move.isKingsideCastle() || move.isQueensideCastle())
-    return side + " castles to improve king safety and activate a rook. " + plan;
-  if (move.isCapture())
-    return side + " uses " + move.san + " to capture on " + move.to + ". Recheck what each side can recapture and how the pawn structure changes. " + plan;
-  if (move.piece === "p")
-    return side + " pushes a pawn from " + move.from + " to " + move.to + ". Look at which central squares or files this changes. " + plan;
-  return side + " moves the " + (pieces[move.piece] ?? "piece") + " from " + move.from + " to " + move.to + ". Evaluate the new attacks, defenders and development. " + plan;
+  const pieces: Record<string, string> = {
+    p: "pawn", n: "knight", b: "bishop", r: "rook", q: "queen", k: "king",
+  };
+  const piece = pieces[move.piece] ?? "piece";
+  const captured = move.captured ? pieces[move.captured] ?? "piece" : null;
+
+  let action: string;
+  if (move.isKingsideCastle() || move.isQueensideCastle()) {
+    action = side + " castles " + (move.isKingsideCastle() ? "kingside" : "queenside") +
+      ". The king and rook change squares together.";
+  } else if (move.promotion) {
+    action = side + " promotes the pawn to a " + (pieces[move.promotion] ?? "piece") +
+      " on " + move.to + ". Promotion changes which piece can move next.";
+  } else if (captured) {
+    action = side + " captures the opponent's " + captured + " on " + move.to +
+      " with a " + piece + ". Recheck possible recaptures and open lines.";
+  } else if (move.piece === "p") {
+    action = side + " advances a pawn from " + move.from + " to " + move.to +
+      ". Check which squares and pawn breaks have changed.";
+  } else {
+    action = side + " moves the " + piece + " from " + move.from + " to " + move.to +
+      ". Identify its new attacks and whether it is defended.";
+  }
+
+  if (after.isCheckmate())
+    return action + " This is checkmate: the opposing king has no legal reply.";
+  if (after.isCheck())
+    return action + " This delivers check. Check what legal defensive replies remain.";
+  if (after.isStalemate())
+    return action + " The opponent has no legal move but is not in check: stalemate.";
+
+  return action + " Study goal: " + plan;
 }
 
 export function walkthroughFrame(sequence: Sequence, requested: number) {
@@ -202,7 +223,7 @@ export function walkthroughFrame(sequence: Sequence, requested: number) {
           (sequence.category === "Openings"
             ? openingPrefixes[sequence.moves.slice(0, step).join(" ")]
             : undefined) ??
-          (lastMove ? explainDisplayedMove(lastMove, sequence.plan) : sequence.plan)),
+          (lastMove ? explainDisplayedMove(lastMove, game, sequence.plan) : sequence.plan)),
   };
 }
 
