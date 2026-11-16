@@ -48,3 +48,28 @@ it("covers both accepting and meeting the Vienna Gambit in the center", () => {
     );
   }
 });
+
+it("replays every extended opening line with legal canonical moves and expected player turns", () => {
+  const newIds = [
+    "caro-advance-c5", "caro-classical-nd7", "caro-two-knights-order",
+    "caro-quiet-d3", "caro-c4",
+    "vienna-f4-nc6", "vienna-gambit-nf3",
+    "vienna-quiet-f4", "vienna-fianchetto",
+    "london-nc6", "london-queenside-fianchetto",
+    "london-nf6-c5", "london-mirror-bishop",
+    "slav-accepted", "slav-solid",
+    "slav-exchange-bf4", "slav-bf5",
+  ];
+  expect(new Set(newIds).size).toBe(17);
+  for (const id of newIds) {
+    const sequence = sequences.find((s) => s.id === id);
+    expect(sequence, id).toBeDefined();
+    expect(sequence!.category).toBe("Openings");
+    expect(sequence!.idea.length).toBeGreaterThan(50);
+    expect(sequence!.plan.length).toBeGreaterThan(45);
+    expect(sequence!.moves.length).toBeGreaterThanOrEqual(8);
+    const game = sequenceGame(sequence!, sequence!.moves.length);
+    expect(game.history(), id).toEqual(sequence!.moves);
+    expect(sequenceGame(sequence!, sequence!.moves.length - 1).turn()).toBe(sequence!.color);
+  }
+});
