@@ -8,6 +8,7 @@ test("three academy paths each expose twenty lessons and a guided board", async 
   await expect(section.getByRole("heading", { name: "Middlegame tactics" })).toBeVisible();
   await expect(section.getByRole("heading", { name: "Endgame decisions" })).toBeVisible();
   for (const title of ["Chess foundations", "Middlegame tactics", "Endgame decisions"]) {
+    await expect(section.getByRole("heading", { name: title })).toBeVisible();
     await section.getByRole("button", { name: "Explore lessons" }).first().click();
     await expect(section.getByRole("listitem")).toHaveCount(20);
     await section.getByRole("button", { name: "← All academy paths" }).click();
