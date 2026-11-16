@@ -39,13 +39,11 @@ test("lesson, backup, persistence and offline delivery", async ({
   expect((await downloadPromise).suggestedFilename()).toBe(
     "knightup-progress.json",
   );
-  await page
-    .locator("input[type=file]")
-    .setInputFiles({
-      name: "bad.json",
-      mimeType: "application/json",
-      buffer: Buffer.from('{"version":2}'),
-    });
+  await page.locator("input[type=file]").setInputFiles({
+    name: "bad.json",
+    mimeType: "application/json",
+    buffer: Buffer.from('{"version":2}'),
+  });
   await expect(page.getByRole("status")).toContainText("not a supported");
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.reload();
@@ -82,4 +80,26 @@ test("responsive accessible navigation in both themes", async ({ page }) => {
     path: `test-results/knightup-${test.info().project.name}.png`,
     fullPage: true,
   });
+});
+
+test("attempts and hints change persisted adaptive recommendations", async ({
+  page,
+}) => {
+  await page.clock.install({ time: new Date("2026-11-16T12:00:00Z") });
+  await page.goto("./");
+  await page.getByRole("button", { name: "Start learning" }).click();
+  await page.getByRole("button", { name: "Need a hint?" }).click();
+  await page.getByLabel("Your move in English SAN").fill("e4");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Next exercise" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Learning path" }).click();
+  await expect(page.getByText("Recommended: N is for knight.")).toBeVisible();
+  await page.clock.fastForward(600_001);
+  await page.reload();
+  await expect(
+    page.getByText("Recommended: A square is a destination."),
+  ).toBeVisible();
+  await expect(page.getByText(/needed help or retries/)).toBeVisible();
 });

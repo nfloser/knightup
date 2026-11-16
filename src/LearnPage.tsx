@@ -5,11 +5,13 @@ export function LearnPage({
   progress,
   start,
   next,
+  reason,
 }: {
   ready: boolean;
   progress: Progress;
   start: (index: number) => void;
   next: number;
+  reason: string;
 }) {
   const count = progress.completed.length;
   return (
@@ -53,6 +55,9 @@ export function LearnPage({
           <span className="art-label">EVERY MASTER STARTED HERE.</span>
         </div>
       </section>
+      <p className="recommendation" role="status">
+        <strong>Recommended: {lessons[next].title}.</strong> {reason}
+      </p>
       <section className="path-section">
         <div className="section-heading">
           <h2>Your learning path</h2>

@@ -4,7 +4,7 @@
 
 - Static React + TypeScript + Vite app at `/knightup/`; no server, API keys or trackers. Local privacy takes precedence over an automatic public coaching report.
 - `chess.js` owns move legality and SAN generation. Our boundary also compares submitted SAN with canonical SAN, ensuring omitted check/mate suffixes cannot pass. Exercise objectives are authored moves, not engine best-move recommendations.
-- Stable content IDs include notation version. Schema-1 backups are validated before writes and merged rather than replacing existing completions. Saves merge the stored and incoming sets within a single read/write transaction, preventing stale tabs or overlapping restores from erasing completions. Unknown/future versions fail explicitly; no deployment resets IndexedDB.
+- Stable content IDs include notation version. Schema-1 and schema-2 backups are validated before writes and merged rather than replacing existing completions. Saves merge the stored and incoming sets within a single read/write transaction, preventing stale tabs or overlapping restores from erasing completions. Unknown/future versions fail explicitly; no deployment resets IndexedDB.
 - One IDB store contains progress and theme. Storage failures remain visible. XP/streaks omitted until a mastery policy exists.
 - PWA uses Workbox precache of static assets, prompt-based update, and no runtime remote-data cache. Single-thread analysis and private scheduled storage are future design decisions.
 - Design reference resolved as https://github.com/meta/astryx (MIT). Semantic tokens, theme separation and consistent states inform original CSS; no Astryx source copied. Apple HIG https://developer.apple.com/design/human-interface-guidelines informs hierarchy and mobile clarity; no Apple assets used.
@@ -20,7 +20,7 @@
 ## Roadmap (not shipped)
 
 1. Notation variants, black orientation, move sequence replay and keyboard roving grid.
-2. Curriculum and spaced repetition with validated mastery scheduling.
+2. Broader curriculum and calibrated mastery scheduling. Initial notation due reviews are documented in ADAPTIVE.md.
 3. Public Chess.com incremental import with explicit consent, PGN import and deduplication.
 4. Stockfish bounded analysis, engine/version provenance, legal variations and uncertainty-aware teaching.
 5. Private recommendations, daily refresh only after private storage design is established; optional secure sync.
