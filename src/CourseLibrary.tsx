@@ -1,3 +1,4 @@
+import { activeCourseExerciseIndex } from "./course-resume";
 import { database } from "./local-db";
 import { loadReports, learningNeeds } from "./coaching";
 import { useEffect, useState } from "react";
@@ -12,12 +13,29 @@ export function CourseSession({
   onExit: () => void;
 }) {
   const [practising, setPractising] = useState(false);
+  const [resumeIndex, setResumeIndex] = useState(0);
+  const [progressReady, setProgressReady] = useState(false);
+  const [progressError, setProgressError] = useState("");
+  useEffect(() => {
+    let active = true;
+    loadTraining()
+      .then((ledger) => {
+        if (!active) return;
+        const next = activeCourseExerciseIndex(active.exercises, ledger.records);
+        setResumeIndex(next);
+        setProgressReady(true);
+      })
+      .catch(() => {
+        if (active) setProgressError("Could not load saved Academy progress.");
+      });
+    return () => { active = false; };
+  }, [active]);
   if (practising)
     return (
       <Lesson
         content={active.exercises}
         label="CHESS ACADEMY"
-        initialIndex={0}
+        initialIndex={resumeIndex}
         onExit={exit}
         onAttempt={async (id, success, assisted) => {
           try {
@@ -50,8 +68,9 @@ export function CourseSession({
           Curriculum bands are guides, not guaranteed playing ratings. Read the
           objective before choosing a move.
         </p>
-        <button className="primary wide" onClick={() => setPractising(true)}>
-          Practise this idea →
+        {progressError && <p role="alert">{progressError}</p>}
+        <button className="primary wide" disabled={!progressReady} onClick={() => setPractising(true)}>
+          {resumeIndex > 0 ? "Continue your practice" : "Practise this idea"} →
         </button>
       </section>
     </div>
