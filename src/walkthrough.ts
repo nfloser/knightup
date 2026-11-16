@@ -12,7 +12,7 @@ const notes: Record<string, Record<number, string>> = {
   "fried-liver-nb4": {
     15: "Black moves the c6-knight to b4, where it can pressure c2.",
     16: "Castle to bring your king to safety and activate the rook; keep an eye on c2.",
-    17: "Black plays ...c6, supporting d5 and restricting the bishop on b5.",
+    17: "Black plays ...c6, supporting the knight on d5 and controlling b5.",
     18: "d4 opens the center and a diagonal for the bishop on c1.",
   },
   "two-knights-na5": {
