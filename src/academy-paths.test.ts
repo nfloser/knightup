@@ -1,3 +1,4 @@
+import sourcePuzzles from "./academy-path-puzzles.json";
 import { describe, expect, it } from "vitest";
 import { academyPathInfo, academyPaths, academySequences } from "./academy-paths";
 import { sequenceGame } from "./sequences";
@@ -33,4 +34,21 @@ describe("guided academy paths", () => {
       expect(sequenceGame(s, 1).turn()).toBe(s.color);
     }
   });
+});
+
+it("introduces curated phase examples in nondecreasing source difficulty without changing IDs", () => {
+  const source = new Map(sourcePuzzles.map((p) => [p.id, p]));
+  for (const phase of ["foundations", "middlegame", "endgame"] as const) {
+    const lessons = academyPaths[phase];
+    const ratings = lessons.map((lesson, index) => {
+      const puzzleId = lesson.id.slice(("academy-" + phase + "-").length);
+      const row = source.get(puzzleId);
+      expect(row, lesson.id).toBeDefined();
+      expect(row!.phase).toBe(phase);
+      expect(lesson.title.startsWith(String(index + 1).padStart(2, "0") + " · "), lesson.id).toBe(true);
+      return row!.rating;
+    });
+    expect(ratings, phase).toEqual([...ratings].sort((a, b) => a - b));
+    expect(new Set(lessons.map((x) => x.id)).size).toBe(20);
+  }
 });
