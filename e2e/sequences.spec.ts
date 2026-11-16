@@ -76,7 +76,7 @@ test("a revealed endgame continuation stays assisted and earns no XP", async ({
     .getByRole("button", { name: "Endgames", exact: true })
     .click();
   await page
-    .getByRole("button", { name: /Endgames · Black Finish with checkmate/ })
+    .getByRole("button", { name: /Endgames · Black Finish with checkmate/i })
     .click();
   await page.getByRole("button", { name: "Practise whole line" }).click();
   await page.getByRole("button", { name: "Explain", exact: true }).click();
