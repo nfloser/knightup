@@ -1,3 +1,5 @@
+import { SequenceLibrary } from "./SequenceSession";
+import type { Sequence } from "./sequences";
 import type { Course } from "./curriculum";
 import { CourseLibrary } from "./CourseLibrary";
 import { lessons, type Progress } from "./learning";
@@ -9,8 +11,10 @@ export function LearnPage({
   next,
   reason,
   onCourseStart,
+  onSequenceStart,
   now,
 }: {
+  onSequenceStart: (s: Sequence) => void;
   ready: boolean;
   now: number;
   onCourseStart: (course: Course) => void;
@@ -27,6 +31,7 @@ export function LearnPage({
         <h1>Your next good move.</h1>
         <p className="lead">Build understanding, one small lesson at a time.</p>
       </div>
+      <SequenceLibrary onStart={onSequenceStart} />
       <CourseLibrary now={now} onStart={onCourseStart} />
       <section className="featured">
         <div>

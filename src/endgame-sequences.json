@@ -1,0 +1,90 @@
+[
+  {
+    "id": "ending-000pA",
+    "title": "Finish with checkmate",
+    "category": "Endgames",
+    "color": "b",
+    "fen": "5rk1/5pp1/7p/3p4/1KpPn3/4PPP1/1P2N1P1/r4R1R b - - 0 24",
+    "moves": ["Rb8#"],
+    "idea": "Find a check that covers every king escape. Distinguish mate from stalemate.",
+    "plan": "This is a specific forcing continuation from a real game. The exercise rehearses the supplied best line; the opponent replies automatically.",
+    "source": "https://lichess.org/game/3dA5upN3#47"
+  },
+  {
+    "id": "ending-000Zo",
+    "title": "Calculate mate in two",
+    "category": "Endgames",
+    "color": "b",
+    "fen": "4r3/1k6/pp3P2/1b5p/3R1p2/P1R2P2/1P4PP/6K1 b - - 0 35",
+    "moves": ["Re1+", "Kf2", "Rf1#"],
+    "idea": "Calculate your check, the supplied defense and your final mating move before moving.",
+    "plan": "This is a specific forcing continuation from a real game. The exercise rehearses the supplied best line; the opponent replies automatically.",
+    "source": "https://lichess.org/game/n8Ff742v#69"
+  },
+  {
+    "id": "ending-004LZ",
+    "title": "Convert your passed pawn",
+    "category": "Endgames",
+    "color": "b",
+    "fen": "8/7R/5p2/p7/7P/2p5/3k2N1/1K6 b - - 0 48",
+    "moves": ["c2+", "Ka2", "c1=Q", "Rd7+", "Ke2"],
+    "idea": "Check the promotion square and the opposing king. A passed pawn is useful only if it can advance safely.",
+    "plan": "This is a specific forcing continuation from a real game. The exercise rehearses the supplied best line; the opponent replies automatically.",
+    "source": "https://lichess.org/game/drahwNdj#95"
+  },
+  {
+    "id": "ending-0008Q",
+    "title": "Rook endgame technique",
+    "category": "Endgames",
+    "color": "b",
+    "fen": "8/5R2/1p2P3/p4r2/P6p/1P3Pk1/4K3/8 b - - 2 64",
+    "moves": ["Re5+", "Kf1", "Rxe6"],
+    "idea": "Rook activity and king safety matter more than a pawn count alone. Calculate checks and captures.",
+    "plan": "This is a specific forcing continuation from a real game. The exercise rehearses the supplied best line; the opponent replies automatically.",
+    "source": "https://lichess.org/game/MQSyb3KW#127"
+  },
+  {
+    "id": "ending-00465",
+    "title": "Finish with checkmate · White",
+    "category": "Endgames",
+    "color": "w",
+    "fen": "5r1k/pp4pp/2p5/6q1/5R2/2P5/P1P2PPP/3rR1K1 w - - 0 28",
+    "moves": ["Rxf8#"],
+    "idea": "Find a check that covers every king escape. Distinguish mate from stalemate.",
+    "plan": "This is a specific forcing continuation from a real game. The exercise rehearses the supplied best line; the opponent replies automatically.",
+    "source": "https://lichess.org/game/h21VtqGG/black#54"
+  },
+  {
+    "id": "ending-001Wz",
+    "title": "Calculate mate in two · White",
+    "category": "Endgames",
+    "color": "w",
+    "fen": "6k1/5ppp/r1p5/p1n1rP2/8/2P2N1P/2P3P1/3R2K1 w - - 0 22",
+    "moves": ["Rd8+", "Re8", "Rxe8#"],
+    "idea": "Calculate your check, the supplied defense and your final mating move before moving.",
+    "plan": "This is a specific forcing continuation from a real game. The exercise rehearses the supplied best line; the opponent replies automatically.",
+    "source": "https://lichess.org/game/84RH3LaP/black#42"
+  },
+  {
+    "id": "ending-00Aae",
+    "title": "Convert your passed pawn · White",
+    "category": "Endgames",
+    "color": "w",
+    "fen": "1R6/1P6/4pkp1/5p2/3P4/3KP2p/8/1r6 w - - 0 44",
+    "moves": ["Rf8+", "Ke7", "b8=Q", "Rxb8", "Rxb8"],
+    "idea": "Check the promotion square and the opposing king. A passed pawn is useful only if it can advance safely.",
+    "plan": "This is a specific forcing continuation from a real game. The exercise rehearses the supplied best line; the opponent replies automatically.",
+    "source": "https://lichess.org/game/mLIjph1r/black#86"
+  },
+  {
+    "id": "ending-006yP",
+    "title": "Rook endgame technique · White",
+    "category": "Endgames",
+    "color": "w",
+    "fen": "6R1/8/Kpk1p3/1p1pP3/6P1/PPr5/8/8 w - - 0 41",
+    "moves": ["Rc8+", "Kd7", "Rxc3"],
+    "idea": "Rook activity and king safety matter more than a pawn count alone. Calculate checks and captures.",
+    "plan": "This is a specific forcing continuation from a real game. The exercise rehearses the supplied best line; the opponent replies automatically.",
+    "source": "https://lichess.org/game/vf9MOLH1/black#80"
+  }
+]
