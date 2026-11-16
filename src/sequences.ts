@@ -151,7 +151,9 @@ export function expectedMove(s: Sequence, ply: number) {
   return g.move(s.moves[ply]).san;
 }
 import endgames from "./endgame-sequences.json";
+import { extendedOpenings } from "./extended-openings";
 export const sequences: Sequence[] = [
   ...openingSequences,
+  ...extendedOpenings,
   ...(endgames as Sequence[]),
 ];
