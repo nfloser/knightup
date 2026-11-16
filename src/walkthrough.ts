@@ -1,5 +1,6 @@
 import { Chess } from "chess.js";
 import { sequenceGame, type Sequence } from "./sequences";
+import { extendedWalkthroughNotes } from "./extended-walkthrough-notes";
 
 // Notes are keyed by the move just shown (zero-based ply). Missing notes use
 // the lesson's authored plan rather than inventing a reason for a move.
@@ -180,6 +181,7 @@ export function walkthroughFrame(sequence: Sequence, requested: number) {
       step === 0
         ? sequence.idea
         : (notes[sequence.id]?.[step - 1] ??
+          extendedWalkthroughNotes[sequence.id]?.[step - 1] ??
           (sequence.category === "Openings"
             ? openingPrefixes[sequence.moves.slice(0, step).join(" ")]
             : undefined) ??
