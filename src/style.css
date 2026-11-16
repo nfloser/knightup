@@ -1515,3 +1515,140 @@ select {
     gap: 8px;
   }
 }
+
+.academy {
+  margin: 28px 0 40px;
+}
+.academy > p {
+  font-size: 0.85rem;
+}
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.course-card {
+  padding: 22px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  min-height: 150px;
+}
+.course-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 16px 0 8px;
+  letter-spacing: -0.025em;
+}
+.course-card p {
+  font-size: 0.7rem;
+  margin-bottom: 12px;
+}
+.course-card > span:last-child {
+  font-size: 0.75rem;
+  color: var(--accent);
+}
+.course-card:hover {
+  border-color: var(--accent);
+}
+.course-reading {
+  max-width: 760px;
+  margin: auto;
+  padding: 32px;
+}
+.course-reading h2 {
+  font-size: 1.2rem;
+  margin-top: 24px;
+}
+.course-reading > h1 {
+  font-size: 2.2rem;
+}
+.course-reading p {
+  font-size: 0.95rem;
+}
+.course-intro {
+  min-height: 480px;
+}
+@media (max-width: 760px) {
+  .course-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .course-card {
+    padding: 16px;
+    min-height: 150px;
+  }
+  .course-card h3 {
+    font-size: 0.9rem;
+  }
+  .course-card .eyebrow {
+    font-size: 0.5rem;
+  }
+  .course-reading {
+    margin: 0;
+    padding: 16px;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .course-reading > h1 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  .course-reading h2 {
+    font-size: 0.9rem;
+    margin: 14px 0 6px;
+  }
+  .course-reading p {
+    font-size: 0.78rem;
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+  .course-reading .small {
+    font-size: 0.6rem;
+  }
+  .course-reading .eyebrow {
+    font-size: 0.55rem;
+    margin-bottom: 10px;
+  }
+  .course-intro {
+    min-height: 0;
+  }
+  .workspace:has(.course-intro) > main > .page-title,
+  .workspace:has(.course-intro) > main > section.featured,
+  .workspace:has(.course-intro) > main > .recommendation,
+  .workspace:has(.course-intro) > main > .path-section {
+    display: none;
+  }
+}
+
+.academy > .primary {
+  margin-bottom: 20px;
+}
+@media (max-width: 760px) and (max-height: 500px) {
+  .course-reading {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    align-content: center;
+  }
+  .course-reading > .eyebrow,
+  .course-reading > h1,
+  .course-reading > .small,
+  .course-reading > .primary {
+    grid-column: 1/-1;
+    margin: 0;
+  }
+  .course-reading > h1 {
+    font-size: 1.2rem;
+  }
+  .course-reading h2 {
+    margin: 0 0 6px;
+  }
+  .course-reading p {
+    font-size: 0.7rem;
+    line-height: 1.3;
+  }
+}
