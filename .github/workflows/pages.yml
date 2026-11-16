@@ -27,6 +27,13 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - uses: actions/configure-pages@v5
+      - name: Stamp deployment identity
+        run: |
+          node --input-type=module - <<'JS'
+          import {readFileSync, writeFileSync} from 'node:fs';
+          const version = JSON.parse(readFileSync('package.json', 'utf8')).version;
+          writeFileSync('dist/build.json', JSON.stringify({version, commit: process.env.GITHUB_SHA}));
+          JS
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
@@ -39,3 +46,54 @@ jobs:
     steps:
       - uses: actions/deploy-pages@v4
         id: deployment
+  release:
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify published assets
+        run: |
+          python - <<'PY'
+          import json, os, time, urllib.request
+          base = 'https://nfloser.github.io/knightup/'
+          version = json.load(open('package.json'))['version']
+          for path in ['build.json', '', 'puzzles.json', 'engine/SOURCE.txt', 'engine/stockfish-19-lite-single.wasm']:
+              for attempt in range(5):
+                  try:
+                      with urllib.request.urlopen(base + path + "?deployment=" + os.environ["GITHUB_SHA"], timeout=20) as response:
+                          data = response.read()
+                          assert response.status == 200 and data
+                          if path == 'build.json':
+                              identity = json.loads(data)
+                              assert identity == {'version': version, 'commit': os.environ['GITHUB_SHA']}
+                          if path == 'puzzles.json':
+                              assert len(json.loads(data)) == 4000
+                          if path.endswith('.wasm'):
+                              assert data[:4] == b'\x00asm'
+                      break
+                  except Exception:
+                      if attempt == 4:
+                          raise
+                      time.sleep(5)
+              print('Published asset verified:', path or '/')
+          PY
+      - name: Publish versioned release when notes exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version=$(node -p 'require("./package.json").version')
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo 'Invalid release version'; exit 1
+          fi
+          notes="docs/RELEASE-${version%.*}.md"
+          if [[ ! -f "$notes" ]]; then
+            echo 'No release notes for this version; deployment only'; exit 0
+          fi
+          tag="v$version"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo 'Release already exists'
+          else
+            gh release create "$tag" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "KnightUp $version" --notes-file "$notes"
+          fi

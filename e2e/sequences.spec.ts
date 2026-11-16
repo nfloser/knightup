@@ -59,3 +59,32 @@ test("lesson categories include all three phases and phone training stays readab
     await page.screenshot({ path: testInfo.outputPath("sequence-phone.png") });
   }
 });
+test("a revealed endgame continuation stays assisted and earns no XP", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page
+    .getByRole("group", { name: "Sequence categories" })
+    .getByRole("button", { name: "Endgames", exact: true })
+    .click();
+  await page
+    .getByRole("button", { name: /Endgames · Black Finish with checkmate/ })
+    .click();
+  await page.getByRole("button", { name: "Practise whole line" }).click();
+  await page.getByRole("button", { name: "Explain", exact: true }).click();
+  await expect(page.locator(".sequence-screen .feedback")).toContainText(
+    "Train Rb8#",
+  );
+  await page.getByLabel("Your move in English SAN").fill("Rb8#");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.locator(".sequence-screen .feedback")).toContainText(
+    "with assistance",
+  );
+  await expect(
+    page.getByRole("heading", { name: "Play the whole plan" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Profile", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Level 1 · 0 XP" }),
+  ).toBeVisible();
+});

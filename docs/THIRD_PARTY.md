@@ -11,3 +11,9 @@
 - workbox-window 7.4.1: MIT; full notice in `licenses/workbox-window-LICENSE`.
 
 Design references: Meta Astryx (MIT) and Apple HIG, concepts only. Original KnightUp mascots and teaching text. No copied tap2-coach implementation or paid educational content.
+
+## Stockfish engine
+Stockfish.js 19.0.0, GPL-3.0-or-later. Build copies the lite single-thread JavaScript/WASM from the pinned npm package; generated engine/COPYING and engine/SOURCE.txt identify license, exact upstream revision and SHA256. Preferred upstream source: https://github.com/nmrugg/stockfish.js/tree/54fde71d90c7c403964f6cacef48f7bbec495df1 . Source and build instructions are available there; no engine binary is modified.
+
+## Puzzle data
+Lichess open puzzle database, CC0: https://database.lichess.org/#puzzles . 4,000-record offline subset and attributed endgame continuations. Import procedure and prefix provenance: docs/PUZZLES.md and docs/puzzle-source.json in the repository. Each puzzle retains its source game URL.

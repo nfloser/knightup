@@ -5,10 +5,10 @@
 - Static React + TypeScript + Vite app at `/knightup/`; no server, API keys or trackers. Local privacy takes precedence over an automatic public coaching report.
 - `chess.js` owns move legality and SAN generation. Our boundary also compares submitted SAN with canonical SAN, ensuring omitted check/mate suffixes cannot pass. Exercise objectives are authored moves, not engine best-move recommendations.
 - Stable content IDs include notation version. Schema-1 and schema-2 backups are validated before writes and merged rather than replacing existing completions. Saves merge the stored and incoming sets within a single read/write transaction, preventing stale tabs or overlapping restores from erasing completions. Unknown/future versions fail explicitly; no deployment resets IndexedDB.
-- One IDB store contains progress and theme. Storage failures remain visible. XP/streaks omitted until a mastery policy exists.
-- PWA uses Workbox precache of static assets, prompt-based update, and no runtime remote-data cache. Single-thread analysis and private scheduled storage are future design decisions.
+- One IDB settings store contains notation progress, training ledger, reward settings, imported games, versioned Stockfish reports and opt-in import preferences. Storage failures remain visible; learning backups exclude private games/reports. See REWARDS.md.
+- PWA uses Workbox precache of static assets and prompt-based updates. Generated single-thread Stockfish assets are cached on demand separately; private reports stay in IndexedDB. Daily import/analysis starts only when Insights is open, visible and idle. A started bounded job may finish in a hidden tab; leaving Insights aborts it.
 - Design reference resolved as https://github.com/meta/astryx (MIT). Semantic tokens, theme separation and consistent states inform original CSS; no Astryx source copied. Apple HIG https://developer.apple.com/design/human-interface-guidelines informs hierarchy and mobile clarity; no Apple assets used.
-- Standard green/cream board, classical black/white Cburnett SVG figures, tap piece then legal destination, explicit promotion choices. No mascot art used as playing pieces. Board does not yet support drag/drop or black orientation; current lessons all use White to move.
+- Standard green/cream board, classical black/white Cburnett SVG figures, tap piece then legal destination, explicit promotion choices. No mascot art used as playing pieces. Board supports both orientations, tap/click legal destinations and a promotion picker. Drag/drop remains optional.
 
 ## Sources checked
 
@@ -17,13 +17,16 @@
 - https://github.com/lichess-org/lila/blob/master/COPYING.md — distinct artwork licenses, Cburnett GPL-2.0-or-later. Figures vendored unchanged; see notices.
 - No tap2-coach code, Lichess application code, proprietary Chess.com images or GothamChess course content has been copied. Further reuse requires scoped inspection and license review.
 
-## Roadmap (not shipped)
+## Learning modules
 
-1. Notation variants, black orientation, move sequence replay and keyboard roving grid.
-2. Broader curriculum and calibrated mastery scheduling. Initial notation due reviews are documented in ADAPTIVE.md.
-3. Public Chess.com incremental import with explicit consent, PGN import and deduplication.
-4. Stockfish bounded analysis, engine/version provenance, legal variations and uncertainty-aware teaching.
-5. Private recommendations, daily refresh only after private storage design is established; optional secure sync.
+- Versioned notation and original 18-course curriculum; stable authored IDs preserve progress.
+- CC0 Lichess puzzle pack and full-line repertoire/endgame sequences with legal replay and assisted grading.
+- Opt-in Chess.com/PGN import with bounded responses and deduplication.
+- Pinned Stockfish 19 lite Worker, bounded analysis, resumable private reports and evidence-based recommendations.
+- Adaptive playable opponent with reduced skill, beginner move mixture and smoothed completed-game results.
+- Transactional mastery credits, derived XP/levels, local calendar streaks and original collectibles.
+
+Optional future work: physical-device certification, private cross-device sync, closed-device background jobs, expanded repertoire branches and drag/drop. These are not represented as shipped.
 
 ## Review and limitations
 
