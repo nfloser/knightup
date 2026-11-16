@@ -36,3 +36,15 @@ it("provides legal London setups against common Black replies", () => {
     );
   }
 });
+
+it("covers both accepting and meeting the Vienna Gambit in the center", () => {
+  for (const id of ["vienna-gambit-d5", "vienna-gambit-accepted"]) {
+    const line = sequences.find((s) => s.id === id);
+    expect(line).toBeDefined();
+    expect(line?.color).toBe("w");
+    expect(line?.moves.slice(0, 5)).toEqual(["e4", "e5", "Nc3", "Nf6", "f4"]);
+    expect(sequenceGame(line!, line!.moves.length).history()).toEqual(
+      line!.moves,
+    );
+  }
+});
