@@ -17,18 +17,18 @@ export function CourseSession({
   const [progressReady, setProgressReady] = useState(false);
   const [progressError, setProgressError] = useState("");
   useEffect(() => {
-    let active = true;
+    let alive = true;
     loadTraining()
       .then((ledger) => {
-        if (!active) return;
+        if (!alive) return;
         const next = activeCourseExerciseIndex(active.exercises, ledger.records);
         setResumeIndex(next);
         setProgressReady(true);
       })
       .catch(() => {
-        if (active) setProgressError("Could not load saved Academy progress.");
+        if (alive) setProgressError("Could not load saved Academy progress.");
       });
-    return () => { active = false; };
+    return () => { alive = false; };
   }, [active]);
   if (practising)
     return (
