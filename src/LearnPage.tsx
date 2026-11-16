@@ -1,4 +1,5 @@
 import { SequenceLibrary } from "./SequenceSession";
+import { AcademyPaths } from "./AcademyPaths";
 import type { Sequence } from "./sequences";
 import type { Course } from "./curriculum";
 import { CourseLibrary } from "./CourseLibrary";
@@ -37,6 +38,7 @@ export function LearnPage({
       </div>
       <CourseLibrary now={now} onStart={onCourseStart} recommendationsOnly />
       <SequenceLibrary onStart={onSequenceStart} />
+      <AcademyPaths onStart={onSequenceStart} />
       <CourseLibrary now={now} onStart={onCourseStart} />
       <section className="featured">
         <div>
