@@ -152,8 +152,10 @@ export function expectedMove(s: Sequence, ply: number) {
 }
 import endgames from "./endgame-sequences.json";
 import { extendedOpenings } from "./extended-openings";
+import { additionalRepertoireLessons } from "./additional-repertoire-lessons";
 export const sequences: Sequence[] = [
   ...openingSequences,
   ...extendedOpenings,
+  ...additionalRepertoireLessons,
   ...(endgames as Sequence[]),
 ];
