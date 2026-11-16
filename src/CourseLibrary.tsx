@@ -91,6 +91,17 @@ export function CourseLibrary({
       alive = false;
     };
   }, []);
+  const [category, setCategory] = useState("All");
+  const categoryOf = (c: Course) =>
+    ["development", "castle", "caro-kann", "vienna"].includes(c.id)
+      ? "Openings"
+      : ["endgame-king", "back-rank", "promotion"].includes(c.id)
+        ? "Endgames"
+        : ["loose-pieces", "forks", "pins", "skewers", "discovery"].includes(
+              c.id,
+            )
+          ? "Middlegame"
+          : "Foundations";
   const completed = (course: Course) =>
     course.exercises.filter(
       (e) => training.records[`course:${e.id}`]?.firstSolvedAt !== undefined,
@@ -128,29 +139,45 @@ export function CourseLibrary({
         : {recommended.title} →
       </button>
       {error && <p role="alert">{error}</p>}
+      <div className="actions" role="group" aria-label="Lesson categories">
+        {["All", "Foundations", "Openings", "Middlegame", "Endgames"].map(
+          (c) => (
+            <button
+              key={c}
+              aria-pressed={category === c}
+              onClick={() => setCategory(c)}
+            >
+              {c}
+            </button>
+          ),
+        )}
+      </div>
       <div className="course-grid">
-        {courses.map((course, i) => (
-          <button
-            key={course.id}
-            onClick={() => onStart(course)}
-            className="course-card"
-          >
-            <span className="eyebrow">
-              {String(i + 1).padStart(2, "0")} · {course.band}
-            </span>
-            <h3>{course.title}</h3>
-            <p>
-              {completed(course)} / {course.exercises.length} recalled without
-              help
-            </p>
-            <span>
-              {completed(course) === course.exercises.length
-                ? "Review lesson"
-                : "Open lesson"}{" "}
-              →
-            </span>
-          </button>
-        ))}
+        {courses
+          .filter((c) => category === "All" || categoryOf(c) === category)
+          .map((course) => (
+            <button
+              key={course.id}
+              onClick={() => onStart(course)}
+              className="course-card"
+            >
+              <span className="eyebrow">
+                {String(courses.indexOf(course) + 1).padStart(2, "0")} ·{" "}
+                {course.band}
+              </span>
+              <h3>{course.title}</h3>
+              <p>
+                {completed(course)} / {course.exercises.length} recalled without
+                help
+              </p>
+              <span>
+                {completed(course) === course.exercises.length
+                  ? "Review lesson"
+                  : "Open lesson"}{" "}
+                →
+              </span>
+            </button>
+          ))}
       </div>
     </section>
   );

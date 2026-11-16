@@ -1807,3 +1807,23 @@ textarea {
     overflow: auto;
   }
 }
+.sequence-screen .feedback {
+  max-height: 8em;
+  overflow: auto;
+}
+.sequence-screen .lesson-tools > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .sequence-intro {
+    padding: 16px;
+  }
+  .sequence-intro p {
+    font-size: 1rem;
+  }
+  .sequence-screen .lesson-tools > span {
+    font-size: 0.8rem;
+  }
+}

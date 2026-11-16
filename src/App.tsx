@@ -1,3 +1,5 @@
+import { SequenceSession } from "./SequenceSession";
+import type { Sequence } from "./sequences";
 import { exportLearning, importLearning } from "./backup";
 import { CourseSession } from "./CourseLibrary";
 import type { Course } from "./curriculum";
@@ -16,6 +18,7 @@ import { Lesson } from "./Lesson";
 const tabs = ["Learn", "Practice", "Puzzles", "Insights", "Profile"] as const;
 type Tab = (typeof tabs)[number];
 export default function App() {
+  const [sequence, setSequence] = useState<Sequence | null>(null);
   const [now, setNow] = useState(() => Date.now());
   const [tab, setTab] = useState<Tab>("Learn");
   const [course, setCourse] = useState<Course | null>(null);
@@ -69,6 +72,7 @@ export default function App() {
     setActive(false);
     setCourse(null);
     setPuzzling(false);
+    setSequence(null);
     requestAnimationFrame(() => main.current?.focus());
   }
   function start(index = 0) {
@@ -196,7 +200,15 @@ export default function App() {
               </button>
             </div>
           )}
-          {active ? (
+          {sequence ? (
+            <SequenceSession
+              sequence={sequence}
+              onExit={() => {
+                setSequence(null);
+                setPuzzling(false);
+              }}
+            />
+          ) : active ? (
             <Lesson
               initialIndex={initialIndex}
               onAttempt={record}
@@ -217,6 +229,10 @@ export default function App() {
             <>
               {tab === "Learn" && (
                 <LearnPage
+                  onSequenceStart={(s) => {
+                    setSequence(s);
+                    setPuzzling(true);
+                  }}
                   now={now}
                   onCourseStart={(c) => {
                     setCourse(c);
