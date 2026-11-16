@@ -169,8 +169,8 @@ export default function App() {
             }}
             aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
           >
-            {theme === "light" ? "◐" : "◑"}{" "}
-            <span>{theme === "light" ? "Light" : "Dark"}</span>
+            <span aria-hidden="true">{theme === "light" ? "◐" : "◑"}</span>{" "}
+            <span>Switch to {theme === "light" ? "dark" : "light"} mode</span>
           </button>
         </header>
         <main id="main" ref={main} tabIndex={-1}>
