@@ -1,3 +1,4 @@
+import { additionalRepertoireLessons } from "./additional-repertoire-lessons";
 import { useEffect, useRef, useState } from "react";
 import { remainingCourseSteps } from "./courseRun";
 import { Chess } from "chess.js";
@@ -63,26 +64,26 @@ export function SequenceLibrary({
         "caro-two-knights-order",
         "caro-quiet-d3",
         "caro-c4",
-        ...sequences.filter((s) => s.id.startsWith("caro-") && !["caro-advance", "caro-exchange", "caro-classical", "caro-panov", "caro-two-knights", "caro-fantasy", "caro-advance-c5", "caro-classical-nd7", "caro-two-knights-order", "caro-quiet-d3", "caro-c4"].includes(s.id)).map((s) => s.id),
+        ...additionalRepertoireLessons.filter((s) => s.id.startsWith("caro-")).map((s) => s.id),
       ],
       description:
-        "Build a reliable response to 1.e4: learn the central structure and practise eleven common White setups, move orders and central responses.",
+        "Build a reliable response to 1.e4: learn the central structure and practise 20 opponent setups, move orders and central responses.",
     },
     {
       id: "slav",
       title: "Slav Defence",
       color: "b",
-      ids: ["slav-exchange", "slav-accepted", "slav-solid", "slav-exchange-bf4", "slav-bf5", ...sequences.filter((s) => s.id.startsWith("slav-") && !["slav-exchange", "slav-accepted", "slav-solid", "slav-exchange-bf4", "slav-bf5"].includes(s.id)).map((s) => s.id)],
+      ids: ["slav-exchange", "slav-accepted", "slav-solid", "slav-exchange-bf4", "slav-bf5", ...additionalRepertoireLessons.filter((s) => s.id.startsWith("slav-")).map((s) => s.id)],
       description:
-        "Practise five Slav choices against exchanges, quiet development and the early c4 capture.",
+        "Study 20 Slav responses, exchanges, development schemes and central pawn decisions.",
     },
     {
       id: "london",
       title: "London System",
       color: "w",
-      ids: ["london-classical", "london-fianchetto", "london-c5", "london-nc6", "london-queenside-fianchetto", "london-nf6-c5", "london-mirror-bishop", ...sequences.filter((s) => s.id.startsWith("london-") && !["london-classical", "london-fianchetto", "london-c5", "london-nc6", "london-queenside-fianchetto", "london-nf6-c5", "london-mirror-bishop"].includes(s.id)).map((s) => s.id)],
+      ids: ["london-classical", "london-fianchetto", "london-c5", "london-nc6", "london-queenside-fianchetto", "london-nf6-c5", "london-mirror-bishop", ...additionalRepertoireLessons.filter((s) => s.id.startsWith("london-")).map((s) => s.id)],
       description:
-        "Develop the bishop early and practise a solid setup against seven Black responses and development plans.",
+        "Develop the bishop early and practise a solid setup against 20 Black responses and development plans.",
     },
     {
       id: "vienna",
@@ -97,10 +98,10 @@ export function SequenceLibrary({
         "vienna-gambit-nf3",
         "vienna-quiet-f4",
         "vienna-fianchetto",
-        ...sequences.filter((s) => s.id.startsWith("vienna-") && !["vienna-natural", "vienna-falkbeer", "vienna-gambit-d5", "vienna-gambit-accepted", "vienna-f4-nc6", "vienna-gambit-nf3", "vienna-quiet-f4", "vienna-fianchetto"].includes(s.id)).map((s) => s.id),
+        ...additionalRepertoireLessons.filter((s) => s.id.startsWith("vienna-")).map((s) => s.id),
       ],
       description:
-        "Learn a developing setup and practise eight quiet and gambit responses, including central breaks.",
+        "Learn a developing setup and practise 20 quiet and gambit responses, including central breaks.",
     },
   ];
   const selected = groups.find((g) => g.id === course);
