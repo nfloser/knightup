@@ -24,3 +24,12 @@ it("hints at the move's type without giving away the SAN or target", () => {
   expect(hintForMove(position.fen, "c6")).toMatch(/pawn/i);
   expect(hintForMove(position.fen, "c6")).not.toContain("c6");
 });
+
+it("explains shared opening moves in context rather than jumping to the end plan", () => {
+  const caro = sequences.find((item) => item.id === "caro-exchange")!;
+  expect(walkthroughFrame(caro, 2).text).toMatch(/prepares.*d5/i);
+  const london = sequences.find((item) => item.id === "london-fianchetto")!;
+  expect(walkthroughFrame(london, 1).text).toMatch(/central space/i);
+  const vienna = sequences.find((item) => item.id === "vienna-gambit-d5")!;
+  expect(walkthroughFrame(vienna, 2).text).toMatch(/center/i);
+});
