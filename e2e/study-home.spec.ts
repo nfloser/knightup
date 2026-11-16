@@ -41,3 +41,27 @@ test("practice offers clear destinations and keeps notation drills available", a
     page.getByRole("heading", { name: /puzzle/i }).first(),
   ).toBeVisible();
 });
+
+test("opening course cards and instructions stay readable on narrow phones in both themes", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  await page.goto("./");
+  await page.getByRole("button", { name: "Black", exact: true }).click();
+  for (const theme of ["light", "dark"]) {
+    await page.evaluate((value) => {
+      document.documentElement.dataset.theme = value;
+    }, theme);
+    const card = page.getByRole("button", { name: /Caro.Kann.*training lines/i }).first();
+    await expect(card).toBeVisible();
+    const description = card.locator("p");
+    expect(
+      await description.evaluate((element) =>
+        Number.parseFloat(getComputedStyle(element).fontSize),
+      ),
+    ).toBeGreaterThanOrEqual(14);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth),
+    ).toBeLessThanOrEqual(375);
+  }
+});
