@@ -66,8 +66,8 @@ export default function App() {
   async function record(id: string) {
     try {
       const next = complete(progress, id);
-      await saveProgress(next);
-      setProgress(next);
+      const saved = await saveProgress(next);
+      setProgress(saved);
       return true;
     } catch {
       return false;
@@ -94,8 +94,8 @@ export default function App() {
         version: 1,
         completed: [...new Set([...progress.completed, ...parsed.completed])],
       });
-      await saveProgress(merged);
-      setProgress(merged);
+      const saved = await saveProgress(merged);
+      setProgress(saved);
       setMessage("Backup restored. Your existing completions were kept.");
     } catch (error) {
       setMessage(

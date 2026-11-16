@@ -4,7 +4,7 @@
 
 - Static React + TypeScript + Vite app at `/knightup/`; no server, API keys or trackers. Local privacy takes precedence over an automatic public coaching report.
 - `chess.js` owns move legality and SAN generation. Our boundary also compares submitted SAN with canonical SAN, ensuring omitted check/mate suffixes cannot pass. Exercise objectives are authored moves, not engine best-move recommendations.
-- Stable content IDs include notation version. Schema-1 backups are validated before writes and merged rather than replacing existing completions. Unknown/future versions fail explicitly; no deployment resets IndexedDB.
+- Stable content IDs include notation version. Schema-1 backups are validated before writes and merged rather than replacing existing completions. Saves merge the stored and incoming sets within a single read/write transaction, preventing stale tabs or overlapping restores from erasing completions. Unknown/future versions fail explicitly; no deployment resets IndexedDB.
 - One IDB store contains progress and theme. Storage failures remain visible. XP/streaks omitted until a mastery policy exists.
 - PWA uses Workbox precache of static assets, prompt-based update, and no runtime remote-data cache. Single-thread analysis and private scheduled storage are future design decisions.
 - Design reference resolved as https://github.com/meta/astryx (MIT). Semantic tokens, theme separation and consistent states inform original CSS; no Astryx source copied. Apple HIG https://developer.apple.com/design/human-interface-guidelines informs hierarchy and mobile clarity; no Apple assets used.
@@ -29,3 +29,5 @@
 
 Unit tests cover every lesson solution, malformed backups, duplicate completions and notation regression cases. Browser suite exercises full lesson, persistent progress, invalid import, export, offline reload, responsive overflow and axe checks in both themes. Physical iOS/Android validation is not equivalent to a Chromium viewport simulation.
 Dependency audit currently reports moderate/low issues in build-only Workbox/lint transitive dependencies; no high/critical findings at initial inspection. Runtime deps are checked separately. CI blocks high and critical findings. No automatic force/downgrade was applied to silence audit.
+
+Independent review found a stale-tab overwrite race, reproduced with a failing concurrent-save regression and fixed by transactional merging. A mutation removing canonical SAN enforcement caused the suffix regression to fail, confirming that guard is covered.

@@ -11,7 +11,17 @@ export async function loadProgress() {
   return stored === undefined ? emptyProgress : parseProgress(stored);
 }
 export async function saveProgress(value: Progress) {
-  await (await db()).put("settings", parseProgress(value), "progress");
+  const incoming = parseProgress(value);
+  const tx = (await db()).transaction("settings", "readwrite");
+  const stored = await tx.store.get("progress");
+  const current = stored === undefined ? emptyProgress : parseProgress(stored);
+  const merged = parseProgress({
+    version: 1,
+    completed: [...new Set([...current.completed, ...incoming.completed])],
+  });
+  await tx.store.put(merged, "progress");
+  await tx.done;
+  return merged;
 }
 export async function loadTheme(): Promise<"light" | "dark"> {
   return (await (await db()).get("settings", "theme")) === "dark"
