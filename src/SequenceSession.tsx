@@ -10,6 +10,7 @@ import {
 } from "./sequences";
 import { loadTraining, recordTraining, emptyTraining } from "./training";
 import { useTrainingViewport } from "./useTrainingViewport";
+import { walkthroughFrame } from "./walkthrough";
 export function SequenceLibrary({
   onStart,
 }: {
@@ -383,14 +384,17 @@ export function SequenceSession({
   sequence,
   onExit,
   onComplete,
+  sessionProgress,
 }: {
   sequence: Sequence;
   onExit: () => void;
   onComplete?: () => void;
+  sessionProgress?: { current: number; total: number };
 }) {
   const [ply, setPly] = useState(0),
     [input, setInput] = useState(""),
     [intro, setIntro] = useState(true),
+    [demoStep, setDemoStep] = useState(0),
     [feedback, setFeedback] = useState(
       "Watch the opponent and choose your repertoire response.",
     ),
@@ -460,7 +464,7 @@ export function SequenceSession({
       setInput("");
       setPly(next);
       setFeedback(
-        `${normalized}: ${moveReason(normalized, sequence)}${assisted ? " Assisted recall." : ""}`,
+        `${normalized}: ${walkthroughFrame(sequence, next).text}${assisted ? " Assisted recall." : ""}`,
       );
       if (next === sequence.moves.length) {
         setDone(true);
@@ -475,6 +479,28 @@ export function SequenceSession({
         setFeedback(
           "Could not save this attempt. Retry when storage is available.",
         );
+    } finally {
+      busy.current = false;
+      if (current === token.current) setSaving(false);
+    }
+  }
+  async function hint() {
+    if (intro || done || opponent || busy.current) return;
+    busy.current = true;
+    setSaving(true);
+    setAssisted(true);
+    const current = token.current;
+    try {
+      await recordTraining(
+        `course:sequence-${sequence.id}`,
+        "course",
+        false,
+        true,
+      );
+      if (current === token.current) setFeedback(`Plan hint: ${sequence.idea}`);
+    } catch {
+      if (current === token.current)
+        setFeedback("Could not save this hint. Please check browser storage.");
     } finally {
       busy.current = false;
       if (current === token.current) setSaving(false);
@@ -497,7 +523,7 @@ export function SequenceSession({
       if (current !== token.current) return;
       setExplaining((v) => !v);
       setFeedback(
-        `Train ${target}. ${moveReason(target, sequence)} ${sequence.plan}`,
+        `Train ${target}. ${walkthroughFrame(sequence, ply + 1).text}`,
       );
     } catch {
       if (current === token.current)
@@ -509,35 +535,86 @@ export function SequenceSession({
       if (current === token.current) setSaving(false);
     }
   }
-  if (intro)
+  if (intro) {
+    const frame = walkthroughFrame(sequence, demoStep);
     return (
-      <section className="surface sequence-intro">
-        <p className="eyebrow">{sequence.category} · FULL LINE</p>
-        <h1>{sequence.title}</h1>
-        <h2>Recognize the response</h2>
-        <p>{sequence.idea}</p>
-        <h2>Your plan</h2>
-        <p>{sequence.plan}</p>
-        <p>
-          You play {sequence.color === "w" ? "White" : "Black"}. Opponent
-          replies run automatically. Finish the entire line; Explain reveals the
-          next repertoire move and marks the attempt assisted.
-        </p>
-        {sequence.source && (
-          <p>
-            <a href={sequence.source} target="_blank" rel="noreferrer">
-              Original Lichess position · CC0
-            </a>
-          </p>
-        )}
-        <div className="actions">
-          <button className="primary" onClick={() => setIntro(false)}>
-            Practise whole line
+      <section className="sequence-intro surface">
+        <div className="section-heading">
+          <button className="text-button" onClick={onExit}>
+            ← Learning library
           </button>
-          <button onClick={onExit}>Back to lessons</button>
+          <span>{sequence.category.toUpperCase()} · GUIDED EXPLANATION</span>
         </div>
+        <h1>{sequence.title}</h1>
+        <div className="walkthrough-layout">
+          <Board
+            fen={frame.fen}
+            orientation={sequence.color}
+            lastMove={frame.lastMove}
+            disabled
+            onMove={() => {}}
+          />
+          <div className="walkthrough-copy">
+            <p className="eyebrow">
+              LEARN FIRST · STEP {frame.step} / {sequence.moves.length}
+            </p>
+            <h2>
+              {frame.lastMove
+                ? `${frame.lastMove.color === "w" ? "White" : "Black"} plays ${frame.lastMove.san}`
+                : "The idea"}
+            </h2>
+            <p role="status">{frame.text}</p>
+            {frame.step === sequence.moves.length && (
+              <p>
+                <strong>Your plan:</strong> {sequence.plan}
+              </p>
+            )}
+            <p className="small">
+              Explore the moves at your own pace. Viewing the explanation does
+              not count as solving the exercise.
+            </p>
+            <div className="actions walkthrough-actions">
+              <button
+                className="secondary-action"
+                disabled={frame.step === 0}
+                onClick={() => setDemoStep(frame.step - 1)}
+              >
+                Previous move
+              </button>
+              <button
+                className="secondary-action"
+                disabled={frame.step === sequence.moves.length}
+                onClick={() => setDemoStep(frame.step + 1)}
+              >
+                Next move
+              </button>
+            </div>
+            <button className="primary" onClick={() => setIntro(false)}>
+              Practise whole line
+            </button>
+            <p className="small">
+              You play {sequence.color === "w" ? "White" : "Black"}. In
+              practice, the opponent replies automatically and Explain reveals
+              the next move.
+            </p>
+            {sequence.source && (
+              <p>
+                <a href={sequence.source} target="_blank" rel="noreferrer">
+                  Original Lichess position · CC0
+                </a>
+              </p>
+            )}
+            <button className="text-button" onClick={onExit}>
+              Back to lessons
+            </button>
+          </div>
+        </div>
+        {sessionProgress && (
+          <CourseSessionProgress {...sessionProgress} fraction={0} />
+        )}
       </section>
     );
+  }
   return (
     <div
       className="lesson-screen sequence-screen"
@@ -553,6 +630,13 @@ export function SequenceSession({
         </span>
       </div>
       <div className="lesson-tools">
+        <button
+          className="explain-button"
+          disabled={opponent || done || saving}
+          onClick={() => void hint()}
+        >
+          Hint
+        </button>
         <button
           className="explain-button"
           disabled={opponent || done || saving}
@@ -612,22 +696,35 @@ export function SequenceSession({
           </p>
         </section>
       </div>
+      {sessionProgress && (
+        <CourseSessionProgress
+          {...sessionProgress}
+          fraction={ply / sequence.moves.length}
+        />
+      )}
     </div>
   );
 }
-function moveReason(san: string, s: Sequence) {
-  if (san.includes("#")) return "Checkmate: the king has no legal defense.";
-  if (san.includes("="))
-    return "Promote the pawn and check the resulting threats.";
-  if (san.includes("+"))
-    return "Check forces the opponent to deal with the king attack.";
-  if (san === "O-O" || san === "O-O-O")
-    return "Castle to make the king safer and connect your rooks.";
-  if (san.includes("x"))
-    return "Complete the planned exchange and reassess the center.";
-  if (san.startsWith("N") || san.startsWith("B"))
-    return "Develop or reposition a minor piece with the plan in mind.";
-  return s.category === "Openings"
-    ? "Support or challenge the center before launching an attack."
-    : s.plan;
+
+function CourseSessionProgress({
+  current,
+  total,
+  fraction,
+}: {
+  current: number;
+  total: number;
+  fraction: number;
+}) {
+  return (
+    <div className="course-session-progress">
+      <span>
+        Course session · lesson {current} of {total}
+      </span>
+      <progress
+        aria-label="Course session progress"
+        value={current - 1 + fraction}
+        max={total}
+      />
+    </div>
+  );
 }

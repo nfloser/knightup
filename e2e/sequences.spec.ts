@@ -169,6 +169,14 @@ test("continuing a course advances through lessons and resumes unfinished work",
     .click();
   await page.getByRole("button", { name: /London System Develop/ }).click();
   await page.getByRole("button", { name: "Continue course" }).click();
+  await expect(
+    page.getByRole("progressbar", { name: "Course session progress" }),
+  ).toHaveAttribute("value", "0");
+  await expect(page.getByText("Course session · lesson 1 of 3")).toBeVisible();
+  await page.getByRole("button", { name: "Next move" }).click();
+  await expect(
+    page.getByRole("progressbar", { name: "Course session progress" }),
+  ).toHaveAttribute("value", "0");
   await page.getByRole("button", { name: "Practise whole line" }).click();
   for (const san of ["d4", "Bf4", "e3", "Nf3", "Bd3", "O-O"]) {
     await expect(
@@ -182,6 +190,10 @@ test("continuing a course advances through lessons and resumes unfinished work",
       name: /London · against a kingside fianchetto/,
     }),
   ).toBeVisible();
+  await expect(page.getByText("Course session · lesson 2 of 3")).toBeVisible();
+  await expect(
+    page.getByRole("progressbar", { name: "Course session progress" }),
+  ).toHaveAttribute("value", "1");
   await page.getByRole("button", { name: "Back to lessons" }).click();
   await expect(
     page.getByText("1 / 3 lines recalled without help."),
@@ -193,4 +205,60 @@ test("continuing a course advances through lessons and resumes unfinished work",
       name: /London · against a kingside fianchetto/,
     }),
   ).toBeVisible();
+});
+
+test("learners see a board demonstration before practising without earning credit", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
+  await page
+    .getByRole("button", { name: /Caro–Kann · against the Advance/ })
+    .click();
+  const intro = page.locator(".sequence-intro");
+  await expect(intro.getByRole("heading", { name: "The idea" })).toBeVisible();
+  await expect(
+    intro.getByRole("button", { name: "Previous move" }),
+  ).toBeDisabled();
+  await intro.getByRole("button", { name: "Next move" }).click();
+  await expect(
+    intro.getByRole("heading", { name: "White plays e4" }),
+  ).toBeVisible();
+  await intro.getByRole("button", { name: "Next move" }).click();
+  await expect(
+    intro.getByRole("heading", { name: "Black plays c6" }),
+  ).toBeVisible();
+  await expect(intro.getByRole("status")).toContainText("d5");
+  await intro.getByRole("button", { name: "Previous move" }).click();
+  await expect(
+    intro.getByRole("heading", { name: "White plays e4" }),
+  ).toBeVisible();
+  await intro
+    .getByRole("button", { name: "Back to lessons", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Profile", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Level 1 · 0 XP" }),
+  ).toBeVisible();
+});
+
+test("a hint gives a plan without revealing the next move", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
+  await page
+    .getByRole("button", { name: /Caro–Kann · against the Advance/ })
+    .click();
+  await page.getByRole("button", { name: "Practise whole line" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your repertoire move" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Hint", exact: true }).click();
+  await expect(page.locator(".sequence-screen .feedback")).toContainText(
+    "Plan hint:",
+  );
+  await expect(page.locator(".sequence-screen .feedback")).not.toContainText(
+    "Train c6",
+  );
 });

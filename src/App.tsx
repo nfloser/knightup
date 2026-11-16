@@ -20,6 +20,7 @@ type Tab = (typeof tabs)[number];
 export default function App() {
   const [sequence, setSequence] = useState<Sequence | null>(null);
   const [sequenceQueue, setSequenceQueue] = useState<Sequence[]>([]);
+  const [sequenceRunTotal, setSequenceRunTotal] = useState(0);
   const [now, setNow] = useState(() => Date.now());
   const [tab, setTab] = useState<Tab>("Learn");
   const [course, setCourse] = useState<Course | null>(null);
@@ -75,6 +76,7 @@ export default function App() {
     setPuzzling(false);
     setSequence(null);
     setSequenceQueue([]);
+    setSequenceRunTotal(0);
     requestAnimationFrame(() => main.current?.focus());
   }
   function start(index = 0) {
@@ -206,18 +208,28 @@ export default function App() {
             <SequenceSession
               key={sequence.id}
               sequence={sequence}
+              sessionProgress={
+                sequenceRunTotal
+                  ? {
+                      current: sequenceRunTotal - sequenceQueue.length,
+                      total: sequenceRunTotal,
+                    }
+                  : undefined
+              }
               onComplete={() => {
                 if (sequenceQueue.length) {
                   setSequence(sequenceQueue[0]);
                   setSequenceQueue(sequenceQueue.slice(1));
                 } else {
                   setSequence(null);
+                  setSequenceRunTotal(0);
                   setPuzzling(false);
                 }
               }}
               onExit={() => {
                 setSequence(null);
                 setSequenceQueue([]);
+                setSequenceRunTotal(0);
                 setPuzzling(false);
               }}
             />
@@ -242,9 +254,10 @@ export default function App() {
             <>
               {tab === "Learn" && (
                 <LearnPage
-                  onSequenceStart={(s, remaining = []) => {
+                  onSequenceStart={(s, remaining) => {
                     setSequence(s);
-                    setSequenceQueue(remaining);
+                    setSequenceQueue(remaining ?? []);
+                    setSequenceRunTotal(remaining ? remaining.length + 1 : 0);
                     setPuzzling(true);
                   }}
                   now={now}
