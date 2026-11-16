@@ -72,6 +72,23 @@ test-results. The check is a deliberately shallow **gross-blunder screen**:
 other legal moves may be equally good, sacrifice evaluations can be unstable,
 and it is not a complete move-by-move engine endorsement of 80 variations.
 
+## Board-evidence explanation fallback
+
+During a guided move-by-move board walkthrough, an original, position-specific
+author note takes priority. When a move has no dedicated note, the walkthrough
+now uses chess.js to describe only independently verifiable events on the
+resulting board: a capture and captured piece type, pawn promotion, kingside or
+queenside castling, check, checkmate, or stalemate. For nonforcing moves it
+reports the piece's actual origin/destination and prompts the learner to
+inspect threats and defenses. The authored learning plan remains available.
+
+This avoids pretending that a legal demonstration move has been evaluated
+as engine-best or that the app knows the opponent's intentions. It is not a
+substitute for a complete positional explanation or a deeper Stockfish review.
+Tests cover the main tactical consequences and ensure authored notes retain
+precedence. Existing lesson IDs, save data and source continuations do not
+change.
+
 ## Graduated ordering of phase-level study paths
 
 The foundations, middlegame and endgame **guided phase paths** now sort their
