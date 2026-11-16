@@ -56,3 +56,18 @@ individual topic exercises; they offer walkthrough-first complete puzzle
 continuations, whereas a topic exercise asks for the first response after the
 source setup move. Content remains subject to engine quality review, especially
 for opening choices and broader abstract teaching themes.
+
+## Course resumption and tactical screening
+
+For the expanded single-board Academy drills, opening a topic now selects its
+first exercise not yet recalled cleanly. A topic with all twenty clean records
+starts again at its first example for review. The persisted ledger is read
+before the practice button becomes available. This preserves earlier mastery
+rather than forcing learners to repeat the first two examples every time.
+
+Browser CI additionally runs the shipped Stockfish 19 WASM engine over one
+late-lesson learner decision from each of the eighty opening examples, comparing
+a bounded before/after centipawn estimate. The JSON audit report is saved in
+test-results. The check is a deliberately shallow **gross-blunder screen**:
+other legal moves may be equally good, sacrifice evaluations can be unstable,
+and it is not a complete move-by-move engine endorsement of 80 variations.
