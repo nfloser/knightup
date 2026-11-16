@@ -63,6 +63,7 @@ export function SequenceLibrary({
         "caro-two-knights-order",
         "caro-quiet-d3",
         "caro-c4",
+        ...sequences.filter((s) => s.id.startsWith("caro-") && !["caro-advance", "caro-exchange", "caro-classical", "caro-panov", "caro-two-knights", "caro-fantasy", "caro-advance-c5", "caro-classical-nd7", "caro-two-knights-order", "caro-quiet-d3", "caro-c4"].includes(s.id)).map((s) => s.id),
       ],
       description:
         "Build a reliable response to 1.e4: learn the central structure and practise eleven common White setups, move orders and central responses.",
@@ -71,7 +72,7 @@ export function SequenceLibrary({
       id: "slav",
       title: "Slav Defence",
       color: "b",
-      ids: ["slav-exchange", "slav-accepted", "slav-solid", "slav-exchange-bf4", "slav-bf5"],
+      ids: ["slav-exchange", "slav-accepted", "slav-solid", "slav-exchange-bf4", "slav-bf5", ...sequences.filter((s) => s.id.startsWith("slav-") && !["slav-exchange", "slav-accepted", "slav-solid", "slav-exchange-bf4", "slav-bf5"].includes(s.id)).map((s) => s.id)],
       description:
         "Practise five Slav choices against exchanges, quiet development and the early c4 capture.",
     },
@@ -79,7 +80,7 @@ export function SequenceLibrary({
       id: "london",
       title: "London System",
       color: "w",
-      ids: ["london-classical", "london-fianchetto", "london-c5", "london-nc6", "london-queenside-fianchetto", "london-nf6-c5", "london-mirror-bishop"],
+      ids: ["london-classical", "london-fianchetto", "london-c5", "london-nc6", "london-queenside-fianchetto", "london-nf6-c5", "london-mirror-bishop", ...sequences.filter((s) => s.id.startsWith("london-") && !["london-classical", "london-fianchetto", "london-c5", "london-nc6", "london-queenside-fianchetto", "london-nf6-c5", "london-mirror-bishop"].includes(s.id)).map((s) => s.id)],
       description:
         "Develop the bishop early and practise a solid setup against seven Black responses and development plans.",
     },
@@ -96,6 +97,7 @@ export function SequenceLibrary({
         "vienna-gambit-nf3",
         "vienna-quiet-f4",
         "vienna-fianchetto",
+        ...sequences.filter((s) => s.id.startsWith("vienna-") && !["vienna-natural", "vienna-falkbeer", "vienna-gambit-d5", "vienna-gambit-accepted", "vienna-f4-nc6", "vienna-gambit-nf3", "vienna-quiet-f4", "vienna-fianchetto"].includes(s.id)).map((s) => s.id),
       ],
       description:
         "Learn a developing setup and practise eight quiet and gambit responses, including central breaks.",
