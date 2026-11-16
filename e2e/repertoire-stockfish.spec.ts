@@ -1,5 +1,4 @@
 import { test, expect } from "@playwright/test";
-import { Chess } from "chess.js";
 import { mkdir, writeFile } from "node:fs/promises";
 import { sequences, sequenceGame } from "../src/sequences";
 
@@ -33,7 +32,10 @@ test("Stockfish 19 screens a learner decision in every opening lesson", async ({
     };
     const wait = (command: string, predicate: (line: string) => boolean, ms = 15000) =>
       new Promise<string>((resolve, reject) => {
-        let timer: ReturnType<typeof setTimeout>;
+        const timer = setTimeout(() => {
+          callbacks.delete(listener);
+          reject(workerFailure ?? Error("Stockfish timed out during " + command));
+        }, ms);
         const listener = (line: string) => {
           if (!predicate(line)) return;
           callbacks.delete(listener);
@@ -41,10 +43,6 @@ test("Stockfish 19 screens a learner decision in every opening lesson", async ({
           resolve(line);
         };
         callbacks.add(listener);
-        timer = setTimeout(() => {
-          callbacks.delete(listener);
-          reject(workerFailure ?? Error("Stockfish timed out during " + command));
-        }, ms);
         worker.postMessage(command);
       });
     try {
