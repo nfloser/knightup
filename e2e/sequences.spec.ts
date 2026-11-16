@@ -370,3 +370,31 @@ test("guided explanation remains readable in dark mode", async ({
   ).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("guided-dark.png") });
 });
+
+test("Fried Liver training distinguishes the Na5 alternative", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page
+    .getByRole("group", { name: "Opening color" })
+    .getByRole("button", { name: "White" })
+    .click();
+  await page
+    .getByRole("button", { name: /Fried Liver & Two Knights Understand/ })
+    .click();
+  await expect(
+    page.getByRole("region", { name: "Fried Liver course guide" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Two Knights · the Fried Liver/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Two Knights · against ...Na5/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Two Knights · the Traxler/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Fried Liver · reinforcing d5/ }),
+  ).toBeVisible();
+});

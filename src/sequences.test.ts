@@ -48,3 +48,48 @@ it("covers both accepting and meeting the Vienna Gambit in the center", () => {
     );
   }
 });
+
+it("teaches both the Fried Liver and Black's Na5 alternative", () => {
+  for (const id of ["fried-liver", "two-knights-na5"]) {
+    const line = sequences.find((s) => s.id === id);
+    expect(line).toBeDefined();
+    expect(line?.color).toBe("w");
+    expect(line?.moves.slice(0, 6)).toEqual([
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bc4",
+      "Nf6",
+    ]);
+    expect(sequenceGame(line!, line!.moves.length).history()).toEqual(
+      line!.moves,
+    );
+  }
+});
+
+it("includes additional branches after the sacrifice and the Traxler counterattack", () => {
+  for (const id of [
+    "fried-liver-ne7",
+    "fried-liver-nb4",
+    "two-knights-traxler",
+  ]) {
+    const line = sequences.find((s) => s.id === id);
+    expect(line).toBeDefined();
+    expect(line?.color).toBe("w");
+    expect(sequenceGame(line!, line!.moves.length).history()).toEqual(
+      line!.moves,
+    );
+  }
+});
+
+it("covers two different alternatives to the Fried Liver sacrifice", () => {
+  const na5 = sequences.find((s) => s.id === "two-knights-na5-quiet")!;
+  const nd4 = sequences.find((s) => s.id === "two-knights-nd4")!;
+  expect(na5.moves.slice(9, 13)).toEqual(["Na5", "d3", "h6", "Nf3"]);
+  expect(nd4.moves.slice(9, 13)).toEqual(["Nd4", "c3", "b5", "Bf1"]);
+  for (const line of [na5, nd4]) {
+    const game = sequenceGame(line, line.moves.length);
+    expect(game.history()).toHaveLength(line.moves.length);
+  }
+});
