@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.1.0 — unreleased
+## Unreleased
+
+- Adapt notation recommendations to wrong answers, hints and spaced review due dates.
+- Migrate existing completions to schema 2 without resetting progress.
+
+## 0.1.0 — foundation
 
 - Learn and practice eight English notation exercises with a legal interactive board.
 - Keep progress locally, export backups and restore completions safely.

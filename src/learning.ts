@@ -1,3 +1,4 @@
+import type { ReviewState } from "./adaptive";
 import { Chess } from "chess.js";
 export type Lesson = {
   id: string;
@@ -119,8 +120,16 @@ export function assess(lesson: Lesson, input: string) {
     };
   }
 }
-export type Progress = { version: 1; completed: string[] };
-export const emptyProgress: Progress = { version: 1, completed: [] };
+export type Progress = {
+  version: 2;
+  completed: string[];
+  reviews: Record<string, ReviewState>;
+};
+export const emptyProgress: Progress = {
+  version: 2,
+  completed: [],
+  reviews: {},
+};
 export function complete(progress: Progress, id: string): Progress {
   if (!lessons.some((l) => l.id === id)) throw Error("Unknown lesson");
   return { ...progress, completed: [...new Set([...progress.completed, id])] };
@@ -130,7 +139,7 @@ export function parseProgress(value: unknown): Progress {
     !value ||
     typeof value !== "object" ||
     !("version" in value) ||
-    value.version !== 1 ||
+    (value.version !== 1 && value.version !== 2) ||
     !("completed" in value) ||
     !Array.isArray(value.completed) ||
     value.completed.length > lessons.length ||
@@ -141,5 +150,48 @@ export function parseProgress(value: unknown): Progress {
     throw Error(
       "This is not a supported KnightUp progress backup. Your existing progress has not changed.",
     );
-  return { version: 1, completed: [...new Set(value.completed)] };
+  const reviews: Record<string, ReviewState> = {};
+  if (value.version === 2) {
+    if (
+      !("reviews" in value) ||
+      !value.reviews ||
+      typeof value.reviews !== "object" ||
+      Array.isArray(value.reviews)
+    )
+      throw Error("Invalid review history.");
+    for (const [id, raw] of Object.entries(value.reviews)) {
+      if (!lessons.some((l) => l.id === id) || !raw || typeof raw !== "object")
+        throw Error("Invalid review history.");
+      const r = raw as Record<string, unknown>;
+      if (
+        typeof r.id !== "string" ||
+        !r.id.length ||
+        r.id.length > 100 ||
+        typeof r.correct !== "boolean" ||
+        typeof r.assisted !== "boolean" ||
+        ![r.at, r.due, r.box, r.attempts, r.failures].every(
+          (n) => typeof n === "number" && Number.isSafeInteger(n) && n >= 0,
+        ) ||
+        Number(r.box) > 5 ||
+        Number(r.attempts) < 1 ||
+        Number(r.attempts) > 1_000_000 ||
+        Number(r.failures) > Number(r.attempts) ||
+        Number(r.at) > Date.now() + 300_000 ||
+        Number(r.due) < Number(r.at) ||
+        Number(r.due) > Number(r.at) + 31 * 86_400_000
+      )
+        throw Error("Invalid review history.");
+      reviews[id] = {
+        id: r.id,
+        at: Number(r.at),
+        due: Number(r.due),
+        box: Number(r.box),
+        attempts: Number(r.attempts),
+        failures: Number(r.failures),
+        correct: r.correct,
+        assisted: r.assisted,
+      };
+    }
+  }
+  return { version: 2, completed: [...new Set(value.completed)], reviews };
 }

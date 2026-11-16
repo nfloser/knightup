@@ -1,3 +1,4 @@
+import { recommend, mergeProgress } from "./adaptive";
 import { ProfilePage } from "./ProfilePage";
 import { InsightsPage } from "./InsightsPage";
 import { PracticePage } from "./PracticePage";
@@ -5,18 +6,19 @@ import { LearnPage } from "./LearnPage";
 import { Knight } from "./Knight";
 import { useEffect, useRef, useState } from "react";
 import { useRegisterSW } from "virtual:pwa-register/react";
+import { emptyProgress, parseProgress, type Progress } from "./learning";
 import {
-  lessons,
-  emptyProgress,
-  complete,
-  parseProgress,
-  type Progress,
-} from "./learning";
-import { loadProgress, saveProgress, loadTheme, saveTheme } from "./storage";
+  loadProgress,
+  saveProgress,
+  loadTheme,
+  saveTheme,
+  saveAttempt,
+} from "./storage";
 import { Lesson } from "./Lesson";
 const tabs = ["Learn", "Practice", "Insights", "Profile"] as const;
 type Tab = (typeof tabs)[number];
 export default function App() {
+  const [now, setNow] = useState(() => Date.now());
   const [tab, setTab] = useState<Tab>("Learn");
   const [active, setActive] = useState(false);
   const [initialIndex, setInitialIndex] = useState(0);
@@ -51,6 +53,15 @@ export default function App() {
     };
   }, []);
   useEffect(() => {
+    const refresh = () => setNow(Date.now());
+    const timer = window.setInterval(refresh, 30_000);
+    window.addEventListener("focus", refresh);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", refresh);
+    };
+  }, []);
+  useEffect(() => {
     document.documentElement.dataset.theme = theme;
   }, [theme]);
   function navigate(next: Tab) {
@@ -63,10 +74,9 @@ export default function App() {
     setActive(true);
     requestAnimationFrame(() => main.current?.focus());
   }
-  async function record(id: string) {
+  async function record(id: string, correct: boolean, assisted: boolean) {
     try {
-      const next = complete(progress, id);
-      const saved = await saveProgress(next);
+      const saved = await saveAttempt(id, correct, assisted);
       setProgress(saved);
       return true;
     } catch {
@@ -90,10 +100,7 @@ export default function App() {
     try {
       if (file.size > 100000) throw Error("Backup is too large.");
       const parsed = parseProgress(JSON.parse(await file.text()));
-      const merged = parseProgress({
-        version: 1,
-        completed: [...new Set([...progress.completed, ...parsed.completed])],
-      });
+      const merged = mergeProgress(progress, parsed);
       const saved = await saveProgress(merged);
       setProgress(saved);
       setMessage("Backup restored. Your existing completions were kept.");
@@ -104,10 +111,8 @@ export default function App() {
     }
   }
   const count = progress.completed.length;
-  const next = Math.max(
-    0,
-    lessons.findIndex((l) => !progress.completed.includes(l.id)),
-  );
+  const recommendation = recommend(progress, now);
+  const next = recommendation.index;
   return (
     <div className="app-shell">
       <a className="skip" href="#main">
@@ -190,7 +195,7 @@ export default function App() {
           {active ? (
             <Lesson
               initialIndex={initialIndex}
-              onComplete={record}
+              onAttempt={record}
               onExit={() => {
                 setActive(false);
                 main.current?.focus();
@@ -204,6 +209,7 @@ export default function App() {
                   progress={progress}
                   start={start}
                   next={next}
+                  reason={recommendation.reason}
                 />
               )}
               {tab === "Practice" && (

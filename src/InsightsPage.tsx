@@ -6,7 +6,10 @@ export function InsightsPage({ count }: { count: number }) {
       <div className="page-title">
         <p className="eyebrow">PROGRESS YOU CAN TRUST</p>
         <h1>Small steps add up.</h1>
-        <p className="lead">Your learning record, saved on this device.</p>
+        <p className="lead">
+          Your learning record, saved on this device. Your next lesson adapts to
+          errors, hints and due reviews.
+        </p>
       </div>
       <section className="surface">
         <span className="metric">

@@ -4,11 +4,15 @@ import { Board } from "./Board";
 import { assess, lessons } from "./learning";
 export function Lesson({
   initialIndex,
-  onComplete,
+  onAttempt,
   onExit,
 }: {
   initialIndex: number;
-  onComplete: (id: string) => Promise<boolean>;
+  onAttempt: (
+    id: string,
+    correct: boolean,
+    assisted: boolean,
+  ) => Promise<boolean>;
   onExit: () => void;
 }) {
   const [index, setIndex] = useState(initialIndex);
@@ -16,6 +20,7 @@ export function Lesson({
   const [feedback, setFeedback] = useState("");
   const [correct, setCorrect] = useState(false);
   const [hint, setHint] = useState(false);
+  const [assisted, setAssisted] = useState(false);
   const [busy, setBusy] = useState(false);
   const lesson = lessons[index];
   const game = new Chess(lesson.fen);
@@ -25,14 +30,13 @@ export function Lesson({
     setBusy(true);
     const result = assess(lesson, san);
     setFeedback(result.message);
-    if (result.correct) {
-      const saved = await onComplete(lesson.id);
-      setCorrect(saved);
-      if (!saved)
-        setFeedback(
-          "Progress could not be saved. Please retry, or check storage permissions.",
-        );
-    }
+    const saved = await onAttempt(lesson.id, result.correct, assisted);
+    if (result.correct && saved) setCorrect(true);
+    if (!result.correct) setAssisted(true);
+    if (!saved)
+      setFeedback(
+        "Progress could not be saved. Please retry, or check storage permissions.",
+      );
     setBusy(false);
   }
   function next() {
@@ -41,6 +45,7 @@ export function Lesson({
     setFeedback("");
     setCorrect(false);
     setHint(false);
+    setAssisted(false);
   }
   return (
     <>
@@ -107,7 +112,10 @@ export function Lesson({
             <>
               <button
                 className="text-button"
-                onClick={() => setHint(!hint)}
+                onClick={() => {
+                  setHint(!hint);
+                  setAssisted(true);
+                }}
                 aria-expanded={hint}
               >
                 {hint ? "Hide hint" : "Need a hint?"}
