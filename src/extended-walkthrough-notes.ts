@@ -30,7 +30,7 @@ export const extendedWalkthroughNotes: Record<string, Record<number, string>> = 
   "caro-c4": {
     2: "White challenges d5 in advance by playing c4 on move two.",
     3: "...d5 strikes at the e4 pawn despite the unusual move order.",
-    4: "White trades the e-pawn for the d-pawn, opening the center.",
+    4: "White trades the e-pawn for the d-pawn, opening lines in the center.",
     5: "...cxd5 recaptures toward the center.",
     6: "The c-pawn captures on d5; Black must evaluate the resulting isolated pawn and piece activity.",
     7: "...Nf6 brings a knight into play instead of automatically pushing another pawn."
@@ -91,7 +91,7 @@ export const extendedWalkthroughNotes: Record<string, Record<number, string>> = 
     7: "...dxc4 wins a pawn temporarily but releases central tension.",
     8: "e4 gives White a large center in return for the pawn.",
     9: "...b5 supports the c4 pawn at the cost of queenside weaknesses.",
-    10: "a4 challenges that pawn chain. Black must respond to the pressure, not assume the pawn is safe."
+
   },
   "slav-solid": {
     3: "...c6 reinforces d5 and establishes a Slav structure.",
