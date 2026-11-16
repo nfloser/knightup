@@ -48,3 +48,13 @@ Browser regressions verify selection/last-move feedback, reduced motion, automat
 The exercise route uses an immersive fixed available viewport on phones. Global navigation/header/footer give way to a compact learning-path exit, objective, board, input and feedback. Learn/Practice entry pages and data/settings pages retain normal document scrolling. Board size uses the remaining space, not a hard-coded pixel height. Explain replaces the input/feedback area while the intended move stays visible. Compact/landscape views place the board beside the controls. The visualViewport resize event updates available height when a mobile keyboard changes it; focused compact input hides the repeated title/objective to keep actions reachable.
 
 Browser geometry checks cover 320×568, 375×667, 390×844, 667×375 and a 390×360 reduced viewport. They check full visibility of the board, SAN/Check/Explain and explanatory actions, not merely hidden document overflow. Native iOS/Android keyboards still require physical device verification; a resized Chromium viewport is a simulation.
+
+## Mobile course readability (2026-11)
+
+Learning-library cards use a single column on narrow screens to preserve legibility for
+course titles and descriptions. Course descriptions, metadata and walkthrough prose have
+explicit mobile minimum sizes rather than the earlier tiny compact overrides.
+The palette continues to rely on semantic theme tokens, with high-contrast focus
+outlines for keyboard navigation. Chromium browser regression coverage checks
+a narrow 375px viewport in light and dark modes. Physical-device testing remains
+separate and is not implied by the simulated viewport.
