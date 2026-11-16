@@ -1935,3 +1935,17 @@ textarea {
     gap: 2px;
   }
 }
+@media (max-width: 760px) {
+  .sequence-screen .lesson-tools {
+    gap: 6px;
+  }
+  .sequence-screen .lesson-tools > span {
+    flex: 1;
+    min-width: 0;
+  }
+}
+@media (max-width: 420px) {
+  .sequence-screen .lesson-tools > span {
+    display: none;
+  }
+}

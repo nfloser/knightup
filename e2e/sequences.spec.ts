@@ -268,3 +268,76 @@ test("a hint gives a plan without revealing the next move", async ({
     "Train c6",
   );
 });
+
+test("reviewing the explanation during practice returns to the same position", async ({
+  page,
+}) => {
+  await page.goto("./");
+  await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
+  await page
+    .getByRole("button", { name: /Caro–Kann · against the Advance/ })
+    .click();
+  await page.getByRole("button", { name: "Practise whole line" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your repertoire move" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Review lesson" }).click();
+  await expect(
+    page
+      .locator(".sequence-intro")
+      .getByRole("heading", { name: "White plays e4" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Resume practice" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Your repertoire move" }),
+  ).toBeVisible();
+  await page.getByLabel("Your move in English SAN").fill("c6");
+  await page.getByRole("button", { name: "Check", exact: true }).click();
+  await expect(page.locator(".sequence-screen .feedback")).toContainText(
+    "Assisted recall",
+  );
+});
+
+test("course controls and progress fit compact phone views", async ({
+  page,
+}, testInfo) => {
+  if (testInfo.project.name !== "mobile") return;
+  await page.goto("./");
+  await page
+    .getByRole("group", { name: "Opening color" })
+    .getByRole("button", { name: "White" })
+    .click();
+  await page.getByRole("button", { name: /London System Develop/ }).click();
+  await page.getByRole("button", { name: "Continue course" }).click();
+  await page.getByRole("button", { name: "Practise whole line" }).click();
+  for (const size of [
+    { width: 320, height: 568 },
+    { width: 667, height: 375 },
+  ]) {
+    await page.setViewportSize(size);
+    for (const locator of [
+      page.locator(".sequence-screen .board"),
+      page.getByRole("button", { name: "Hint", exact: true }),
+      page.getByRole("button", { name: "Review lesson" }),
+      page.getByRole("progressbar", { name: "Course progress" }),
+      page.getByLabel("Your move in English SAN"),
+    ]) {
+      await expect(locator).toBeVisible();
+      await expect
+        .poll(async () => {
+          const box = await locator.boundingBox();
+          return (
+            !!box &&
+            box.x >= 0 &&
+            box.y >= 0 &&
+            box.x + box.width <= size.width + 1 &&
+            box.y + box.height <= size.height + 1
+          );
+        })
+        .toBe(true);
+    }
+    expect(
+      await page.evaluate(() => document.documentElement.scrollHeight),
+    ).toBeLessThanOrEqual(size.height + 1);
+  }
+});

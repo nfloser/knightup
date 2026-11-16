@@ -10,7 +10,7 @@ import {
 } from "./sequences";
 import { loadTraining, recordTraining, emptyTraining } from "./training";
 import { useTrainingViewport } from "./useTrainingViewport";
-import { walkthroughFrame } from "./walkthrough";
+import { hintForMove, walkthroughFrame } from "./walkthrough";
 export function SequenceLibrary({
   onStart,
 }: {
@@ -506,10 +506,40 @@ export function SequenceSession({
         false,
         true,
       );
-      if (current === token.current) setFeedback(`Plan hint: ${sequence.idea}`);
+      if (current === token.current)
+        setFeedback(
+          `Plan hint: ${hintForMove(game.fen(), expectedMove(sequence, ply))}`,
+        );
     } catch {
       if (current === token.current)
         setFeedback("Could not save this hint. Please check browser storage.");
+    } finally {
+      busy.current = false;
+      if (current === token.current) setSaving(false);
+    }
+  }
+  async function reviewExplanation() {
+    if (intro || done || opponent || busy.current) return;
+    busy.current = true;
+    setSaving(true);
+    setAssisted(true);
+    const current = token.current;
+    try {
+      await recordTraining(
+        `course:sequence-${sequence.id}`,
+        "course",
+        false,
+        true,
+      );
+      if (current === token.current) {
+        setDemoStep(ply);
+        setIntro(true);
+      }
+    } catch {
+      if (current === token.current)
+        setFeedback(
+          "Could not save this review. Please check browser storage.",
+        );
     } finally {
       busy.current = false;
       if (current === token.current) setSaving(false);
@@ -600,7 +630,7 @@ export function SequenceSession({
               </button>
             </div>
             <button className="primary" onClick={() => setIntro(false)}>
-              Practise whole line
+              {ply > 0 ? "Resume practice" : "Practise whole line"}
             </button>
             <p className="small">
               You play {sequence.color === "w" ? "White" : "Black"}. In
@@ -640,6 +670,13 @@ export function SequenceSession({
         </span>
       </div>
       <div className="lesson-tools">
+        <button
+          className="explain-button"
+          disabled={opponent || done || saving}
+          onClick={() => void reviewExplanation()}
+        >
+          Review lesson
+        </button>
         <button
           className="explain-button"
           disabled={opponent || done || saving}

@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { walkthroughFrame } from "./walkthrough";
+import { hintForMove, walkthroughFrame } from "./walkthrough";
 import { sequences } from "./sequences";
 
 it("shows a legal sequence of positions with explanatory context", () => {
@@ -16,4 +16,11 @@ it("clamps navigation to the available line", () => {
   const s = sequences[0];
   expect(walkthroughFrame(s, -1).step).toBe(0);
   expect(walkthroughFrame(s, 999).step).toBe(s.moves.length);
+});
+
+it("hints at the move's type without giving away the SAN or target", () => {
+  const s = sequences.find((item) => item.id === "caro-advance")!;
+  const position = walkthroughFrame(s, 1);
+  expect(hintForMove(position.fen, "c6")).toMatch(/pawn/i);
+  expect(hintForMove(position.fen, "c6")).not.toContain("c6");
 });
