@@ -7,3 +7,7 @@ Eight endgame sequences use attributed CC0 Lichess puzzle continuations (source 
 Opponent moves animate automatically, and finishing a line returns to lessons automatically. Explain reveals the next move plus its tactical role and plan, marks the whole line assisted, and schedules review. Wrong repertoire choices also count as assisted recall. First clean due completion earns one course credit. Recommended branches prioritize due review, then unseen branches, then weaker mastered branches.
 
 Mobile training uses visualViewport sizing, compact landscape support and 16px move input. Core training copy is at least 14px; board size absorbs the space change. Detailed explanations can scroll inside their own bounded panel while active controls remain on screen.
+
+## Repertoire navigation
+
+Opening practice is grouped by color and repertoire. Caro–Kann currently contains three ordered training lines (Advance, Exchange, and Nc3); Vienna contains two and the Slav one. These are bounded starting courses, not complete coverage of every opponent response. Course progress reuses the existing clean sequence records and survives reloads and learning backups. Continue selects the first line without clean recall; random and due-first branch practice remain available. The current course selection is retained for the browser session. Endgame exercises and the separate academy lessons remain available.

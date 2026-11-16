@@ -3,6 +3,7 @@ test("trains a complete Caro-Kann branch against automatic replies", async ({
   page,
 }) => {
   await page.goto("./");
+  await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
   await page
     .getByRole("button", { name: /Caro–Kann · against the Advance/ })
     .click();
@@ -18,7 +19,13 @@ test("trains a complete Caro-Kann branch against automatic replies", async ({
     "Whole line complete",
   );
   await expect(
-    page.getByRole("heading", { name: "Play the whole plan" }),
+    page.getByRole("heading", { name: "Study a system" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("1 / 3 lines recalled without help."),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Caro–Kann · against the Exchange/ }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Profile", exact: true }).click();
   await expect(
@@ -39,6 +46,7 @@ test("lesson categories include all three phases and phone training stays readab
   await expect(
     page.getByRole("button", { name: /Activate the king/ }),
   ).toBeVisible();
+  await page.getByRole("button", { name: /Caro–Kann Build/ }).click();
   await page
     .getByRole("button", { name: /Caro–Kann · against the Advance/ })
     .click();
@@ -64,11 +72,17 @@ test("a revealed endgame continuation stays assisted and earns no XP", async ({
 }) => {
   await page.goto("./");
   await page
-    .getByRole("group", { name: "Sequence categories" })
+    .getByRole("group", { name: "Study categories" })
     .getByRole("button", { name: "Endgames", exact: true })
     .click();
+  await expect(
+    page.getByRole("button", { name: "Random response →" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Train a recommended branch →" }),
+  ).toBeVisible();
   await page
-    .getByRole("button", { name: /Endgames · Black Finish with checkmate/ })
+    .getByRole("button", { name: /Endgames · Black Finish with checkmate/i })
     .click();
   await page.getByRole("button", { name: "Practise whole line" }).click();
   await page.getByRole("button", { name: "Explain", exact: true }).click();
@@ -81,7 +95,7 @@ test("a revealed endgame continuation stays assisted and earns no XP", async ({
     "with assistance",
   );
   await expect(
-    page.getByRole("heading", { name: "Play the whole plan" }),
+    page.getByRole("heading", { name: "Study a system" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "Profile", exact: true }).click();
   await expect(

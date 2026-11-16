@@ -14,70 +14,252 @@ export function SequenceLibrary({
 }: {
   onStart: (s: Sequence) => void;
 }) {
-  const [category, setCategory] = useState("Openings"),
-    [training, setTraining] = useState(emptyTraining);
+  const [training, setTraining] = useState(emptyTraining);
+  const [section, setSection] = useState<"Openings" | "Endgames">("Openings");
+  const [color, setColor] = useState<"w" | "b">(() =>
+    sessionStorage.getItem("knightup-course-color") === "w" ? "w" : "b",
+  );
+  const [course, setCourse] = useState<string | null>(() =>
+    sessionStorage.getItem("knightup-course"),
+  );
+  const [error, setError] = useState("");
   useEffect(() => {
-    void loadTraining()
-      .then(setTraining)
-      .catch(() => {});
+    let active = true;
+    loadTraining()
+      .then((value) => {
+        if (active) setTraining(value);
+      })
+      .catch(() => {
+        if (active) setError("Could not load course progress.");
+      });
+    return () => {
+      active = false;
+    };
   }, []);
-  const pool = sequences.filter((s) => s.category === category);
-  const adaptive = () => {
-    const ordered = [...pool].sort((a, b) => {
-      const ar = training.records[`course:sequence-${a.id}`],
-        br = training.records[`course:sequence-${b.id}`];
-      const priority = (r: typeof ar) => (!r ? 1 : r.due <= Date.now() ? 0 : 2);
-      return priority(ar) - priority(br) || (ar?.box ?? 0) - (br?.box ?? 0);
-    });
-    if (ordered[0]) onStart(ordered[0]);
-  };
+  const groups = [
+    {
+      id: "caro",
+      title: "Caro–Kann",
+      color: "b",
+      ids: ["caro-advance", "caro-exchange", "caro-classical"],
+      description:
+        "Build a reliable response to 1.e4: learn the central structure and practise three common white setups.",
+    },
+    {
+      id: "slav",
+      title: "Slav Defence",
+      color: "b",
+      ids: ["slav-exchange"],
+      description:
+        "Start a repertoire against 1.d4 with the Exchange variation.",
+    },
+    {
+      id: "vienna",
+      title: "Vienna Game",
+      color: "w",
+      ids: ["vienna-natural", "vienna-falkbeer"],
+      description:
+        "Learn a developing setup and practise two common black replies.",
+    },
+  ];
+  const selected = groups.find((g) => g.id === course);
+  const lessons = selected
+    ? selected.ids
+        .map((id) => sequences.find((s) => s.id === id))
+        .filter((s): s is Sequence => !!s)
+    : [];
+  const solved = (s: Sequence) =>
+    training.records[`course:sequence-${s.id}`]?.firstSolvedAt !== undefined;
+  const next = lessons.find((s) => !solved(s)) ?? lessons[0];
   return (
     <section className="academy">
-      <h2>Play the whole plan</h2>
+      <div className="section-heading">
+        <h2>Study a system</h2>
+        <span>GUIDED REPERTOIRES</span>
+      </div>
       <p>
-        React to the opponent, then carry the idea through a complete training
-        line. These are repertoire choices, not the only good moves.
+        Learn the plan, then practise complete lines against different replies.
+        Your clean progress is saved on this device.
       </p>
-      <div className="actions" role="group" aria-label="Sequence categories">
-        {["Openings", "Endgames"].map((c) => (
+      {error && <p role="alert">{error}</p>}
+      <div className="actions" role="group" aria-label="Study categories">
+        {(["Openings", "Endgames"] as const).map((item) => (
           <button
-            key={c}
-            aria-pressed={category === c}
-            onClick={() => setCategory(c)}
+            key={item}
+            aria-pressed={section === item}
+            onClick={() => {
+              setSection(item);
+              setCourse(null);
+            }}
           >
-            {c}
-          </button>
-        ))}
-        <button
-          onClick={() => {
-            const pick = pool[Math.floor(Math.random() * pool.length)];
-            if (pick) onStart(pick);
-          }}
-        >
-          Random response →
-        </button>
-        <button className="primary" onClick={adaptive}>
-          Train a recommended branch →
-        </button>
-      </div>
-      <div className="course-grid">
-        {pool.map((s) => (
-          <button className="course-card" key={s.id} onClick={() => onStart(s)}>
-            <span className="eyebrow">
-              {s.category} · {s.color === "w" ? "White" : "Black"}
-            </span>
-            <h3>{s.title}</h3>
-            <p>{s.idea}</p>
-            <span>
-              {training.records[`course:sequence-${s.id}`]?.firstSolvedAt !==
-              undefined
-                ? "Mastered · review"
-                : "Learn this line"}{" "}
-              →
-            </span>
+            {item}
           </button>
         ))}
       </div>
+      {section === "Openings" ? (
+        <>
+          <div className="actions" role="group" aria-label="Opening color">
+            {(["w", "b"] as const).map((side) => (
+              <button
+                key={side}
+                aria-pressed={color === side}
+                onClick={() => {
+                  setColor(side);
+                  setCourse(null);
+                  sessionStorage.setItem("knightup-course-color", side);
+                  sessionStorage.removeItem("knightup-course");
+                }}
+              >
+                {side === "w" ? "White" : "Black"}
+              </button>
+            ))}
+          </div>
+          <p className="eyebrow">
+            OPENINGS / {color === "w" ? "WHITE" : "BLACK"}
+            {selected ? ` / ${selected.title.toUpperCase()}` : ""}
+          </p>
+          {!selected ? (
+            <div className="course-grid">
+              {groups
+                .filter((g) => g.color === color)
+                .map((g) => (
+                  <button
+                    className="course-card"
+                    key={g.id}
+                    onClick={() => {
+                      setCourse(g.id);
+                      sessionStorage.setItem("knightup-course", g.id);
+                    }}
+                  >
+                    <h3>{g.title}</h3>
+                    <p>{g.description}</p>
+                    <span>
+                      {g.ids.length} training{" "}
+                      {g.ids.length === 1 ? "line" : "lines"} →
+                    </span>
+                  </button>
+                ))}
+            </div>
+          ) : (
+            <div className="surface course-reading">
+              <button
+                className="text-button"
+                onClick={() => {
+                  setCourse(null);
+                  sessionStorage.removeItem("knightup-course");
+                }}
+              >
+                ← All {color === "w" ? "White" : "Black"} openings
+              </button>
+              <h3>{selected.title}</h3>
+              <p>{selected.description}</p>
+              <p>
+                {lessons.filter(solved).length} / {lessons.length} lines
+                recalled without help. This course currently covers the lines
+                shown below; it is not an exhaustive repertoire.
+              </p>
+              {next && (
+                <button className="primary" onClick={() => onStart(next)}>
+                  {lessons.every(solved) ? "Review course" : "Continue course"}{" "}
+                  →
+                </button>
+              )}
+              <div className="actions">
+                <button
+                  onClick={() => {
+                    const pick =
+                      lessons[Math.floor(Math.random() * lessons.length)];
+                    if (pick) onStart(pick);
+                  }}
+                >
+                  Random response →
+                </button>
+                <button
+                  onClick={() => {
+                    const ordered = [...lessons].sort((a, b) => {
+                      const rank = (item: Sequence) => {
+                        const r =
+                          training.records[`course:sequence-${item.id}`];
+                        return !r ? 1 : r.due <= Date.now() ? 0 : 2;
+                      };
+                      return rank(a) - rank(b);
+                    });
+                    if (ordered[0]) onStart(ordered[0]);
+                  }}
+                >
+                  Train a recommended branch →
+                </button>
+              </div>
+              <ol className="path-list">
+                {lessons.map((s, i) => (
+                  <li key={s.id}>
+                    <button className="path-item" onClick={() => onStart(s)}>
+                      <span className={`step ${solved(s) ? "done" : ""}`}>
+                        {solved(s) ? "✓" : i + 1}
+                      </span>
+                      <span>
+                        <strong>{s.title}</strong>
+                        <small>{s.idea}</small>
+                      </span>
+                      <span aria-hidden="true">→</span>
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <div className="actions">
+            <button
+              onClick={() => {
+                const pool = sequences.filter((s) => s.category === "Endgames");
+                const pick = pool[Math.floor(Math.random() * pool.length)];
+                if (pick) onStart(pick);
+              }}
+            >
+              Random response →
+            </button>
+            <button
+              onClick={() => {
+                const pool = sequences.filter((s) => s.category === "Endgames");
+                const rank = (s: Sequence) => {
+                  const r = training.records[`course:sequence-${s.id}`];
+                  return !r ? 1 : r.due <= Date.now() ? 0 : 2;
+                };
+                pool.sort(
+                  (a, b) =>
+                    rank(a) - rank(b) ||
+                    (training.records[`course:sequence-${a.id}`]?.box ?? 0) -
+                      (training.records[`course:sequence-${b.id}`]?.box ?? 0),
+                );
+                if (pool[0]) onStart(pool[0]);
+              }}
+            >
+              Train a recommended branch →
+            </button>
+          </div>
+          <div className="course-grid">
+            {sequences
+              .filter((s) => s.category === "Endgames")
+              .map((s) => (
+                <button
+                  className="course-card"
+                  key={s.id}
+                  onClick={() => onStart(s)}
+                >
+                  <span className="eyebrow">
+                    ENDGAMES · {s.color === "w" ? "WHITE" : "BLACK"}
+                  </span>
+                  <h3>{s.title}</h3>
+                  <p>{s.idea}</p>
+                  <span>{solved(s) ? "Review" : "Practise"} →</span>
+                </button>
+              ))}
+          </div>
+        </>
+      )}
     </section>
   );
 }
