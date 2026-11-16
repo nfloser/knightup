@@ -140,3 +140,21 @@ test("London offers a guided path for White", async ({ page }) => {
   await page.getByRole("button", { name: "Check", exact: true }).click();
   await expect(page.locator(".sequence-screen .feedback")).toContainText("d4");
 });
+
+test("Vienna explains quiet plans and gambit responses", async ({ page }) => {
+  await page.goto("./");
+  await page
+    .getByRole("group", { name: "Opening color" })
+    .getByRole("button", { name: "White" })
+    .click();
+  await page.getByRole("button", { name: /Vienna Game Learn/ }).click();
+  await expect(
+    page.getByRole("region", { name: "Vienna Game course guide" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Vienna Gambit · against/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Vienna Gambit · if Black takes/ }),
+  ).toBeVisible();
+});
