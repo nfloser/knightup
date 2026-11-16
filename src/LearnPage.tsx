@@ -14,7 +14,11 @@ export function LearnPage({
   onSequenceStart,
   now,
 }: {
-  onSequenceStart: (s: Sequence, remaining?: Sequence[]) => void;
+  onSequenceStart: (
+    s: Sequence,
+    remaining?: Sequence[],
+    course?: { total: number; completed: number },
+  ) => void;
   ready: boolean;
   now: number;
   onCourseStart: (course: Course) => void;

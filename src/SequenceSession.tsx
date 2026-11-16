@@ -14,7 +14,11 @@ import { walkthroughFrame } from "./walkthrough";
 export function SequenceLibrary({
   onStart,
 }: {
-  onStart: (s: Sequence, remaining?: Sequence[]) => void;
+  onStart: (
+    s: Sequence,
+    remaining?: Sequence[],
+    course?: { total: number; completed: number },
+  ) => void;
 }) {
   const [training, setTraining] = useState(emptyTraining);
   const [section, setSection] = useState<"Openings" | "Endgames">("Openings");
@@ -275,7 +279,12 @@ export function SequenceLibrary({
                 <button
                   className="primary"
                   disabled={!progressReady}
-                  onClick={() => onStart(next, courseSteps.slice(1))}
+                  onClick={() =>
+                    onStart(next, courseSteps.slice(1), {
+                      total: lessons.length,
+                      completed: lessons.filter(solved).length,
+                    })
+                  }
                 >
                   {lessons.every(solved) ? "Review course" : "Continue course"}{" "}
                   →
@@ -389,7 +398,7 @@ export function SequenceSession({
   sequence: Sequence;
   onExit: () => void;
   onComplete?: () => void;
-  sessionProgress?: { current: number; total: number };
+  sessionProgress?: { current: number; total: number; review: boolean };
 }) {
   const [ply, setPly] = useState(0),
     [input, setInput] = useState(""),
@@ -571,7 +580,8 @@ export function SequenceSession({
             )}
             <p className="small">
               Explore the moves at your own pace. Viewing the explanation does
-              not count as solving the exercise.
+              not count as solving the exercise. The progress bar includes
+              assisted steps; clean recall is tracked separately.
             </p>
             <div className="actions walkthrough-actions">
               <button
@@ -710,18 +720,21 @@ function CourseSessionProgress({
   current,
   total,
   fraction,
+  review,
 }: {
   current: number;
   total: number;
   fraction: number;
+  review: boolean;
 }) {
   return (
     <div className="course-session-progress">
       <span>
-        Course session · lesson {current} of {total}
+        {review ? "Course review" : "Course progress"} · lesson {current} of{" "}
+        {total}
       </span>
       <progress
-        aria-label="Course session progress"
+        aria-label="Course progress"
         value={current - 1 + fraction}
         max={total}
       />

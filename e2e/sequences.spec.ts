@@ -170,12 +170,12 @@ test("continuing a course advances through lessons and resumes unfinished work",
   await page.getByRole("button", { name: /London System Develop/ }).click();
   await page.getByRole("button", { name: "Continue course" }).click();
   await expect(
-    page.getByRole("progressbar", { name: "Course session progress" }),
+    page.getByRole("progressbar", { name: "Course progress" }),
   ).toHaveAttribute("value", "0");
-  await expect(page.getByText("Course session · lesson 1 of 3")).toBeVisible();
+  await expect(page.getByText("Course progress · lesson 1 of 3")).toBeVisible();
   await page.getByRole("button", { name: "Next move" }).click();
   await expect(
-    page.getByRole("progressbar", { name: "Course session progress" }),
+    page.getByRole("progressbar", { name: "Course progress" }),
   ).toHaveAttribute("value", "0");
   await page.getByRole("button", { name: "Practise whole line" }).click();
   for (const san of ["d4", "Bf4", "e3", "Nf3", "Bd3", "O-O"]) {
@@ -190,9 +190,9 @@ test("continuing a course advances through lessons and resumes unfinished work",
       name: /London · against a kingside fianchetto/,
     }),
   ).toBeVisible();
-  await expect(page.getByText("Course session · lesson 2 of 3")).toBeVisible();
+  await expect(page.getByText("Course progress · lesson 2 of 3")).toBeVisible();
   await expect(
-    page.getByRole("progressbar", { name: "Course session progress" }),
+    page.getByRole("progressbar", { name: "Course progress" }),
   ).toHaveAttribute("value", "1");
   await page.getByRole("button", { name: "Back to lessons" }).click();
   await expect(
@@ -205,6 +205,10 @@ test("continuing a course advances through lessons and resumes unfinished work",
       name: /London · against a kingside fianchetto/,
     }),
   ).toBeVisible();
+  await expect(page.getByText("Course progress · lesson 2 of 3")).toBeVisible();
+  await expect(
+    page.getByRole("progressbar", { name: "Course progress" }),
+  ).toHaveAttribute("value", "1");
 });
 
 test("learners see a board demonstration before practising without earning credit", async ({

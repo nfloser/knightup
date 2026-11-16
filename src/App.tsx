@@ -20,7 +20,12 @@ type Tab = (typeof tabs)[number];
 export default function App() {
   const [sequence, setSequence] = useState<Sequence | null>(null);
   const [sequenceQueue, setSequenceQueue] = useState<Sequence[]>([]);
-  const [sequenceRunTotal, setSequenceRunTotal] = useState(0);
+  const [sequenceRun, setSequenceRun] = useState<{
+    total: number;
+    baseline: number;
+    scheduled: number;
+    review: boolean;
+  } | null>(null);
   const [now, setNow] = useState(() => Date.now());
   const [tab, setTab] = useState<Tab>("Learn");
   const [course, setCourse] = useState<Course | null>(null);
@@ -76,7 +81,7 @@ export default function App() {
     setPuzzling(false);
     setSequence(null);
     setSequenceQueue([]);
-    setSequenceRunTotal(0);
+    setSequenceRun(null);
     requestAnimationFrame(() => main.current?.focus());
   }
   function start(index = 0) {
@@ -209,10 +214,14 @@ export default function App() {
               key={sequence.id}
               sequence={sequence}
               sessionProgress={
-                sequenceRunTotal
+                sequenceRun
                   ? {
-                      current: sequenceRunTotal - sequenceQueue.length,
-                      total: sequenceRunTotal,
+                      current:
+                        sequenceRun.baseline +
+                        sequenceRun.scheduled -
+                        sequenceQueue.length,
+                      total: sequenceRun.total,
+                      review: sequenceRun.review,
                     }
                   : undefined
               }
@@ -222,14 +231,14 @@ export default function App() {
                   setSequenceQueue(sequenceQueue.slice(1));
                 } else {
                   setSequence(null);
-                  setSequenceRunTotal(0);
+                  setSequenceRun(null);
                   setPuzzling(false);
                 }
               }}
               onExit={() => {
                 setSequence(null);
                 setSequenceQueue([]);
-                setSequenceRunTotal(0);
+                setSequenceRun(null);
                 setPuzzling(false);
               }}
             />
@@ -254,10 +263,22 @@ export default function App() {
             <>
               {tab === "Learn" && (
                 <LearnPage
-                  onSequenceStart={(s, remaining) => {
+                  onSequenceStart={(s, remaining, courseProgress) => {
                     setSequence(s);
                     setSequenceQueue(remaining ?? []);
-                    setSequenceRunTotal(remaining ? remaining.length + 1 : 0);
+                    const review =
+                      !!courseProgress &&
+                      courseProgress.completed === courseProgress.total;
+                    setSequenceRun(
+                      courseProgress && remaining
+                        ? {
+                            total: courseProgress.total,
+                            baseline: review ? 0 : courseProgress.completed,
+                            scheduled: remaining.length + 1,
+                            review,
+                          }
+                        : null,
+                    );
                     setPuzzling(true);
                   }}
                   now={now}
