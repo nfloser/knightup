@@ -163,7 +163,7 @@ export default function App() {
             <br />
             <strong>Play stronger.</strong>
           </p>
-          <span className="small">FOUNDATION · v0.1</span>
+          <span className="small">LOCAL COACH · v0.2</span>
         </div>
       </aside>
       <div className="workspace">

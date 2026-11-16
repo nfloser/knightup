@@ -28,3 +28,7 @@ Learn has one primary next action; Practice puts the board first. Flat warm-neut
 ## Verification
 
 Unit tests for lesson solutions, canonical SAN special cases, backup validation and duplicate completion. Browser tests for full lesson, keyboard navigation, persistence, backup, responsive overflow, accessibility and offline reload. Build/type/lint/audit in CI.
+
+## Expanded product scope (0.2)
+
+The original foundation milestone is complete. Current accepted additions are random/themed full-line puzzles, original phased curriculum, public-game opt-in import, bounded private Stockfish coaching, playable adaptive opponent, repertoire response sequences, endgame continuations, mastery-based rewards and learning recovery. Module contracts and limits are in CURRICULUM.md, PUZZLES.md, COACHING.md, PLAY_COACH.md, SEQUENCES.md and REWARDS.md. Insights reports actual local evidence rather than an empty placeholder. No paid backend, unattended private service or fabricated Elo is included.
